@@ -62,7 +62,7 @@ public class DashBoardWeighBridgeController {
 	
 
 	@Value("${common.error.message}")
-	public String commonError;
+	public String commonError; 
 	
 	@Value("${record.dataexport.success}")
 	public String dataExportSucess;
@@ -87,9 +87,9 @@ public class DashBoardWeighBridgeController {
 	public ModelAndView dashboardhome(@ModelAttribute User user,DashBoardWeighBridge obj, HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.home);
 		String userId = null;
-		String userName = null;
-		String role = null;
-		try {   
+		String userName = null; 
+		String role = null; 
+		try {      
 			userId = (String) session.getAttribute("USER_ID");
 			userName = (String) session.getAttribute("USER_NAME");
 			role = (String) session.getAttribute("BASE_ROLE");
