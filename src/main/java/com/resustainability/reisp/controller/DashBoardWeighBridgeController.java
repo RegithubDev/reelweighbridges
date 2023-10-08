@@ -99,7 +99,7 @@ public class DashBoardWeighBridgeController {
 			List <DashBoardWeighBridge> wbList = service.getWeighBridgeList(obj);
 			model.addObject("wbList", wbList);
 			
-			if(StringUtils.isEmpty(obj.getSbu())) {
+			if(StringUtils.isEmpty(obj.getSbu())) {   
 				obj.setSbu("MSW");
 			}
 		  
