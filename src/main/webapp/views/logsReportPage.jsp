@@ -77,7 +77,9 @@ License: You must have a valid license purchased only from themeforest(the above
 		  width: 100%;
 		  table-layout: fixed; /* set the table layout to fixed */
 		}
-		
+		.border-secondary {
+    		border: 1px solid #82868B!important;
+		}
 		thead th {
 		  position: sticky; /* fix the position of the header */
 		  top: 0; /* set the top position to 0 */
@@ -295,7 +297,7 @@ License: You must have a valid license purchased only from themeforest(the above
          		<div class="row page-titles">
                     <div class="col-md-6 col-8 align-self-center">
 				
-                        <h3 class="text-themecolor m-b-0 m-t-0">Weighbridge Daily Transactions Report&nbsp;</h3>
+                        <h3 class="text-themecolor m-b-0 m-t-0">Weighbridge Detail Log Report&nbsp;</h3>
                        
                     </div>
                    
@@ -310,55 +312,20 @@ License: You must have a valid license purchased only from themeforest(the above
 <!-- Vertical Wizard -->
 <section class="vertical-wizard">
   <div class="bs-stepper vertical vertical-wizard-example">
-    <div class="bs-stepper-header">
-    <c:forEach var="obj" items="${logsList}" varStatus="index">
-      <div class="step" data-target="#account-details-vertical${index.count }" role="tab"  id="account-details-vertical-trigger${index.count }">
-        <button type="button" class="step-trigger"> <%-- //onclick="getSiteDetails('${index.count }','${obj.project }')" --%>
-          <span class="bs-stepper-label">
-            <span class="bs-stepper-title">${obj.project }</span>
-          </span>
-        </button>
-      </div>
-	</c:forEach>
-    </div>
     <div class="bs-stepper-content">
-     <c:forEach var="obj" items="${logsList}" varStatus="index">
-      <div
-        id="account-details-vertical${index.count }"
-        class="content"
-        role="tabpanel"
-        aria-labelledby="account-details-vertical-trigger${index.count }"
-      >
-        <div class="content-header">
-          <h5 class="mb-0">${obj.sbu } - ${obj.curDAte }</h5>
+     <c:forEach var="obj" items="${allLogs}" varStatus="index"> 
+     
+     <div class="col-md-12 col-xl-12">
+      <div class="card shadow-none bg-transparent border-secondary">
+        <div class="card-body">
+          <h4 class="card-title ">${obj.PTCDT }</h4>
+          <p class="card-text">${obj.uniqueAPIIDs }</p>
+          <c:if test="${empty obj.uniqueAPIIDs}"> <button type="button" class="btn btn-flat-danger waves-effect">No Transaction</button> </c:if>
         </div>
-        <div class="table-container">
-       <table id="datatable-${obj.sbu }" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
-       	<thead>
-       	<tr>
-          
-		    <th style="width: 50%">Last Sync on </th>
-		    <th style="width: 50%">Last Sync since</th>
-			
-		  </tr>
-       	</thead>
-       	<tbody>
-       	  <c:forEach var="objjr" items="${obj.transactionsList}" varStatus="index">
-       	  <tr>
-		
-			<td>${objjr.PTCDT1 }</td>
-			<td>
-			 <c:if test="${objjr.days_diff eq '0' }"> <i class="ti-arrow-up text-success"></i> Today</c:if>
-			 <c:if test="${objjr.days_diff ne '0' }"> <i class="ti-arrow-up text-danger"></i> ${objjr.days_diff } Days ago</c:if>
-			</td>
-     	</tr>
-       	  </c:forEach>
-       	  <c:if test="${empty obj.transactionsList }">   <tr style="text-align: center;"> <td colspan="9">No Logs found</td></tr></c:if>
-       	 
-       	</tbody>
-       </table>
-       </div>
       </div>
+    </div>
+    
+    
 	</c:forEach>
       
       

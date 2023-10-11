@@ -4,8 +4,8 @@ import java.util.List;
 
 public class DashBoardWeighBridge {
 
-	private String   UID,plant,cabsTransID,actualVisitDate,indicator_name,
-	route,customerTown,vehicleRegNo,aPIType,aPIID,visitDayTime
+	private String   UID,plant,cabsTransID,actualVisitDate,indicator_name,uniqueAPIIDs,
+	route,customerTown,vehicleRegNo,aPIType,aPIID,visitDayTime,PTCDT1
 		      ,TRNO,VEHICLENO,MATERIAL,count,min,dmNmae,days_diff,PARTY,all_wb,all_sites,visitDays,customerStatus,TRANSPORTER,curDAte,BILLDCNO,BILLWEIGHT,DATEIN,TIMEIN,FIRSTWEIGHT,USER1,DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO
 		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE
 		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM
@@ -62,7 +62,23 @@ public class DashBoardWeighBridge {
 	
 	List<DashBoardWeighBridge> transactionsList;
 	
-	
+
+	public String getUniqueAPIIDs() {
+		return uniqueAPIIDs;
+	}
+
+	public void setUniqueAPIIDs(String uniqueAPIIDs) {
+		this.uniqueAPIIDs = uniqueAPIIDs;
+	}
+
+	public String getPTCDT1() {
+		return PTCDT1;
+	}
+
+	public void setPTCDT1(String pTCDT1) {
+		PTCDT1 = pTCDT1;
+	}
+
 	public String getCompany_code() {
 		return company_code;
 	}

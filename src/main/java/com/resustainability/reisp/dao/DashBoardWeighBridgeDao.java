@@ -534,12 +534,13 @@ public class DashBoardWeighBridgeDao {
 		List<DashBoardWeighBridge> objsList1 = new ArrayList<DashBoardWeighBridge>();
 		try {
 			String qry = "SELECT sbu,db_name,table_name,status,project , convert(varchar, getdate(), 106) as curDAte FROM MasterDB.dbo.log_master mt  "
-					+ " where  mt.table_name is not null and  mt.table_name <> '' and  table_name is not null and status <> 'Inactive'  order by sbu desc"; 
+					+ " where  mt.table_name is not null and  mt.table_name <> '' and  table_name is not null and status <> 'Inactive' "; 
 			int arrSize = 0;
 			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
 					qry = qry + " AND sbu = ? ";
 					arrSize++;
 				}
+				qry = qry + " order by sbu desc ";
 			 Object[] pValues1 = new Object[arrSize];
 				int j = 0;
 				 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
@@ -548,7 +549,7 @@ public class DashBoardWeighBridgeDao {
 			objsList = jdbcTemplate.query( qry,pValues1, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 			for (DashBoardWeighBridge list : objsList) {
 				String data = ""
-						+ "select TOP (1) convert(varchar, PTCDT, 0) as PTCDT, convert(varchar, getdate(), 106) as curDAte,DATEDIFF(day, [PTCDT], getdate()) AS days_diff from ["+list.getDb_name()+"].[dbo].["+list.getTable_name()+"] tt ";
+						+ "select TOP (1) convert(varchar, PTCDT, 0) as PTCDT1, convert(varchar, getdate(), 106) as curDAte,DATEDIFF(day, [PTCDT], getdate()) AS days_diff from ["+list.getDb_name()+"].[dbo].["+list.getTable_name()+"] tt ";
 			    data = data + " order by PTCDT desc  ";
 				objsList1 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 				list.setTransactionsList(objsList1);
@@ -564,12 +565,13 @@ public class DashBoardWeighBridgeDao {
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		String qry = "SELECT company,sbu,project,project_name,location,project_status,no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
 				+ ",developed_by FROM [MasterDB].[dbo].[master_table] mt "
-				+ " where  mt.location is not null and  mt.location <> '' and  wb_site_id is not null  order by sbu desc"; 
+				+ " where  mt.location is not null and  mt.location <> '' and  wb_site_id is not null "; 
 		int arrSize1 = 0;
 		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
 				qry = qry + " AND sbu = ? ";
 				arrSize1++;
 			}
+			qry = qry + " order by sbu desc ";
 		 Object[] pValues1 = new Object[arrSize1];
 			int j = 0;
 			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
@@ -789,6 +791,75 @@ objsList.forEach(bmw -> {
 			e.printStackTrace();
 		}
 		return objsList;
+	}
+
+	public List<DashBoardWeighBridge> getLogsReportBMW(DashBoardWeighBridge obj) throws Exception {
+		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
+		try {
+			String qry = " ";
+			if("msw_bilaspur_logs".contentEquals(obj.getSbu())) {
+				 qry = "SELECT "
+					 		+ "    CONVERT(DATE, PTCDT) AS PTCDT,"
+					 		+ "		  STUFF(("
+					 		+ "        SELECT DISTINCT ', ' + [VEHICLENO] "
+					 		+ "        FROM [All_MSW_SITES].[dbo].[msw_bilaspur_logs] b "
+					 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+					 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_MSW_SITES].[dbo].[msw_bilaspur_logs] a "
+					 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc"; 
+				
+			}else if("hyd_logs".contentEquals(obj.getSbu())) {
+				 qry = "    SELECT CONVERT(DATE, PTCDT) AS PTCDT, "
+				 		+ "   "
+				 		+ "		  STUFF(( SELECT DISTINCT ', ' + [VEHICLENO] FROM [All_MSW_SITES].[dbo].[hyd_logs] b "
+				 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+				 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_MSW_SITES].[dbo].[hyd_logs] a "
+				 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
+				 		+ ""; 
+			}else if("hyd_cnd_logs".contentEquals(obj.getSbu())) {
+				 qry = "    SELECT  "
+				 		+ "    CONVERT(DATE, PTCDT) AS PTCDT, "
+				 		+ "   "
+				 		+ "		  STUFF(( "
+				 		+ "        SELECT DISTINCT ', ' + [VEHICLENO] "
+				 		+ "        FROM [All_CnD_Sites].[dbo].[hyd_cnd_logs] b "
+				 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+				 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_CnD_Sites].[dbo].[hyd_cnd_logs] a "
+				 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
+					 		+ ""; 
+			}else if("noida_site_log".contentEquals(obj.getSbu())) {
+				 qry = "   SELECT  "
+				 		+ "    CONVERT(DATE, PTCDT) AS PTCDT, "
+				 		+ "   "
+				 		+ "		  STUFF(( "
+				 		+ "        SELECT DISTINCT ', ' + [VEHICLENO] "
+				 		+ "        FROM [All_CnD_Sites].[dbo].[noida_site_log] b "
+				 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+				 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_CnD_Sites].[dbo].[noida_site_log] a "
+				 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
+					 		+ ""; 
+			}else if("bmw_logs".contentEquals(obj.getSbu())) {
+				 qry = "   SELECT  "
+				 		+ "    CONVERT(DATE, PTCDT) AS PTCDT, "
+				 		+ "    STUFF(( "
+				 		+ "        SELECT DISTINCT ', ' + APIID "
+				 		+ "        FROM ALL_BMW_Sites.dbo.bmw_logs b "
+				 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+				 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs "
+				 		+ "FROM ALL_BMW_Sites.dbo.bmw_logs a "
+				 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc"
+					 		+ ""; 
+			}
+			objsList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+		return objsList;
+	}
+
+	public List<DashBoardWeighBridge> getLogsReportALL(DashBoardWeighBridge obj) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

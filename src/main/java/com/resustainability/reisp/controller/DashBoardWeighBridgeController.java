@@ -60,7 +60,7 @@ public class DashBoardWeighBridgeController {
 	@Autowired
 	DashBoardWeighBridgeService service;
 	
-
+ 
 	@Value("${common.error.message}")
 	public String commonError; 
 	
@@ -93,7 +93,7 @@ public class DashBoardWeighBridgeController {
 			userId = (String) session.getAttribute("USER_ID");
 			userName = (String) session.getAttribute("USER_NAME");
 			role = (String) session.getAttribute("BASE_ROLE");
-			String email = (String) session.getAttribute("USER_EMAIL");
+			String email = (String) session.getAttribute("USER_EMAIL"); 
 			 List <DashBoardWeighBridge> trasactionsSumLists = service.getTransactionsList1(obj);
 				model.addObject("trasactionsSumLists", trasactionsSumLists);
 			List <DashBoardWeighBridge> wbList = service.getWeighBridgeList(obj);
@@ -259,6 +259,33 @@ public class DashBoardWeighBridgeController {
 			}
 		
 		
+		} catch (Exception e) {
+			e.printStackTrace();
+		};
+		return model;
+	}
+	
+	@RequestMapping(value = "/report-logs/{sbu}", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView reportLogs(@ModelAttribute User user,DashBoardWeighBridge obj,@PathVariable("sbu") String sbu , HttpSession session) {
+		ModelAndView model = new ModelAndView(PageConstants.bmwlogsPage);
+		String userId = null;
+		String userName = null;
+		String role = null;
+		try {   
+			userId = (String) session.getAttribute("USER_ID");
+			userName = (String) session.getAttribute("USER_NAME");
+			role = (String) session.getAttribute("BASE_ROLE");
+			String email = (String) session.getAttribute("USER_EMAIL");
+			obj.setSbu(sbu);
+			
+			if(sbu.equals("BMW")) {
+				model = new ModelAndView(PageConstants.bmwlogsPage);
+				List <DashBoardWeighBridge> allLogs = service.getLogsReportBMW(obj);
+				model.addObject("allLogs", allLogs);
+			}else {
+				List <DashBoardWeighBridge> allLogs = service.getLogsReportBMW(obj);
+				model.addObject("allLogs", allLogs);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		};

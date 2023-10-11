@@ -64,4 +64,12 @@ public class DashBoardWeighBridgeService {
 	public List<DashBoardWeighBridge> getTransactionsList1(DashBoardWeighBridge obj) throws Exception {
 		return dao.getTransactionsList1(obj);
 	}
+
+	public List<DashBoardWeighBridge> getLogsReportBMW(DashBoardWeighBridge obj) throws Exception {
+		return dao.getLogsReportBMW(obj);
+	}
+
+	public List<DashBoardWeighBridge> getLogsReportALL(DashBoardWeighBridge obj) throws Exception {
+		return dao.getLogsReportALL(obj);
+	}
 }

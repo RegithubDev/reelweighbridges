@@ -17,6 +17,7 @@ public class PageConstants {
 	public static final String MSWReports = "reportPAge";
 	public static final String BMWReports = "reportPAgeBMW";
 	public static final String logsPage = "logsPage";
+	public static final String bmwlogsPage = "logsReportPage";
 	
 	
 	/// Mobile Forms  
