@@ -95,9 +95,9 @@ public class DashBoardWeighBridgeDao {
 						+ "select top 1 UID,TRNO,"
 						+ " (select project_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_name,"
 						+ "VEHICLENO ,"+all_sites+" as all_sites,(select indicator_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as indicator_name ,"
-						+ "(select min(CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
+						+ "(select min(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
 								+ "where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as min,"
-										+ "(select max(CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()
+										+ "(select max(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()
 										+ " where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as DATEIN,convert(varchar, getdate(), 23) as curDAte"
 												+ ",(select top (1) (cast([TIMEIN] as time(0))) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  "
 												+ " where SITEID in ("+siteIDs.getWb_site_id()+") "
@@ -240,13 +240,13 @@ public class DashBoardWeighBridgeDao {
 							
 							//+ "BEGIN TRY   SET NOCOUNT ON; "
 							+ "select top 1 UID,TRNO,VEHICLENO ,"+all_sites+" as all_sites,"+siteIDs.getNo_of_wb()+" as no_of_wbR, (select project_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_name,"
-							+ "(select min(CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
+							+ "(select min(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
 									+ "where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as min,(select indicator_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as indicator_name ,"
 											+ "(Select count(*) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" where "
 											+ " datein = (select top (1) datein from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" where SITEID in ("+siteIDs.getWb_site_id()+") order by trno desc) "
 											+ "	and  SITEID  in ("+siteIDs.getWb_site_id()+")  and NETWT is not null and NETWT <> '' ) as dailyCount,"
-											+ "(select max(CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()
-											+ " where DATEIN is not null and DATEIN <> '' and SITEID in ("+siteIDs.getWb_site_id()+") and datein = (select top (1) datein from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  where SITEID in ("+siteIDs.getWb_site_id()+") order by CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'"
+											+ "(select max(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()
+											+ " where DATEIN is not null and DATEIN <> '' and SITEID in ("+siteIDs.getWb_site_id()+") and datein = (select top (1) datein from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  where SITEID in ("+siteIDs.getWb_site_id()+") order by TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'"
 													+ "ELSE DATEIN  END AS DATE) desc))  as DATEIN,convert(varchar, getdate(), 23) as curDAte"
 											+ ",(select count(TRNO) from "+siteIDs.getDb_name()+""
 											+ ".[dbo]."+siteIDs.getTable_name()+"  where SITEID='"+siteID+"' and NETWT <> '' and NETWT is not null and NETWT <> 0) as count,"
@@ -721,18 +721,18 @@ public class DashBoardWeighBridgeDao {
 				+ "				MAX(d.ActualVisitMonth) AS ActualVisitMonth,"
 				+ "				MAX(d.CustomerStatus) AS CustomerStatus,"
 				+ "CustomerSAPCode,count(CustomerSAPCode) as CustomerSAPCodeCount,"
-				+ "SUM(CAST(BlueCount AS FLOAT )) as BlueCount"
-				+ ",SUM(CAST(BlueWeight AS FLOAT )) as BlueWeight"
-				+ ",SUM(CAST(RedCount AS FLOAT )) as RedCount"
-				+ ",SUM(CAST(RedWeight AS FLOAT )) as RedWeight"
-				+ ",SUM(CAST(YellowCount AS FLOAT )) as YellowCount"
-				+ ",SUM(CAST(YellowWeight AS FLOAT )) as YellowWeight"
-				+ ",SUM(CAST(CytotoxicCount AS FLOAT )) as CytotoxicCount"
-				+ ",SUM(CAST(CytotoxicWeight AS FLOAT )) as CytotoxicWeight"
-				+ ",SUM(CAST(WhitesCount AS FLOAT )) as WhitesCount"
-				+ ",SUM(CAST(WhitesWeight AS FLOAT )) as WhitesWeight"
-				+ ",SUM(CAST(TotalCount AS FLOAT )) as TotalCount"
-				+ ",SUM(CAST(TotalWeight AS FLOAT )) as TotalWeight,"
+				+ "SUM(TRY_CAST(BlueCount AS FLOAT )) as BlueCount"
+				+ ",SUM(TRY_CAST(BlueWeight AS FLOAT )) as BlueWeight"
+				+ ",SUM(TRY_CAST(RedCount AS FLOAT )) as RedCount"
+				+ ",SUM(TRY_CAST(RedWeight AS FLOAT )) as RedWeight"
+				+ ",SUM(TRY_CAST(YellowCount AS FLOAT )) as YellowCount"
+				+ ",SUM(TRY_CAST(YellowWeight AS FLOAT )) as YellowWeight"
+				+ ",SUM(TRY_CAST(CytotoxicCount AS FLOAT )) as CytotoxicCount"
+				+ ",SUM(TRY_CAST(CytotoxicWeight AS FLOAT )) as CytotoxicWeight"
+				+ ",SUM(TRY_CAST(WhitesCount AS FLOAT )) as WhitesCount"
+				+ ",SUM(TRY_CAST(WhitesWeight AS FLOAT )) as WhitesWeight"
+				+ ",SUM(TRY_CAST(TotalCount AS FLOAT )) as TotalCount"
+				+ ",SUM(TRY_CAST(TotalWeight AS FLOAT )) as TotalWeight,"
 				+ " max(ServerDateTime) as ServerDateTime "
 				+ "  FROM ALL_BMW_Sites.dbo.bmw_detailed  d "
 				+ "  where CustomerSAPCode is not null "; 
@@ -754,11 +754,12 @@ public class DashBoardWeighBridgeDao {
 		objsList = jdbcTemplate.query( qry,pValues1, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 		
 		NamedParameterJdbcTemplate namedParamJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+		
 objsList.forEach(bmw -> {
-			
+	int c = 0;
 			String ckeckQRY = "IF EXISTS (SELECT 1 FROM [ALL_BMW_Sites].[dbo].[transactions_summary] WHERE [CustomerCode] = :CustomerSAPCode) "
 					+ "BEGIN "
-					+ "    UPDATE [company] set company_code= :company_code,	company= :company,	plant_name= :plant_name,	"
+					+ "    UPDATE [ALL_BMW_Sites].[dbo].[transactions_summary] set company_code= :company_code,	company= :company,	plant_name= :plant_name,	"
 					+ "					profit_center= :profit_center,profit_center_name= :profit_center_name,ActualVisitMonth= :ActualVisitMonth,	visitsPerMonth= :CustomerSAPCodeCount,	TypeofEstablishment= :TypeofEstablishment,	ServiceFrequency= :ServiceFrequency,	"
 					+ "						BlueCount= :BlueCount,	BlueWeight= :BlueWeight,"
 					+ "						RedCount= :RedCount,	RedWeight= :RedWeight,	"
@@ -783,7 +784,7 @@ objsList.forEach(bmw -> {
 			
 			BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(bmw);		 
 		    int count = namedParamJdbcTemplate.update(ckeckQRY, paramSource);
-			
+			System.out.println(count);
 			
 		});
 		
