@@ -710,84 +710,64 @@ public class DashBoardWeighBridgeDao {
 	public List<DashBoardWeighBridge> getTransactionsList(DashBoardWeighBridge obj) throws Exception {
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		try {
-		String qry = "SELECT "
-				+ "(select profit_center from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS profit_center,"
-				+ "				(select profit_center_name from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS profit_center_name,"
-				+ "MAX(d.company) AS company,"
-				+ "(select company_code from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS company_code,"
-				+ "				MAX(d.plant) AS plant_name,"
-				+ "				MAX(d.TypeofEstablishment) AS TypeofEstablishment,"
-				+ "				MAX(d.ServiceFrequency) AS ServiceFrequency,"
-				+ "				MAX(d.ActualVisitMonth) AS ActualVisitMonth,"
-				+ "				MAX(d.CustomerStatus) AS CustomerStatus,"
-				+ "CustomerSAPCode,count(CustomerSAPCode) as CustomerSAPCodeCount,"
-				+ "SUM(TRY_CAST(BlueCount AS FLOAT )) as BlueCount"
-				+ ",SUM(TRY_CAST(BlueWeight AS FLOAT )) as BlueWeight"
-				+ ",SUM(TRY_CAST(RedCount AS FLOAT )) as RedCount"
-				+ ",SUM(TRY_CAST(RedWeight AS FLOAT )) as RedWeight"
-				+ ",SUM(TRY_CAST(YellowCount AS FLOAT )) as YellowCount"
-				+ ",SUM(TRY_CAST(YellowWeight AS FLOAT )) as YellowWeight"
-				+ ",SUM(TRY_CAST(CytotoxicCount AS FLOAT )) as CytotoxicCount"
-				+ ",SUM(TRY_CAST(CytotoxicWeight AS FLOAT )) as CytotoxicWeight"
-				+ ",SUM(TRY_CAST(WhitesCount AS FLOAT )) as WhitesCount"
-				+ ",SUM(TRY_CAST(WhitesWeight AS FLOAT )) as WhitesWeight"
-				+ ",SUM(TRY_CAST(TotalCount AS FLOAT )) as TotalCount"
-				+ ",SUM(TRY_CAST(TotalWeight AS FLOAT )) as TotalWeight,"
-				+ " max(ServerDateTime) as ServerDateTime "
-				+ "  FROM ALL_BMW_Sites.dbo.bmw_detailed  d "
-				+ "  where CustomerSAPCode is not null "; 
-		int arrSize1 = 0;
-		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCustomerSAPCode())) {
-				qry = qry + " AND CustomerSAPCode like %"+obj.getCustomerSAPCode()+"%";
-			}
-		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getActualVisitMonth())) {
-				qry = qry + " AND ActualVisitMonth = ? ";
-				arrSize1++;
-			}
-		 qry = qry + " group by CustomerSAPCode,ActualVisitMonth ";
-		 Object[] pValues1 = new Object[arrSize1];
-			int j = 0;
-			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getActualVisitMonth())) {
-				 pValues1[j++] = obj.getActualVisitMonth();
-				 
-			}
-		objsList = jdbcTemplate.query( qry,pValues1, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+			NamedParameterJdbcTemplate namedParamJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+			String deleteQRY = "delete from [ALL_BMW_Sites].[dbo].[transactions_summary] where company_code is not null";
+			DashBoardWeighBridge dObj = new DashBoardWeighBridge();
+			dObj.setId("0");
+			BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(dObj);		 
+		    namedParamJdbcTemplate.update(deleteQRY, paramSource);
+
+		    String qry = "MERGE [ALL_BMW_Sites].[dbo].[transactions_summary] AS target "
+				+ "USING ( "
+				+ "    SELECT (select profit_center from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS profit_center,		 "
+				+ "(select profit_center_name from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS profit_center_name, "
+				+ "MAX(d.company) AS company,(select company_code from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS company_code, "
+				+ "MAX(d.plant) AS plant_name,				MAX(d.TypeofEstablishment) AS TypeofEstablishment,			 "
+				+ "MAX(d.ServiceFrequency) AS ServiceFrequency,				MAX(d.ActualVisitMonth) AS ActualVisitMonth,	 "
+				+ "MAX(d.CustomerStatus) AS CustomerStatus,CustomerSAPCode, "
+				+ "count(CustomerSAPCode) as CustomerSAPCodeCount, "
+				+ "SUM(TRY_CAST(BlueCount AS FLOAT )) as BlueCount, "
+				+ "SUM(TRY_CAST(BlueWeight AS FLOAT )) as BlueWeight, "
+				+ "SUM(TRY_CAST(RedCount AS FLOAT )) as RedCount, "
+				+ "SUM(TRY_CAST(RedWeight AS FLOAT )) as RedWeight, "
+				+ "SUM(TRY_CAST(YellowCount AS FLOAT )) as YellowCount, "
+				+ "SUM(TRY_CAST(YellowWeight AS FLOAT )) as YellowWeight, "
+				+ "SUM(TRY_CAST(CytotoxicCount AS FLOAT )) as CytotoxicCount, "
+				+ "SUM(TRY_CAST(CytotoxicWeight AS FLOAT )) as CytotoxicWeight, "
+				+ "SUM(TRY_CAST(WhitesCount AS FLOAT )) as WhitesCount, "
+				+ "SUM(TRY_CAST(WhitesWeight AS FLOAT )) as WhitesWeight, "
+				+ "SUM(TRY_CAST(TotalCount AS FLOAT )) as TotalCount, "
+				+ "SUM(TRY_CAST(TotalWeight AS FLOAT )) as TotalWeight, "
+				+ "max(ServerDateTime) as ServerDateTime   FROM ALL_BMW_Sites.dbo.bmw_detailed d   "
+				+ "where CustomerSAPCode is not null  group by CustomerSAPCode,ActualVisitMonth  "
+				+ ") AS source "
+				+ "ON target.CustomerCode = source.CustomerSAPCode "
+				+ "WHEN MATCHED THEN "
+				+ "    UPDATE SET company = source.company, profit_center = source.profit_center, profit_center_name = source.profit_center_name, company_code = source.company_code, "
+				+ "	plant_name = source.plant_name "
+				+ "	, TypeofEstablishment = source.TypeofEstablishment, ServiceFrequency = source.ServiceFrequency, ActualVisitMonth = source.ActualVisitMonth, "
+				+ "	CustomerStatus = source.CustomerStatus, CustomerCode = source.CustomerSAPCode "
+				+ "	, visitsPerMonth = source.CustomerSAPCodeCount, BlueCount = source.BlueCount, BlueWeight = source.BlueWeight, RedCount = source.RedCount, "
+				+ "	RedWeight = source.RedWeight "
+				+ "	, YellowCount = source.YellowCount, YellowWeight = source.YellowWeight, CytotoxicCount = source.CytotoxicCount,  "
+				+ "	CytotoxicWeight = source.CytotoxicWeight, WhitesCount = source.WhitesCount, WhitesWeight = source.WhitesWeight,  "
+				+ "	TotalCount = source.TotalCount,TotalWeight = source.TotalWeight,last_modified = getdate() "
+				+ "WHEN NOT MATCHED THEN "
+				+ "    INSERT (company, profit_center, profit_center_name, company_code, plant_name, TypeofEstablishment, ServiceFrequency, "
+				+ "	ActualVisitMonth, CustomerStatus, CustomerCode, visitsPerMonth, BlueCount, BlueWeight "
+				+ "	, RedCount, RedWeight, YellowCount, YellowWeight, CytotoxicCount, CytotoxicWeight, WhitesCount, WhitesWeight,  "
+				+ "	TotalCount,TotalWeight,last_modified) "
+				+ "    VALUES (source.company, source.profit_center, source.profit_center_name, source.company_code, source.plant_name, source.TypeofEstablishment, source.ServiceFrequency "
+				+ "	, source.ActualVisitMonth, source.CustomerStatus, source.CustomerSAPCode, source.CustomerSAPCodeCount, source.BlueCount, source.BlueWeight, "
+				+ "	source.RedCount, source.RedWeight "
+				+ "	, source.YellowCount, source.YellowWeight, source.CytotoxicCount, source.CytotoxicWeight, source.WhitesCount, source.WhitesWeight,  "
+				+ "	source.TotalCount,source.TotalWeight,getdate()); "
+				+ " "
+				+ ""; 
 		
-		NamedParameterJdbcTemplate namedParamJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-		
-objsList.forEach(bmw -> {
-	int c = 0;
-			String ckeckQRY = "IF EXISTS (SELECT 1 FROM [ALL_BMW_Sites].[dbo].[transactions_summary] WHERE [CustomerCode] = :CustomerSAPCode) "
-					+ "BEGIN "
-					+ "    UPDATE [ALL_BMW_Sites].[dbo].[transactions_summary] set company_code= :company_code,	company= :company,	plant_name= :plant_name,	"
-					+ "					profit_center= :profit_center,profit_center_name= :profit_center_name,ActualVisitMonth= :ActualVisitMonth,	visitsPerMonth= :CustomerSAPCodeCount,	TypeofEstablishment= :TypeofEstablishment,	ServiceFrequency= :ServiceFrequency,	"
-					+ "						BlueCount= :BlueCount,	BlueWeight= :BlueWeight,"
-					+ "						RedCount= :RedCount,	RedWeight= :RedWeight,	"
-					+ "						YellowCount= :YellowCount,	YellowWeight= :YellowWeight,"
-					+ "						CytotoxicCount= :CytotoxicCount,	CytotoxicWeight= :CytotoxicWeight,	"
-					+ "						WhitesCount= :WhitesCount,	WhitesWeight= :WhitesWeight,	"
-					+ "						TotalCount= :TotalCount,	TotalWeight= :TotalWeight,"
-					+ "						last_modified= getdate()"
-					+ "					 where CustomerCode= :CustomerSAPCode ; "
-														+ "END "
-														+ "ELSE "
-														+ "BEGIN "
-					+ "INSERT INTO [ALL_BMW_Sites].[dbo].[transactions_summary] "
-											+ "(company_code,company,plant_name,CustomerCode,profit_center,profit_center_name,visitsPerMonth,TypeofEstablishment,ServiceFrequency,last_modified,"
-											+ "BlueCount,BlueWeight,RedCount,RedWeight,YellowCount,YellowWeight,CytotoxicCount,CytotoxicWeight,WhitesCount,WhitesWeight,"
-											+ "TotalCount,TotalWeight,ActualVisitMonth) "
-											+ "VALUES "
-											+ "(:company_code,:company,:plant_name,:CustomerSAPCode,:profit_center,:profit_center_name,:CustomerSAPCodeCount,:TypeofEstablishment,:ServiceFrequency,getdate(),"
-											+ ":BlueCount,:BlueWeight,:RedCount,:RedWeight,:YellowCount,:YellowWeight,:CytotoxicCount,:CytotoxicWeight,:WhitesCount,"
-											+ ":WhitesWeight,:TotalCount,:TotalWeight,:ActualVisitMonth); "
-					+ "END";
-			
-			BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(bmw);		 
-		    int count = namedParamJdbcTemplate.update(ckeckQRY, paramSource);
-			System.out.println(count);
-			
-		});
-		
+		    paramSource = new BeanPropertySqlParameterSource(dObj);		 
+		    namedParamJdbcTemplate.update(qry, paramSource);
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

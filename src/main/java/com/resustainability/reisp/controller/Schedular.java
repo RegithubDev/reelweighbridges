@@ -46,11 +46,11 @@ public class Schedular {
 	
 	/**********************************************************************************/
 	
-	@Scheduled(cron = "${cron.expression.user.login.timeout}")
+	@Scheduled(cron = "${cron.expression.send.mail.with.contract.bg.insurance.report}")
 	public void userLoginTimeout(){
 		if(is_cron_jobs_enabled || is_cron_jobs_enabled_in_qa) {
 			try {
-				//List <DashBoardWeighBridge> trasactionsList = service.getTransactionsList(null);
+				List <DashBoardWeighBridge> trasactionsList = service.getTransactionsList(null);
 		    	 System.out.println("cronJob Called!!!!");
 			 } catch (Exception e) {
 				 e.printStackTrace();
