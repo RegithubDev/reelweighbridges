@@ -204,7 +204,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                   <c:if test="${sessionScope.BASE_ROLE eq 'Administrator' }">
                                   <li><a href="<%=request.getContextPath() %>/report/MSW">MSW Reports</a></li>
 <li><a href="<%=request.getContextPath() %>/report/CND">C&D Reports</a></li>
-								  <li><a href="<%=request.getContextPath() %>/report/BMW">BMW Reports</a></li>  <li><a href="<%=request.getContextPath() %>/user">Users</a></li> </c:if>
+								  <li><a href="<%=request.getContextPath() %>/report/BMW">BMW Reports</a></li>  <%-- <li><a href="<%=request.getContextPath() %>/user">Users</a></li> --%> </c:if>
 								<li>
 		                            <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Logs Dashboard</span></a>
 		                            <ul aria-expanded="false" class="collapse">
@@ -213,8 +213,19 @@ License: You must have a valid license purchased only from themeforest(the above
 		                                <li><a href="<%=request.getContextPath() %>/logs/BMW">BMW Logs Dashboard</a></li>
 		                            </ul>
 		                        </li>
+		                               <li>
+                            <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Logs Cumulative Dashboard</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li><a href="<%=request.getContextPath() %>/report-logs/msw_bilaspur_logs">Bilaspur Logs Report</a></li>
+                                <li><a href="<%=request.getContextPath() %>/report-logs/hyd_logs">HYD MSw Logs Report</a></li>
+                                <li><a href="<%=request.getContextPath() %>/report-logs/hyd_cnd_logs">HYD CND Logs Report</a></li>
+                                <li><a href="<%=request.getContextPath() %>/report-logs/noida_site_log">Noida Logs Report</a></li>
+                                <li><a href="<%=request.getContextPath() %>/report-logs/bmw_logs">BMW Logs Report</a></li>
                             </ul>
                         </li>
+                            </ul>
+                        </li>
+                        
                     </ul>
                 </nav>
                 <!-- End Sidebar navigation -->

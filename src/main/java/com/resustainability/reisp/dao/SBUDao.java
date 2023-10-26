@@ -38,7 +38,7 @@ public class SBUDao {
 		try {
 			int arrSize = 0;
 			String qry =" select ";
-					qry = qry +"(select count( sbu_code) from sbu where sbu_code is not null  ";
+					qry = qry +"(select count( sbu_code) from [MasterDB].[dbo].sbu where sbu_code is not null  ";
 					if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
 						qry = qry + " and company_code = ?";
 						arrSize++;
@@ -52,7 +52,7 @@ public class SBUDao {
 						arrSize++;
 					}
 					qry = qry +  " ) as all_sbu ,";
-					qry = qry +	"(select count( sbu_code) from sbu where sbu_code is not null and status = 'Active' ";
+					qry = qry +	"(select count( sbu_code) from [MasterDB].[dbo].sbu where sbu_code is not null and status = 'Active' ";
 					if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
 						qry = qry + " and company_code = ?";
 						arrSize++;
@@ -66,7 +66,7 @@ public class SBUDao {
 						arrSize++;
 					}
 							qry = qry + " ) as active_sbu,"
-							+ "(select count( sbu_code) from sbu where sbu_code is not null   and status <> 'Active' ";
+							+ "(select count( sbu_code) from [MasterDB].[dbo].sbu where sbu_code is not null   and status <> 'Active' ";
 							if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
 								qry = qry + " and company_code = ?";
 								arrSize++;
@@ -80,8 +80,8 @@ public class SBUDao {
 								arrSize++;
 							}
 							qry = qry + " ) as inActive_sbu,"
-					+ "s.id,s.company_code,c.company_name,sbu_code,sbu_name,s.status from [sbu] s "
-					+ " left join [company] c on c.company_code = s.company_code "
+					+ "s.id,s.company_code,c.company_name,sbu_code,sbu_name,s.status from [MasterDB].[dbo].[sbu] s "
+					+ " left join [MasterDB].[dbo].[company] c on c.company_code = s.company_code "
 					+ " where s.sbu_code is not null and s.sbu_code <> '' ";
 			
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
@@ -147,8 +147,8 @@ public class SBUDao {
 	public List<SBU> getCompanyFilterList(SBU obj) throws Exception {
 		List<SBU> objsList = new ArrayList<SBU>();
 		try {
-			String qry = "SELECT  distinct s.company_code,c.company_name FROM [sbu] s "
-					+ " left join [company] c on c.company_code = s.company_code "
+			String qry = "SELECT  distinct s.company_code,c.company_name from [MasterDB].[dbo].[sbu] s "
+					+ " left join [MasterDB].[dbo].[company] c on c.company_code = s.company_code "
 					+ " where c.company_code is not null and c.company_code <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
@@ -186,7 +186,7 @@ public class SBUDao {
 	public List<SBU> getSBUFilterList(SBU obj) throws Exception {
 		List<SBU> objsList = new ArrayList<SBU>();
 		try {
-			String qry = "SELECT distinct sbu_code, sbu_name FROM [sbu] s "
+			String qry = "SELECT distinct sbu_code, sbu_name from [MasterDB].[dbo].[sbu] s "
 					+ " where sbu_code is not null and sbu_code <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
@@ -271,7 +271,7 @@ public class SBUDao {
 	public List<SBU> getCompaniesList(SBU obj) throws SQLException {
 		List<SBU> menuList = null;
 		try{  
-			String qry = "select company_code, company_name from [company] ";
+			String qry = "select company_code, company_name from [MasterDB].[dbo].[company] ";
 			menuList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<SBU>(SBU.class));
 			
 		}catch(Exception e){ 
@@ -284,7 +284,7 @@ public class SBUDao {
 	public List<SBU> getStatusFilterListFromSBU(SBU obj) throws Exception {
 		List<SBU> objsList = new ArrayList<SBU>();
 		try {
-			String qry = "SELECT distinct status FROM [sbu] s "
+			String qry = "SELECT distinct status from [MasterDB].[dbo].[sbu] s "
 					+ " where status is not null and status <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
@@ -322,7 +322,7 @@ public class SBUDao {
 	public List<SBU> checkUniqueIfForSBU(SBU obj) throws Exception {
 		List<SBU> objsList = new ArrayList<SBU>();
 		try {
-			String qry = "SELECT sbu_code FROM [sbu]  "
+			String qry = "SELECT sbu_code from [MasterDB].[dbo].[sbu]  "
 					+ " where status is not null and status <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu_code())) {

@@ -44,7 +44,7 @@ public class CompanyDao {
 		try {
 			int arrSize = 0;
 			String qry =" select ";
-					qry = qry +"(select count( company_code) from company where company_code is not null  ";
+					qry = qry +"(select count( company_code) from [MasterDB].[dbo].company where company_code is not null  ";
 					if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 						qry = qry + " and status = ? ";
 						arrSize++;
@@ -54,7 +54,7 @@ public class CompanyDao {
 						arrSize++;
 					}
 					qry = qry +  " ) as all_companies ,";
-					qry = qry +	"(select count( company_code) from company where company_code is not null and status = 'Active' ";
+					qry = qry +	"(select count( company_code) from [MasterDB].[dbo].company where company_code is not null and status = 'Active' ";
 									if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 										qry = qry + "  and status = ? ";
 										arrSize++;
@@ -64,7 +64,7 @@ public class CompanyDao {
 										arrSize++;
 									}
 									qry = qry + " ) as active_companies,"
-									+ "(select count( company_code) from company where company_code is not null   and status <> 'Active' ";
+									+ "(select count( company_code) from [MasterDB].[dbo].company where company_code is not null   and status <> 'Active' ";
 									if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 										qry = qry + " and status = ? ";
 										arrSize++;
@@ -75,9 +75,9 @@ public class CompanyDao {
 									}
 									qry = qry + " ) as inActive_companies,"
 					+ "c.id	,company_code,	company_name,	status,	FORMAT (c.created_date, 'dd-MMM-yy') as created_date,up.user_name as 	"
-					+ " created_by,FORMAT	(c.modified_date, 'dd-MMM-yy') as modified_date,up1.user_name as  modified_by from [company] c "
-					+ " left join [user_profile] up on c.created_by = up.user_id "
-					+ " left join [user_profile] up1 on c.modified_by = up1.user_id "
+					+ " created_by,FORMAT	(c.modified_date, 'dd-MMM-yy') as modified_date,up1.user_name as  modified_by from [MasterDB].[dbo].[company] c "
+					+ " left join [MasterDB].[dbo].[user_profile] up on c.created_by = up.user_id "
+					+ " left join [MasterDB].[dbo].[user_profile] up1 on c.modified_by = up1.user_id "
 					+ " where c.company_code is not null and c.company_code <> '' ";
 			
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
@@ -129,7 +129,7 @@ public class CompanyDao {
 		List<Company> objsList = new ArrayList<Company>();
 		try {
 			String qry = "SELECT  id,	company_code,	company_name,	status "
-					+ " FROM [company] where company_code is not null and company_code <> ''  "; 
+					+ " from [MasterDB].[dbo].[company] where company_code is not null and company_code <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
 				qry = qry + "and company_code = ? ";
@@ -164,7 +164,7 @@ public class CompanyDao {
 		int i = 1;
 		try{  
 			con = dataSource.getConnection();
-			String qry = "SELECT TOP 1 (select count( company_code) from company where company_code is not null  ";
+			String qry = "SELECT TOP 1 (select count( company_code) from [MasterDB].[dbo].company where company_code is not null  ";
 					if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 						qry = qry + " and status = ? ";
 					}
@@ -172,7 +172,7 @@ public class CompanyDao {
 						qry = qry + " and company_code = ? ";
 					}
 					qry = qry +  " ) as all_companies ,"
-					+ "(select count( company_code) from company where company_code is not null ";
+					+ "(select count( company_code) from [MasterDB].[dbo].company where company_code is not null ";
 					if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 						qry = qry + " and status = ? ";
 					}else {
@@ -182,7 +182,7 @@ public class CompanyDao {
 						qry = qry + " and company_code = ? ";
 					}
 					qry = qry + " ) as active_companies,"
-					+ "(select count( company_code) from company where company_code is not null ";
+					+ "(select count( company_code) from [MasterDB].[dbo].company where company_code is not null ";
 					if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 						qry = qry + " and status = ? ";
 					}else {
@@ -191,7 +191,7 @@ public class CompanyDao {
 					if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
 						qry = qry + " and company_code = ? ";
 					}
-					qry = qry + " ) as inActive_companies  FROM company";
+					qry = qry + " ) as inActive_companies  from [MasterDB].[dbo].company";
 			stmt = con.prepareStatement(qry);
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 				stmt.setString(i++, obj.getStatus());
@@ -268,7 +268,7 @@ public class CompanyDao {
 		List<Company> objsList = new ArrayList<Company>();
 		try {
 			String qry = "SELECT  status "
-					+ " FROM [company] where status is not null and status <> ''  "; 
+					+ " from [MasterDB].[dbo].[company] where status is not null and status <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 				qry = qry + "and status = ? ";
@@ -298,7 +298,7 @@ public class CompanyDao {
 	public List<Company> checkUniqueIfForCompany(Company obj) throws Exception {
 		List<Company> objsList = new ArrayList<Company>();
 		try {
-			String qry = "SELECT company_code FROM [company]  "
+			String qry = "SELECT company_code from [MasterDB].[dbo].[company]  "
 					+ " where status is not null and status <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {

@@ -185,14 +185,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                  <c:if test="${sessionScope.BASE_ROLE eq 'Administrator' }">
                                  <li><a href="<%=request.getContextPath() %>/report/MSW">MSW Reports</a></li>
 <li><a href="<%=request.getContextPath() %>/report/CND">C&D Reports</a></li>
-								  <li><a href="<%=request.getContextPath() %>/report/BMW">BMW Reports</a></li>  <li><a href="<%=request.getContextPath() %>/user">Users</a></li> </c:if>
+								  <li><a href="<%=request.getContextPath() %>/report/BMW">BMW Reports</a></li>  <%-- <li><a href="<%=request.getContextPath() %>/user">Users</a></li> --%> </c:if>
 								 <li>
                             <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Logs Dashboard</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<%=request.getContextPath() %>/logs/MSW">MSW Logs Dashboard</a></li>
                                 <li><a href="<%=request.getContextPath() %>/logs/CND">CND Logs Dashboard</a></li> <li><a href="<%=request.getContextPath() %>/logs/BMW">BMW Logs Dashboard</a></li>
 								 <li>
-                            <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Logs Cumulative Dashboard</span></a>
                            
                         </li>
 								 

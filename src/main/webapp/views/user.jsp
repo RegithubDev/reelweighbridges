@@ -432,8 +432,8 @@ input[type=number] {
     <script src="<c:url value="/resources/js/moment-v2.8.4.min.js"  />"></script>
     <script src="<c:url value="/resources/js/datetime-moment-v1.10.12.js"  />"></script>
     <script src="<c:url value="/resources/js/sweetalert-v.1.1.0.min.js"  />"></script>
-     <script src="<c:url value="/resources/vendors/js/extensions/sweetalert2.all.min.js" />"></script>
-      <script src="<c:url value="/resources/js/scripts/extensions/ext-component-sweet-alerts.min.js" />"></script>
+    <script src="<c:url value="/resources/vendors/js/extensions/sweetalert2.all.min.js" />"></script>
+    <script src="<c:url value="/resources/js/scripts/extensions/ext-component-sweet-alerts.min.js" />"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <form name="getForm" id="getForm" method="post">
     	<input type="hidden" name="user_id" id="user_id" />

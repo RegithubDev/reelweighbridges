@@ -383,4 +383,32 @@ public class UserController {
         
         return style;
 	}
+	
+	@RequestMapping(value = "/ajax/getProjectListForUser", method = {RequestMethod.GET,RequestMethod.POST},produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<User> getProjectListForUser(@ModelAttribute User obj,HttpSession session) {
+		List<User> objsList = null;
+		try {
+			objsList = service.getProjectListForUser(obj);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("getProjectListForUser : " + e.getMessage());
+		}
+		return objsList;
+	}
+	
+	@RequestMapping(value = "/ajax/getDeptListForUser", method = {RequestMethod.GET,RequestMethod.POST},produces=MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<User> getDeptListForUser(@ModelAttribute User obj,HttpSession session) {
+		List<User> objsList = null;
+		try {
+			objsList = service.getDeptListForUser(obj);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error("getDeptListForUser : " + e.getMessage());
+		}
+		return objsList;
+	}
 }

@@ -41,7 +41,7 @@ public class ProjectDao {
 		try {
 			int arrSize = 0;
 			String qry =" select ";
-					qry = qry +"(select count( project_code) from project where project_code is not null  ";
+					qry = qry +"(select count( project_code) from [MasterDB].[dbo].project where project_code is not null  ";
 					if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 						qry = qry + " and status = ? ";
 						arrSize++;
@@ -59,7 +59,7 @@ public class ProjectDao {
 						arrSize++;
 					}
 					qry = qry +  " ) as all_projects ,";
-					qry = qry +	"(select count( project_code) from project where project_code is not null and status = 'Active' ";
+					qry = qry +	"(select count( project_code) from [MasterDB].[dbo].project where project_code is not null and status = 'Active' ";
 									if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 										qry = qry + "  and status = ? ";
 										arrSize++;
@@ -77,7 +77,7 @@ public class ProjectDao {
 										arrSize++;
 									}
 									qry = qry + " ) as active_projects,"
-									+ "(select count( project_code) from project where project_code is not null   and status <> 'Active' ";
+									+ "(select count( project_code) from [MasterDB].[dbo].project where project_code is not null   and status <> 'Active' ";
 									if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 										qry = qry + " and status = ? ";
 										arrSize++;
@@ -96,11 +96,11 @@ public class ProjectDao {
 									}
 									qry = qry + " ) as inActive_projects,"
 					+ "p.id	,project_code,	project_name,p.company_code,p.sbu_code,c.company_name,s.sbu_name,	p.status,	FORMAT (p.created_date, 'dd-MMM-yy') as created_date,up.user_name as 	"
-					+ " created_by,FORMAT	(p.modified_date, 'dd-MMM-yy') as modified_date,up1.user_name as  modified_by from [project] p "
-					+ " left join [user_profile] up on p.created_by = up.user_id "
-					+ " left join [user_profile] up1 on p.modified_by = up1.user_id "
-					+ " left join [company] c on  p.company_code = c.company_code "
-					+ " left join [sbu] s on p.sbu_code = s.sbu_code "
+					+ " created_by,FORMAT	(p.modified_date, 'dd-MMM-yy') as modified_date,up1.user_name as  modified_by from [MasterDB].[dbo].[project] p "
+					+ " left join [MasterDB].[dbo].[user_profile] up on p.created_by = up.user_id "
+					+ " left join [MasterDB].[dbo].[user_profile] up1 on p.modified_by = up1.user_id "
+					+ " left join [MasterDB].[dbo].[company] c on  p.company_code = c.company_code "
+					+ " left join [MasterDB].[dbo].[sbu] s on p.sbu_code = s.sbu_code "
 					+ " where p.project_code is not null and p.project_code <> '' ";
 			
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
@@ -184,8 +184,8 @@ public class ProjectDao {
 		List<Project> objsList = new ArrayList<Project>();
 		try {
 			String qry = "SELECT  p.company_code,	c.company_name  "
-					+ " FROM [project] p  "
-					+ " left join [company] c on  p.company_code = c.company_code "
+					+ " from [MasterDB].[dbo].[project] p  "
+					+ " left join [MasterDB].[dbo].[company] c on  p.company_code = c.company_code "
 					+ "where project_code is not null and project_code <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
@@ -231,7 +231,7 @@ public class ProjectDao {
 		List<Project> objsList = new ArrayList<Project>();
 		try {
 			String qry = "SELECT  id,	project_code,	project_name,	status "
-					+ " FROM [project] p  where project_code is not null and project_code <> ''  "; 
+					+ " from [MasterDB].[dbo].[project] p  where project_code is not null and project_code <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
 				qry = qry + "and company_code = ? ";
@@ -276,7 +276,7 @@ public class ProjectDao {
 		List<Project> objsList = new ArrayList<Project>();
 		try {
 			String qry = "SELECT  status "
-					+ " FROM [project] p  where status is not null and status <> ''  "; 
+					+ " from [MasterDB].[dbo].[project] p  where status is not null and status <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
 				qry = qry + "and status = ? ";
@@ -366,8 +366,8 @@ public class ProjectDao {
 		List<Project> objsList = new ArrayList<Project>();
 		try {
 			String qry = "SELECT  p.sbu_code,sbu_name "
-					+ " FROM [project] p  "
-					+ "left join [sbu] s on p.sbu_code = s.sbu_code "
+					+ " from [MasterDB].[dbo].[project] p  "
+					+ "left join [MasterDB].[dbo].[sbu] s on p.sbu_code = s.sbu_code "
 					+ " where p.sbu_code is not null and p.sbu_code <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getStatus())) {
@@ -412,7 +412,7 @@ public class ProjectDao {
 	public List<SBU> getCompaniesList(Project obj) throws SQLException {
 		List<SBU> menuList = null;
 		try{  
-			String qry = "select  company_name, company_code from [company]";
+			String qry = "select  company_name, company_code from [MasterDB].[dbo].[company]";
 			menuList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<SBU>(SBU.class));
 			
 		}catch(Exception e){ 
@@ -425,7 +425,7 @@ public class ProjectDao {
 	public List<SBU> getSbuList(Project obj) throws SQLException {
 		List<SBU> menuList = null;
 		try{  
-			String qry = "select sbu_name, sbu_code,company_code from [sbu] ";
+			String qry = "select sbu_name, sbu_code,company_code from [MasterDB].[dbo].[sbu] ";
 			menuList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<SBU>(SBU.class));
 			
 		}catch(Exception e){ 
@@ -439,7 +439,7 @@ public class ProjectDao {
 		List<Project> objsList = new ArrayList<Project>();
 		try {
 			String qry = "SELECT  sbu_code,sbu_name,company_code  "
-					+ " FROM [sbu]   "
+					+ " from [MasterDB].[dbo].[sbu]   "
 					+ " where sbu_code is not null and sbu_code <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCompany_code())) {
@@ -463,7 +463,7 @@ public class ProjectDao {
 	public List<Project> checkUniqueIfForProject(Project obj) throws Exception {
 		List<Project> objsList = new ArrayList<Project>();
 		try {
-			String qry = "SELECT project_code FROM [project]  "
+			String qry = "SELECT project_code from [MasterDB].[dbo].[project]  "
 					+ " where status is not null and status <> ''  "; 
 			int arrSize = 0;
 			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getProject_code())) {
