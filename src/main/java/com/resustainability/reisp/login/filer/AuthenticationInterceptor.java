@@ -41,6 +41,15 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
 				
 				 return true;
 			}
+			if(requestURI.equals("/"+context_path+"/reone/push-bmw-summery-data") &&  !requestURI.equals("/"+context_path+"/login")) {
+				
+				 return true;
+			}
+			if(requestURI.equals("/"+context_path+"/reone/getNagpurList") &&  !requestURI.equals("/"+context_path+"/login")) {
+				
+				 return true;
+			}
+			if(!request.getRequestURI().contains("@")){
 			if( !requestURI.equals("/"+context_path+"/") && !requestURI.equals("/"+context_path+"/login") 
 					&& !requestURI.equals("/") && !requestURI.equals("/login") && !requestURI.equals("/"+context_path+"/logout")){
 				 User userData = (User) request.getSession().getAttribute("user");
@@ -50,9 +59,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
 				 	} finally {
 				 	   if(userData == null ){
 					    	if(request.getRequestURI().contains("/"+context_path+"/")){
-					    		request.getSession().invalidate();
-					    		response.sendRedirect("/"+context_path+"/login");
-					    		return false;
+					    		//request.getSession().invalidate();
+					    		response.sendRedirect("/"+context_path+"/login/{email_id}");
+					    		return true;
 					    	}else{
 					    		response.sendRedirect("/login");
 					    	}
@@ -90,6 +99,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter{
 					 }
 				}
 			}
+		  }else {
+			  return true;
+		}
 		} catch (Exception e) {
 			logger.error("preHandle : " + e.getMessage());
 			return false;

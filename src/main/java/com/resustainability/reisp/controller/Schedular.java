@@ -46,8 +46,21 @@ public class Schedular {
 	
 	/**********************************************************************************/
 	
-	@Scheduled(cron = "${cron.expression.send.mail.with.contract.bg.insurance.report}")
+	@Scheduled(cron = "${cron.expression.generate.alerts}")
 	public void userLoginTimeout(){
+		if(is_cron_jobs_enabled || is_cron_jobs_enabled_in_qa) {
+			try {
+				List <DashBoardWeighBridge> trasactionsList = service.getTransactionsList(null);
+		    	 System.out.println("cronJob Called!!!!");
+			 } catch (Exception e) {
+				 e.printStackTrace();
+				 logger.error("userLoginTimeout() : "+e.getMessage());
+			 }
+		}
+	}
+	
+	@Scheduled(cron = "${cron.expression.send.mail.with.contract.bg.insurance.report}")
+	public void userLoginTimeouts(){
 		if(is_cron_jobs_enabled || is_cron_jobs_enabled_in_qa) {
 			try {
 				List <DashBoardWeighBridge> trasactionsList = service.getTransactionsList(null);

@@ -363,9 +363,31 @@ License: You must have a valid license purchased only from themeforest(the above
        	  <tr>
 			<td>${objjr.TRNO }</td>
 			<td>${objjr.VEHICLENO }</td>
-			<td>${objjr.DATEIN }</td>
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.DATEIN, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.DATEIN, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[0]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.DATEIN }</td>
+			   </c:otherwise>
+		    </c:choose>
+			
 			<td>${objjr.TIMEIN }</td>
-			<td>${objjr.DATEOUT }</td>
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.DATEOUT, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.DATEOUT, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[0]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.DATEOUT }</td>
+			   </c:otherwise>
+		    </c:choose>
+		    
 			<td>${objjr.TIMEOUT }</td>
 			<td>${objjr.FIRSTWEIGHT }</td>
 			<td style="

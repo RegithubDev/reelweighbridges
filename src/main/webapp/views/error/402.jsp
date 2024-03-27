@@ -55,7 +55,7 @@
           <p class="text-muted mt-4 mb-4">
             NO Data Available in System For Selected Date
           </p>
-          <a href="<%=request.getContextPath() %>/dashboard-home" class="btn btn-danger btn-rounded waves-effect waves-light mb-5">Back to home</a>
+          <a href="<%=request.getContextPath() %>/dashboard-wb" class="btn btn-danger btn-rounded waves-effect waves-light mb-5">Back to home</a>
         </div>
       </div>
       <!-- ============================================================== -->

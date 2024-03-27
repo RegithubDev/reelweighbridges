@@ -22,6 +22,7 @@ import org.springframework.util.StringUtils;
 
 import com.resustainability.reisp.model.BMW;
 import com.resustainability.reisp.model.BrainBox;
+import com.resustainability.reisp.model.DashBoardWeighBridge;
 import com.resustainability.reisp.model.SBU;
 
 @Repository
@@ -252,6 +253,97 @@ public class BMWDao {
 		}catch(Exception e){ 
 			e.printStackTrace();
 			throw new SQLException(e.getMessage());
+		}
+		return count;
+	}
+
+	public List<BrainBox> getNagpurCNDList(DashBoardWeighBridge obj1, BrainBox obj, HttpServletResponse response) throws SQLException {
+		List<BrainBox> menuList = null;
+		boolean flag = false;
+		int count = 0;
+		try{  
+			String user_id = "recgwbngpr";
+			String password = "X1298extvbddyzA";
+			//String Myip = Inet4Address.getLocalHost().getHostAddress();
+			String time = " 12:00:00AM";
+			
+			String qry = "SELECT SITEID as TransactionNo1,Trno as TransactionNo2,TRANSPORTER as Transporter,PARTY as Transferstation, Vehicleno as VehicleNo, Material as Zone, "
+					+ "Party as Location, Transporter as Transporter, LEFT(CONVERT(varchar, Datein, 24),9) AS DateIN, "
+					+ "RIGHT(CONVERT(varchar, Timein, 24),11) AS TimeIN, LEFT(CONVERT(varchar, Dateout, 24),9) AS DateOUT, "
+					+ "RIGHT(CONVERT(varchar, Timeout, 24),11) AS TimeOUT,Firstweight as GROSSWeight, SiteID, Secondweight as TareWeight,"
+					+ "NetWT as NetWeight, typeofwaste AS TypeofMaterial FROM [All_CnD_Sites].[dbo].[WEIGHT] WITH (nolock) "
+					+ "WHERE (Trno IS NOT NULL) AND (Vehicleno IS NOT NULL) AND (Datein IS NOT NULL)"
+					+ "AND (Timein IS NOT NULL) AND (Firstweight IS NOT NULL) AND (Dateout IS NOT NULL) AND "
+					+ "(Timeout IS NOT NULL) AND (Secondweight IS NOT NULL) AND (NetWT IS NOT NULL) and(SiteID is not null) AND SITEID IN"
+					+ "('WB1','WB2','WB3')  and NetWT <> '' and NetWT is not null and [SITEID] = 'NAGPURCND_WB1' ";
+					int arrSize = 0;
+				    if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date())) {
+				    	qry = qry + " AND CONVERT(varchar(10), DATEOUT, 105) = CONVERT(varchar(10), ?, 105) ";
+						arrSize++;
+					}
+					qry = qry +"  ORDER BY TRNO desc "; 
+					Object[] pValues = new Object[arrSize];
+					int i = 0;
+					if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date())) {
+						pValues[i++] = obj1.getFrom_date()+time;;
+					}
+			menuList = jdbcTemplate.query( qry,pValues, new BeanPropertyRowMapper<BrainBox>(BrainBox.class));
+		
+		}catch(Exception e){ 
+			e.printStackTrace();
+			throw new SQLException(e.getMessage());
+		}
+		return menuList;
+	}
+
+	public int getLogInfo(DashBoardWeighBridge obj1, BrainBox obj, List<BrainBox> companiesList) throws SQLException {
+		int count = 0;
+		try{  
+			if(!StringUtils.isEmpty(companiesList) && companiesList.size() > 0) {
+				for (BrainBox obj11 : companiesList) {
+					String checkingLogQry = "SELECT count(*) from [nagpur_logs] where weight_TRNO= ? and VEHICLENO= ?";
+					count = jdbcTemplate.queryForObject(checkingLogQry, new Object[] {obj11.getTransactionNo2(),obj11.getVehicleNo()}, Integer.class);
+				}
+			}
+		}catch(Exception e){ 
+			e.printStackTrace();
+			throw new SQLException(e.getMessage());
+		}
+		return count;
+	}
+
+	public Object getLogsOfResults(List<BrainBox> companiesList, DashBoardWeighBridge obj1) throws SQLException {
+		int count = 0;
+		try {
+			NamedParameterJdbcTemplate namedParamJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+			if(companiesList.size() > 0) {
+				for(BrainBox obj : companiesList) {
+					obj.setGROSSWeight(obj1.getPTC_status());
+					obj.setTareWeight(obj1.getMSG());
+					obj.setDateOUT(obj1.getUser_ip());					
+					String insertQry = "INSERT INTO [nagpur_logs] (user_ip,weight_TRNO,VEHICLENO,PTC_status,PTCDT,MSG)"
+							+ " values (:dateOUT,:TransactionNo2,:VehicleNo,:GROSSWeight,GETDATE(),:TareWeight)  ";
+					
+					BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(obj);		 
+				    count = namedParamJdbcTemplate.update(insertQry, paramSource);
+				}
+			}else {
+				BrainBox obj = new BrainBox();
+				obj.setGROSSWeight(null);
+				obj.setTareWeight(obj1.getMSG());
+				obj.setDateOUT(obj1.getUser_ip());		
+				String insertQry = "INSERT INTO [nagpur_logs] (user_ip,weight_TRNO,VEHICLENO,PTC_status,PTCDT,MSG) values (:dateOUT,:TransactionNo2,:VehicleNo,:GROSSWeight,GETDATE(),:TareWeight)  "
+				+ " ";
+				
+				BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(obj);		 
+			    count = namedParamJdbcTemplate.update(insertQry, paramSource);
+			}
+		
+			
+		}catch(Exception e){ 
+			e.printStackTrace();
+			throw new SQLException(e.getMessage());
+			
 		}
 		return count;
 	}

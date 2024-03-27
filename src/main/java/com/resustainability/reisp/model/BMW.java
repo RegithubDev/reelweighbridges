@@ -6,12 +6,92 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class BMW {
 	
-private String company,plant,CustomerDistrict,user_id,password,repulled,user_ip,msg,PTC_status,CustomerTown,CustomerName,CustomerCABSCode,CustomerSAPCode,
-	TypeofEstablishment,ActualVisitDate,ActualVisitMonth,ActualVisitYear,VisitDayTime,BlueCount,BlueWeight,
-	RedCount,RedWeight,YellowCount,YellowWeight,CytotoxicCount,CytotoxicWeight,WhitesCount,WhitesWeight,TotalCount,Logs,
-	CollectionLatitude,ServerDateTime,uniqueID,Active;
+private String company,plant,CustomerDistrict,user_id,password,repulled,user_ip,msg,PTC_status,CustomerCode,CustomerTown,CustomerName,CustomerCABSCode,CustomerSAPCode,
+	TypeofEstablishment,ActualVisitDate,ActualVisitMonth,ActualVisitYear,VisitDayTime,BlueCount,BlueWeight,MSG,status,pull_datetime,
+	RedCount,RedWeight,YellowCount,YellowWeight,CytotoxicCount,CytotoxicWeight,WhitesCount,WhitesWeight,TotalCount,Logs,plant_name,repull,
+	CollectionLatitude,ServerDateTime,uniqueID,Active,TotalVisits,ActiveVistis,incativeVistis,customerId;
 
 	
+
+	public String getTotalVisits() {
+	return TotalVisits;
+}
+
+public void setTotalVisits(String totalVisits) {
+	TotalVisits = totalVisits;
+}
+
+public String getActiveVistis() {
+	return ActiveVistis;
+}
+
+public void setActiveVistis(String activeVistis) {
+	ActiveVistis = activeVistis;
+}
+
+public String getIncativeVistis() {
+	return incativeVistis;
+}
+
+public void setIncativeVistis(String incativeVistis) {
+	this.incativeVistis = incativeVistis;
+}
+
+public String getCustomerId() {
+	return customerId;
+}
+
+public void setCustomerId(String customerId) {
+	this.customerId = customerId;
+}
+
+	public String getRepull() {
+	return repull;
+}
+
+public void setRepull(String repull) {
+	this.repull = repull;
+}
+
+	public String getPlant_name() {
+	return plant_name;
+}
+
+public void setPlant_name(String plant_name) {
+	this.plant_name = plant_name;
+}
+
+	public String getCustomerCode() {
+	return CustomerCode;
+}
+
+public void setCustomerCode(String customerCode) {
+	CustomerCode = customerCode;
+}
+
+	public String getMSG() {
+	return MSG;
+}
+
+public void setMSG(String mSG) {
+	MSG = mSG;
+}
+
+public String getStatus() {
+	return status;
+}
+
+public void setStatus(String status) {
+	this.status = status;
+}
+
+public String getPull_datetime() {
+	return pull_datetime;
+}
+
+public void setPull_datetime(String pull_datetime) {
+	this.pull_datetime = pull_datetime;
+}
 
 	@JsonProperty("BATCHID")
 	private String APIID;

@@ -34,7 +34,7 @@ public class BrainBox {
 	private String Transporter; 
 	private String Transferstation;
 	
-	
+	private String transactionNo;
 	public BrainBox() {}
 
     private Map<String, Object> otherProperties = new LinkedHashMap<>();
@@ -59,6 +59,19 @@ public class BrainBox {
 		Transporter = transporter;
 		Transferstation = transferstation;
 	}
+	
+	public String getTransactionNo() {
+		return transactionNo;
+	}
+
+	public void setTransactionNo(String transactionNo) {
+		this.transactionNo = transactionNo;
+	}
+
+	public void setOtherProperties(Map<String, Object> otherProperties) {
+		this.otherProperties = otherProperties;
+	}
+
 	public String getTransactionNo1() {
 		return TransactionNo1;
 	}

@@ -1,12 +1,17 @@
 package com.resustainability.reisp.service;
 
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.resustainability.reisp.dao.DashBoardWeighBridgeDao;
+import com.resustainability.reisp.model.BrainBox;
 import com.resustainability.reisp.model.DashBoardWeighBridge;
+import com.resustainability.reisp.model.SBU;
 @Service
 public class DashBoardWeighBridgeService {
 	@Autowired
@@ -72,4 +77,16 @@ public class DashBoardWeighBridgeService {
 	public List<DashBoardWeighBridge> getLogsReportALL(DashBoardWeighBridge obj) throws Exception {
 		return dao.getLogsReportALL(obj);
 	}
+	
+	public List<BrainBox> getHydCNDList(SBU obj1, BrainBox obj, HttpServletResponse response) throws Exception {
+      return this.dao.getHydCNDList(obj1, obj, response);
+   }
+
+   public Object getLogsOfResults(List<BrainBox> hydList, SBU obj1) throws Exception {
+      return this.dao.getLogsOfResults(hydList, obj1);
+   }
+
+   public int getLogInfo(SBU obj1, BrainBox obj, List<BrainBox> hydList) throws SQLException {
+      return this.dao.getLogInfo(obj1, obj, hydList);
+   }
 }

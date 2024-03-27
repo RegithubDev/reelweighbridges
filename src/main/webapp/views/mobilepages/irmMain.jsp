@@ -434,7 +434,7 @@ tr td:last-child {
 		       <div class="dt-buttons text-primary" style="height : 1.5em;">
 		      Last 30 Days
 		        </div>
-		          <table id="datatable-irm-my" class="invoice-list-table table" style="width: 100%; font-size:90%">
+		          <table id="datatable-irm-my" class="invoice-list-table table is-zebra w-full text-left" style="width: 100%; font-size:90%">
 		            <thead>
 		              <tr>
 		                <th>#</th>
@@ -457,7 +457,7 @@ tr td:last-child {
                <div class="card-datatable table-responsive">
 		       <div class="dt-buttons" style="height : 1.5em;">
 		        </div>
-		          <table id="datatable-irm-pending" class="invoice-list-table table" style="width: 100%; font-size:90%">
+		          <table id="datatable-irm-pending" class="invoice-list-table table is-zebra w-full text-left" style="width: 100%; font-size:90%">
 		            <thead>
 		              <tr>
 		                <th>#</th>
@@ -481,7 +481,7 @@ tr td:last-child {
 		       <div class="dt-buttons text-primary" style="height : 1.5em;">
 		      Last 30 Days
 		        </div>
-		          <table id="datatable-irm-completed" class="invoice-list-table table" style="width: 100%; font-size:90%">
+		          <table id="datatable-irm-completed" class="invoice-list-table table is-zebra w-full text-left" style="width: 100%; font-size:90%">
 		            <thead>
 		              <tr>
 		                <th>#</th>
@@ -506,7 +506,7 @@ tr td:last-child {
 		        <div class="dt-buttons text-primary" style="height : 1.5em;">
 		      Last 30 Days
 		        </div>
-		          <table id="datatable-irm-no-reviewer" class="invoice-list-table table" style="width: 100%; font-size:90%">
+		          <table id="datatable-irm-no-reviewer" class="invoice-list-table table is-zebra w-full text-left" style="width: 100%; font-size:90%">
 		            <thead>
 		              <tr>
 		                <th>#</th>
@@ -531,7 +531,7 @@ tr td:last-child {
 		        <div class="dt-buttons text-primary" style="height : 1.5em;">
 		      Last 30 Days
 		        </div>
-		          <table id="datatable-irm" class="invoice-list-table table" style="width: 100%; font-size:90%">
+		          <table id="datatable-irm" class="invoice-list-table table is-zebra w-full text-left" style="width: 100%; font-size:90%">
 		            <thead>
 		              <tr>
 		                <th>#</th>
@@ -570,7 +570,7 @@ tr td:last-child {
        <div class="dt-buttons" style="height : 0.5em;">
       
         </div>
-          <table id="datatable-irm" class="invoice-list-table table" style="width: 100%; font-size:90%">
+          <table id="datatable-irm" class="invoice-list-table table is-zebra w-full text-left" style="width: 100%; font-size:90%">
             <thead>
               <tr>
                 <th>#</th>

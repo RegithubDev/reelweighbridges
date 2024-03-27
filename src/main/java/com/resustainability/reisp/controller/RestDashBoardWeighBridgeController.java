@@ -2,16 +2,19 @@ package com.resustainability.reisp.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -32,30 +35,39 @@ import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.resustainability.reisp.constants.PageConstants;
+import com.resustainability.reisp.model.BrainBox;
 import com.resustainability.reisp.model.DashBoardWeighBridge;
+import com.resustainability.reisp.model.SBU;
 import com.resustainability.reisp.model.DashBoardWeighBridge;
 import com.resustainability.reisp.model.User;
 import com.resustainability.reisp.service.DashBoardWeighBridgeService;
 
-@Controller
-public class DashBoardWeighBridgeController {
+@RestController
+@RequestMapping("/reone")
+public class RestDashBoardWeighBridgeController {
 	
 	@InitBinder 
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
-	Logger logger = Logger.getLogger(DashBoardWeighBridgeController.class);
+	Logger logger = Logger.getLogger(RestDashBoardWeighBridgeController.class);
 	
 	@Autowired
 	DashBoardWeighBridgeService service;
@@ -84,7 +96,7 @@ public class DashBoardWeighBridgeController {
 	
 	
 	@RequestMapping(value = "/dashboard-home", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView dashboardhome(@ModelAttribute User user,DashBoardWeighBridge obj, HttpSession session) {
+	public ModelAndView dashboardhome(@RequestBody User user,DashBoardWeighBridge obj, HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.home);
 		String userId = null;
 		String userName = null; 
@@ -111,7 +123,7 @@ public class DashBoardWeighBridgeController {
 	
 	
 	@RequestMapping(value = "/dashboard-wb", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView dashboard(@ModelAttribute User user,DashBoardWeighBridge obj, HttpSession session) {
+	public ModelAndView dashboard(@RequestBody User user,DashBoardWeighBridge obj, HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.MSWdashboard);
 		String userId = null;
 		String userName = null;
@@ -137,7 +149,7 @@ public class DashBoardWeighBridgeController {
 	}
 	
 	@RequestMapping(value = "/dashboard-wb-cnd", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView dashboardCnD(@ModelAttribute User user,DashBoardWeighBridge obj, HttpSession session) {
+	public ModelAndView dashboardCnD(@RequestBody User user,DashBoardWeighBridge obj, HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.CNDdashboard);
 		String userId = null;
 		String userName = null;
@@ -163,7 +175,7 @@ public class DashBoardWeighBridgeController {
 	}
 	
 	@RequestMapping(value = "/dashboard-wb-bmw", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView dashboardBMW(@ModelAttribute User user,DashBoardWeighBridge obj, HttpSession session) {
+	public ModelAndView dashboardBMW(@RequestBody User user,DashBoardWeighBridge obj, HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.BMWdashboard);
 		String userId = null;
 		String userName = null;
@@ -190,7 +202,7 @@ public class DashBoardWeighBridgeController {
 	
 	
 	@RequestMapping(value = "/dashboard-wb-daily", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView dashboardDAily(@ModelAttribute User user,DashBoardWeighBridge obj, HttpSession session) {
+	public ModelAndView dashboardDAily(@RequestBody User user,DashBoardWeighBridge obj, HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.dailyWeighBridge);
 		String userId = null;
 		String userName = null;
@@ -212,7 +224,7 @@ public class DashBoardWeighBridgeController {
 	
 	@RequestMapping(value = "/ajax/getDatawithSBU", method = {RequestMethod.GET,RequestMethod.POST},produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<DashBoardWeighBridge> getDatawithSBU(@ModelAttribute DashBoardWeighBridge obj,HttpSession session) {
+	public List<DashBoardWeighBridge> getDatawithSBU(@RequestBody DashBoardWeighBridge obj,HttpSession session) {
 		List<DashBoardWeighBridge> sitesList = null;
 		String userId = null;
 		String userName = null;
@@ -230,11 +242,12 @@ public class DashBoardWeighBridgeController {
 	}
 	
 	@RequestMapping(value = "/report/{sbu}", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView mswReport(@ModelAttribute User user,DashBoardWeighBridge obj,@PathVariable("sbu") String sbu , HttpSession session) {
+	public List <DashBoardWeighBridge> mswReport(@RequestBody User user,DashBoardWeighBridge obj,@PathVariable("sbu") String sbu , HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.MSWReports);
 		String userId = null;
 		String userName = null;
 		String role = null;
+		List <DashBoardWeighBridge> trasactionsList = null;
 		try {   
 			userId = (String) session.getAttribute("USER_ID");
 			userName = (String) session.getAttribute("USER_NAME");
@@ -244,7 +257,7 @@ public class DashBoardWeighBridgeController {
 			
 			if(sbu.equals("BMW")) {
 				model = new ModelAndView(PageConstants.BMWReports);
-				List <DashBoardWeighBridge> trasactionsList = service.getTransactionsList1(obj);
+			trasactionsList = service.getTransactionsList1(obj);
 				model.addObject("trasactionsList", trasactionsList);
 				List <DashBoardWeighBridge> monthList = service.getMonthList(obj);
 				model.addObject("monthList", monthList);
@@ -256,17 +269,18 @@ public class DashBoardWeighBridgeController {
 			}else {
 				List <DashBoardWeighBridge> projectsList = service.getProjectssList(obj);
 				model.addObject("projectsList", projectsList);
+				return projectsList;
 			}
 		
 		
 		} catch (Exception e) {
 			e.printStackTrace();
 		};
-		return model;
+		return trasactionsList;
 	}
 	
 	@RequestMapping(value = "/report-logs/{sbu}", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView reportLogs(@ModelAttribute User user,DashBoardWeighBridge obj,@PathVariable("sbu") String sbu , HttpSession session) {
+	public ModelAndView reportLogs(@RequestBody User user,DashBoardWeighBridge obj,@PathVariable("sbu") String sbu , HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.bmwlogsPage);
 		String userId = null;
 		String userName = null;
@@ -295,7 +309,7 @@ public class DashBoardWeighBridgeController {
 	
 	@RequestMapping(value = "/ajax/getMSWDataWithSiteID", method = {RequestMethod.GET,RequestMethod.POST},produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<DashBoardWeighBridge> getMSWDataWithSiteID(@ModelAttribute DashBoardWeighBridge obj,HttpSession session) {
+	public List<DashBoardWeighBridge> getMSWDataWithSiteID(@RequestBody DashBoardWeighBridge obj,HttpSession session) {
 		List<DashBoardWeighBridge> sitesList = null;
 		String userId = null;
 		String userName = null;
@@ -314,7 +328,7 @@ public class DashBoardWeighBridgeController {
 	
 	@RequestMapping(value = "/ajax/getCNDDataWithSiteID", method = {RequestMethod.GET,RequestMethod.POST},produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<DashBoardWeighBridge> getCNDDataWithSiteID(@ModelAttribute DashBoardWeighBridge obj,HttpSession session) {
+	public List<DashBoardWeighBridge> getCNDDataWithSiteID(@RequestBody DashBoardWeighBridge obj,HttpSession session) {
 		List<DashBoardWeighBridge> sitesList = null;
 		String userId = null;
 		String userName = null;
@@ -333,7 +347,7 @@ public class DashBoardWeighBridgeController {
 	
 
 	@RequestMapping(value = "/export-project-data", method = {RequestMethod.GET,RequestMethod.POST})
-	public void exportProjectData(HttpServletRequest request, HttpServletResponse response,HttpSession session,@ModelAttribute DashBoardWeighBridge obj,RedirectAttributes attributes){
+	public void exportProjectData(HttpServletRequest request, HttpServletResponse response,HttpSession session,@RequestBody DashBoardWeighBridge obj,RedirectAttributes attributes){
 		List<DashBoardWeighBridge> dataList = new ArrayList<DashBoardWeighBridge>();
 		String userId = null;String userName = null;
 		try {
@@ -487,7 +501,7 @@ public class DashBoardWeighBridgeController {
 	}
 	
 	@RequestMapping(value = "/export-project-manual-data", method = {RequestMethod.GET,RequestMethod.POST})
-	public void exportProjectManualData(HttpServletRequest request, HttpServletResponse response,HttpSession session,@ModelAttribute DashBoardWeighBridge obj,RedirectAttributes attributes){
+	public void exportProjectManualData(HttpServletRequest request, HttpServletResponse response,HttpSession session,@RequestBody DashBoardWeighBridge obj,RedirectAttributes attributes){
 		List<DashBoardWeighBridge> dataList = new ArrayList<DashBoardWeighBridge>();
 		String userId = null;String userName = null;
 		try {
@@ -731,7 +745,7 @@ public class DashBoardWeighBridgeController {
 	}
 	
 	@RequestMapping(value = "/logs/{sbu}", method = {RequestMethod.POST, RequestMethod.GET})
-	public ModelAndView Logs(@ModelAttribute User user,DashBoardWeighBridge obj,@PathVariable("sbu") String sbu , HttpSession session) {
+	public ModelAndView Logs(@RequestBody User user,DashBoardWeighBridge obj,@PathVariable("sbu") String sbu , HttpSession session) {
 		ModelAndView model = new ModelAndView(PageConstants.logsPage);
 		String userId = null;
 		String userName = null;
@@ -753,7 +767,7 @@ public class DashBoardWeighBridgeController {
 	
 	
 	@RequestMapping(value = "/export-bmw-data", method = {RequestMethod.GET,RequestMethod.POST})
-	public void exportBMWSummery(HttpServletRequest request, HttpServletResponse response,HttpSession session,@ModelAttribute DashBoardWeighBridge obj,RedirectAttributes attributes){
+	public void exportBMWSummery(HttpServletRequest request, HttpServletResponse response,HttpSession session,@RequestBody DashBoardWeighBridge obj,RedirectAttributes attributes){
 		List<DashBoardWeighBridge> dataList = new ArrayList<DashBoardWeighBridge>();
 		String userId = null;String userName = null;
 		try {
@@ -934,4 +948,85 @@ public class DashBoardWeighBridgeController {
 		}
 		//return view;
 	}
+	 @RequestMapping(
+		      value = {"/getHydCNDList"},
+		      method = {RequestMethod.GET, RequestMethod.POST},
+		      produces = {"application/json"}
+		   )
+	@ResponseBody
+	   public String getHydCNDList(@RequestHeader("Authorization") String authentication, @RequestBody SBU obj1, BrainBox obj, HttpSession session, HttpServletResponse response, Errors filterErrors) throws IOException {
+	      List<BrainBox> hydList = null;
+	      String json = null;
+	      boolean flag = false;
+	      boolean call_service = true;
+	      boolean log = true;
+	      new HashMap();
+	      ObjectMapper objectMapper = new ObjectMapper();
+
+	      HashMap data;
+	      try {
+	         String user_id1 = "recgwbhydcnd";
+	         String password1 = "Xextd1298dvyzAb";
+	         String pair = new String(Base64.decodeBase64(authentication.substring(6)));
+	         String userName = pair.split(":")[0];
+	         String password = pair.split(":")[1];
+	         obj1.setUser_id(userName);
+	         obj1.setPassword(password);
+	         InetAddress ip = InetAddress.getLocalHost();
+	         System.out.println("IP address: " + ip.getHostAddress());
+	         String newIp = ip.getHostAddress();
+	         String Myip = "10.100.3.11";
+	         String[] IP = new String[]{"10.2.24.18", "10.2.24.81", "10.2.28.164", "196.12.46.130", "117.200.48.237", "112.133.222.124", "61.0.227.124", "14.99.138.146", "34.93.149.251", Myip, newIp};
+	         if (IP.length > 0) {
+	            for(int i = 0; i < IP.length; ++i) {
+	               if (IP[i].contentEquals(newIp)) {
+	                  flag = true;
+	               }
+	            }
+
+	            System.out.println(flag);
+	         }
+
+	         obj1.setPTC_status((String)null);
+	         if (!flag) {
+	            data = new HashMap();
+	            data.put("200", "No Access for this IP Address: " + newIp);
+	            json = objectMapper.writeValueAsString(data);
+	            obj1.setMSG("No Access for this IP Address : " + newIp);
+	            obj1.setUser_ip(newIp);
+	            hydList = new ArrayList(1);
+	         } else {
+	            obj.setTransactionNo(obj1.getTransaction_no());
+	            obj.setVehicleNo(obj1.getVehicle_no());
+	            if (user_id1.contentEquals(obj1.getUser_id()) && password1.contentEquals(obj1.getPassword())) {
+	                hydList = this.service.getHydCNDList(obj1, obj, response);
+	                json = objectMapper.writeValueAsString(hydList);
+		              
+	            } else {
+	               call_service = false;
+	               data = new HashMap();
+	               data.put("200", "User Name or Password Incorrect!");
+	               json = objectMapper.writeValueAsString(data);
+	               obj1.setMSG("User Name or Password Incorrect!");
+	            }
+	         }
+
+	      } catch (Exception var25) {
+	         var25.printStackTrace();
+	         System.out.println(var25.getMessage());
+	         if ("Index 0 out of bounds for length 0".contentEquals(var25.getMessage())) {
+	            data = new HashMap();
+	            data.put("200", "Please enter User Name and Password!");
+	            json = objectMapper.writeValueAsString(data);
+	         } else {
+	            data = new HashMap();
+	            data.put("200", "Internal Error! Please contact Support");
+	            json = objectMapper.writeValueAsString(data);
+	         }
+
+	         this.logger.error("getHydCNDList : " + var25.getMessage());
+	      }
+
+	      return json;
+	   }
 }

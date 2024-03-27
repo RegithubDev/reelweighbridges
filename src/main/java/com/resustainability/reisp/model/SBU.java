@@ -5,6 +5,14 @@ public class SBU {
 	private String id	,transaction_no,vehicle_no,user_ip,company_code,company_name,project,TransactionNo,VehicleNo,repulled,PTC_status,PTCDT,MSG	,sbu_code	,sbu_name,status,from_date,user_id,password,
 	
 	all_sbu,active_sbu,inActive_sbu;
+	private int offset;
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset) {
+		this.offset = offset;
+	}
 
 	public String getUser_ip() {
 		return user_ip;

@@ -1,13 +1,16 @@
 package com.resustainability.reisp.dao;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +22,10 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import com.resustainability.reisp.model.BrainBox;
 import com.resustainability.reisp.model.DashBoardWeighBridge;
 import com.resustainability.reisp.model.ProjectLocation;
+import com.resustainability.reisp.model.SBU;
 
 @Repository
 public class DashBoardWeighBridgeDao {
@@ -711,10 +716,32 @@ public class DashBoardWeighBridgeDao {
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		try {
 			NamedParameterJdbcTemplate namedParamJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+			BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(obj);
+			String ERQ2 = "  UPDATE ALL_BMW_Sites.dbo.bmw_detailed SET [plant] = LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE([plant], "
+					+ "CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
+			paramSource = new BeanPropertySqlParameterSource(obj);	 
+			namedParamJdbcTemplate.update(ERQ2, paramSource);
+			
+			String ERQ3 = "  UPDATE ALL_BMW_Sites.dbo.bmw_detailed SET [CustomerSAPCode] = LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE([CustomerSAPCode], "
+					+ "CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
+			paramSource = new BeanPropertySqlParameterSource(obj);	 
+			namedParamJdbcTemplate.update(ERQ3, paramSource);
+			
+			String ERQ = "  UPDATE [MasterDB].[dbo].[master_table] SET [project_code] = LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE([project_code], "
+					+ "CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
+			paramSource = new BeanPropertySqlParameterSource(obj);	 
+			namedParamJdbcTemplate.update(ERQ, paramSource);
+			
+			String ERQ1 = "  UPDATE [MasterDB].[dbo].[master_table] SET [project_name] = LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE([project_name], "
+					+ "CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
+			paramSource = new BeanPropertySqlParameterSource(obj);	 
+			namedParamJdbcTemplate.update(ERQ1, paramSource);
+			
+			
 			String deleteQRY = "delete from [ALL_BMW_Sites].[dbo].[transactions_summary] where company_code is not null";
 			DashBoardWeighBridge dObj = new DashBoardWeighBridge();
 			dObj.setId("0");
-			BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(dObj);		 
+			paramSource = new BeanPropertySqlParameterSource(dObj);		 
 		    namedParamJdbcTemplate.update(deleteQRY, paramSource);
 
 		    String qry = "MERGE [ALL_BMW_Sites].[dbo].[transactions_summary] AS target "
@@ -737,9 +764,35 @@ public class DashBoardWeighBridgeDao {
 				+ "SUM(TRY_CAST(WhitesCount AS FLOAT )) as WhitesCount, "
 				+ "SUM(TRY_CAST(WhitesWeight AS FLOAT )) as WhitesWeight, "
 				+ "SUM(TRY_CAST(TotalCount AS FLOAT )) as TotalCount, "
-				+ "SUM(TRY_CAST(TotalWeight AS FLOAT )) as TotalWeight, "
-				+ "max(ServerDateTime) as ServerDateTime   FROM ALL_BMW_Sites.dbo.bmw_detailed d   "
-				+ "where CustomerSAPCode is not null  group by CustomerSAPCode,ActualVisitMonth  "
+				+ "SUM(TRY_CAST(TotalWeight AS FLOAT )) as TotalWeight  FROM  ( "
+				+ "    SELECT DISTINCT([ManifestNo]) "
+				+ "	  ,[company] "
+				+ "      ,[plant] "
+				+ "      ,[CustomerDistrict] "
+				+ "      ,[CustomerTown] "
+				+ "      ,[VehicleRegNo] "
+				+ "      ,[CustomerName] "
+				+ "      ,[CustomerSAPCode] "
+				+ "      ,[TypeofEstablishment] "
+				+ "      ,[ActualVisitDate] "
+				+ "      ,[ActualVisitMonth] "
+				+ "      ,[VisitDayTime] "
+				+ "      ,[ServiceFrequency] "
+				+ "      ,[BlueCount] "
+				+ "      ,[BlueWeight] "
+				+ "      ,[RedCount] "
+				+ "      ,[RedWeight] "
+				+ "      ,[YellowCount] "
+				+ "      ,[YellowWeight] "
+				+ "      ,[CytotoxicCount] "
+				+ "      ,[CytotoxicWeight] "
+				+ "      ,[WhitesCount] "
+				+ "      ,[WhitesWeight] "
+				+ "      ,[TotalCount] "
+				+ "      ,[TotalWeight] "
+				+ "      ,[CustomerStatus] "
+				+ "    FROM ALL_BMW_Sites.dbo.[bmw_detailed] "
+				+ ") as d group by CustomerSAPCode,ActualVisitMonth  "
 				+ ") AS source "
 				+ "ON target.CustomerCode = source.CustomerSAPCode "
 				+ "WHEN MATCHED THEN "
@@ -843,7 +896,124 @@ public class DashBoardWeighBridgeDao {
 		return null;
 	}
 	
-	
+	public List<BrainBox> getHydCNDList(SBU obj1, BrainBox obj, HttpServletResponse response) throws Exception {
+	      List<BrainBox> menuList = null;
+	      boolean flag = false;
+	      boolean var6 = false;
+
+	      try {
+	         String user_id = "recgwbhydcnd";
+	         String password = "Xextd1298dvyzAb";
+	         String Myip = "10.100.3.11";
+	         String time = " 12:00:00AM";
+	         String[] IP = new String[]{"10.2.24.18", "10.2.24.81", "10.2.28.164", "196.12.46.130", "117.200.48.237", "112.133.222.124", "61.0.227.124", "14.99.138.146", "34.93.149.251", Myip};
+	         if (IP.length > 0) {
+	            for(int i = 0; i < IP.length; ++i) {
+	               if (IP[i].contentEquals(Myip) && user_id.contentEquals(obj1.getUser_id()) && password.contentEquals(obj1.getPassword())) {
+	                  flag = true;
+	               }
+	            }
+
+	            System.out.println(flag);
+	         }
+
+	         if (flag) {
+	            String qry = "SELECT Trno as TransactionNo, Vehicleno as VehicleNo, Material as Zone, Party as Location, Transporter as Transporter, "
+	            		+ "LEFT(CONVERT(varchar, Datein, 24),9) AS DateIN, RIGHT(CONVERT(varchar, Timein, 24),11) AS TimeIN, LEFT(CONVERT(varchar, Dateout, 24),9) AS DateOUT,"
+	            		+ " RIGHT(CONVERT(varchar, Timeout, 24),11) AS TimeOUT,Firstweight as GROSSWeight, SiteID, Secondweight as TareWeight,NetWT as NetWeight, "
+	            		+ "typeofwaste AS TypeofMaterial FROM [All_CnD_Sites].[dbo].weight WITH (nolock) WHERE (Trno IS NOT NULL) AND (Vehicleno IS NOT NULL) AND "
+	            		+ "(Datein IS NOT NULL)AND (Timein IS NOT NULL) AND (Firstweight IS NOT NULL) AND (Dateout IS NOT NULL) AND (Timeout IS NOT NULL) AND "
+	            		+ "(Secondweight IS NOT NULL) AND (NetWT IS NOT NULL) and(SiteID is not null) AND SITEID IN('HYDCnDJMT_WB1','HYDCnDFTG_WB1') "
+	            		+ " and NetWT <> '' and NetWT is not null ";
+	            int arrSize = 0;
+	            if (!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj.getTransactionNo()) && !StringUtils.isEmpty(obj.getVehicleNo())) {
+	               qry = qry + " AND VEHICLENO = ? and TRNO = ? ";
+	               ++arrSize;
+	               ++arrSize;
+	            }
+	            if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date())) {
+			    	qry = qry + " AND CONVERT(varchar(10), DATEOUT, 105) = CONVERT(varchar(10), ?, 105) ";
+					arrSize++;
+				}
+	            qry = qry + " ORDER BY TRNO desc offset ? rows  fetch next 1000 rows only ";
+	            arrSize++;
+	            Object[] pValues = new Object[arrSize];
+	            int i = 0;
+	            if (!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj.getTransactionNo()) && !StringUtils.isEmpty(obj.getVehicleNo())) {
+	               int var18 = i + 1;
+	               pValues[i] = obj.getVehicleNo();
+	               pValues[var18++] = obj.getTransactionNo();
+	            }
+	            if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getOffset())) {
+					pValues[i++] = obj1.getOffset();;
+				}else {
+					pValues[i++] ="0";
+				}
+
+	            menuList = jdbcTemplate.query(qry, pValues, new BeanPropertyRowMapper<BrainBox>(BrainBox.class));
+	         }
+
+	         return menuList;
+	      } catch (Exception var16) {
+	         var16.printStackTrace();
+	         throw new SQLException(var16.getMessage());
+	      }
+	   }
+
+	   public Object getLogsOfResults(List<BrainBox> hydList, SBU obj1) throws SQLException {
+	      int count = 0;
+
+	      try {
+	         NamedParameterJdbcTemplate namedParamJdbcTemplate = new NamedParameterJdbcTemplate(this.dataSource);
+	         BrainBox obj;
+	         String insertQry;
+	         BeanPropertySqlParameterSource paramSource;
+	         if (hydList.size() > 0) {
+	            for(Iterator var6 = hydList.iterator(); var6.hasNext(); count = namedParamJdbcTemplate.update(insertQry, paramSource)) {
+	               obj = (BrainBox)var6.next();
+	               obj.setGROSSWeight(obj1.getPTC_status());
+	               obj.setTareWeight(obj1.getMSG());
+	               obj.setDateOUT(obj1.getUser_ip());
+	               insertQry = "INSERT INTO [All_CnD_Sites].[dbo].[hyd_cnd_logs] (user_ip,weight_TRNO,VEHICLENO,PTC_status,PTCDT,MSG) values (:dateOUT,:TransactionNo,:VehicleNo,:GROSSWeight,GETDATE(),:TareWeight)  ";
+	               paramSource = new BeanPropertySqlParameterSource(obj);
+	            }
+	         } else {
+	            obj = new BrainBox();
+	            obj.setGROSSWeight((String)null);
+	            obj.setDateOUT(obj1.getUser_ip());
+	            obj.setTareWeight(obj1.getMSG());
+	            String insertQry1 = "INSERT INTO [All_CnD_Sites].[dbo].[hyd_cnd_logs] (user_ip,weight_TRNO,VEHICLENO,PTC_status,PTCDT,MSG) values (:dateOUT,:TransactionNo,:VehicleNo,:GROSSWeight,GETDATE(),:TareWeight)   ";
+	            BeanPropertySqlParameterSource paramSource1 = new BeanPropertySqlParameterSource(obj);
+	            count = namedParamJdbcTemplate.update(insertQry1, paramSource1);
+	         }
+	      } catch (Exception var9) {
+	         var9.printStackTrace();
+	         throw new SQLException(var9.getMessage());
+	      }
+
+	      return count;
+	   }
+
+	   public int getLogInfo(SBU obj1, BrainBox obj, List<BrainBox> hydList) throws SQLException {
+	      int count = 0;
+
+	      try {
+	         BrainBox obj11;
+	         String checkingLogQry;
+	         if (!StringUtils.isEmpty(hydList) && hydList.size() > 0) {
+	            for(Iterator var6 = hydList.iterator(); var6.hasNext(); 
+	            		count = (Integer)this.jdbcTemplate.queryForObject(checkingLogQry, new Object[]{obj11.getTransactionNo(), obj11.getVehicleNo()}, Integer.class)) {
+	               obj11 = (BrainBox)var6.next();
+	               checkingLogQry = "SELECT count(*) from [All_CnD_Sites].[dbo].[hyd_cnd_logs] where weight_TRNO= ? and VEHICLENO= ?";
+	            }
+	         }
+
+	         return count;
+	      } catch (Exception var8) {
+	         var8.printStackTrace();
+	         throw new SQLException(var8.getMessage());
+	      }
+	   }
 	
 	
 	

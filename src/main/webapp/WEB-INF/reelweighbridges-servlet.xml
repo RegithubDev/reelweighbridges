@@ -22,6 +22,7 @@
 			<mvc:exclude-mapping path="/resources/**" />
 			<mvc:exclude-mapping path="/views/**" />
 			<mvc:exclude-mapping path="/ajax/**" />
+			<mvc:exclude-mapping path="/reone/**" />
 			<bean class="com.resustainability.reisp.login.filer.AuthenticationInterceptor" />
 		</mvc:interceptor>
 	 </mvc:interceptors>

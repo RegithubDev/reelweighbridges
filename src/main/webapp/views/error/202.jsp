@@ -7,6 +7,6 @@
 <title>Error page</title>
 </head>
 <body>
-Plant code, Period and Year are Mandatory Please provide and Try Again
+No Data Available or Values Mismatc.
 </body>
 </html>
