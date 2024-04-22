@@ -362,7 +362,35 @@ License: You must have a valid license purchased only from themeforest(the above
        	  <c:forEach var="objjr" items="${obj.transactionsList}" varStatus="index">
        	  <tr>
 			<td>${objjr.TRNO }</td>
-			<td>${objjr.VEHICLENO }</td>
+			<c:if test="${not empty objjr.VEHICLENO}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.VEHICLENO, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.VEHICLENO, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[0]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.VEHICLENO }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
+			
+			<c:if test="${not empty objjr.vehicleNo}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.vehicleNo, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.vehicleNo, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[0]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.vehicleNo }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
+			
+			<c:if test="${not empty objjr.DATEIN}">
 			<c:choose>
 		    	<c:when test="${fn:contains(objjr.DATEIN, ' ')}">
 			        <c:set var="stringValue" value="Hello World" />
@@ -374,8 +402,50 @@ License: You must have a valid license purchased only from themeforest(the above
 			      <td>${objjr.DATEIN }</td>
 			   </c:otherwise>
 		    </c:choose>
+			</c:if>
 			
-			<td>${objjr.TIMEIN }</td>
+			<c:if test="${not empty objjr.dateIN}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.dateIN, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.dateIN, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[0]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.dateIN }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
+			
+			<c:if test="${not empty objjr.TIMEIN}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.TIMEIN, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.TIMEIN, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[1]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.TIMEIN }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
+			
+			<c:if test="${not empty objjr.timeIN}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.timeIN, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.timeIN, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[1]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.timeIN }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
+			<c:if test="${not empty objjr.DATEOUT}">
 			<c:choose>
 		    	<c:when test="${fn:contains(objjr.DATEOUT, ' ')}">
 			        <c:set var="stringValue" value="Hello World" />
@@ -387,13 +457,76 @@ License: You must have a valid license purchased only from themeforest(the above
 			      <td>${objjr.DATEOUT }</td>
 			   </c:otherwise>
 		    </c:choose>
-		    
-			<td>${objjr.TIMEOUT }</td>
+			</c:if>
+			
+			<c:if test="${not empty objjr.dateOUT}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.dateOUT, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.dateOUT, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[0]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.dateOUT }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
+			<c:if test="${not empty objjr.TIMEOUT}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.TIMEOUT, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.TIMEOUT, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[1]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.TIMEOUT }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
+			
+			<c:if test="${not empty objjr.timeOUT}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.timeOUT, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.timeOUT, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[1]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.timeOUT }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
 			<td>${objjr.FIRSTWEIGHT }</td>
-			<td style="
-    width: 100px; /* Width of the container */
-    word-break: break-all;
-"><span>${objjr.SITEID }</span></td>
+			<c:if test="${not empty objjr.SITEID}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.SITEID, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.SITEID, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[1]}" />
+					<td>${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td>${objjr.SITEID }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
+			
+			<c:if test="${not empty objjr.siteID}">
+			<c:choose>
+		    	<c:when test="${fn:contains(objjr.siteID, ' ')}">
+			        <c:set var="stringValue" value="Hello World" />
+					<c:set var="splitArray" value="${fn:split(objjr.siteID, ' ')}" />
+					<c:set var="firstWord" value="${splitArray[1]}" />
+					<td style=" width: 100px; word-break: break-all;">${firstWord}</td>
+			   </c:when>
+			   <c:otherwise>
+			      <td style=" width: 100px; word-break: break-all;">${objjr.siteID }</td>
+			   </c:otherwise>
+		    </c:choose>
+			</c:if>
 			<td>${objjr.SECONDWEIGHT }</td>
 			<td>${objjr.NETWT }</td>
 			<td>${objjr.CONTAINERID }</td>

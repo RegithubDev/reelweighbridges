@@ -540,7 +540,7 @@ public class DashBoardWeighBridgeController {
 					
 	                cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getVEHICLENO());
+					cell.setCellValue (obj1.getVehicleNo());
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
@@ -552,14 +552,23 @@ public class DashBoardWeighBridgeController {
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getTRANSPORTER());
+					cell.setCellValue (obj1.getTransporter());
 					
 					
 					String date = obj1.getDATEIN();
-				    if(date.contains(" ")){
-			            String [] finalDate = date.split(" ");
-			            date = finalDate[0];
-			        }
+					try{
+						 if(date.contains(" ")){
+					            String [] finalDate = date.split(" ");
+					            date = finalDate[0];
+					        }
+					}catch(Exception e) {
+						date = obj1.getDateIN();
+						if(date.contains(" ")){
+				            String [] finalDate = date.split(" ");
+				            date = finalDate[0];
+				        }
+					}
+				   
 				    
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
@@ -567,7 +576,7 @@ public class DashBoardWeighBridgeController {
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getTIMEIN());
+					cell.setCellValue (obj1.getTimeIN());
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
@@ -576,20 +585,28 @@ public class DashBoardWeighBridgeController {
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
 					cell.setCellValue (obj1.getUSER1());
+				
+				    String dateO = obj1.getDATEOUT();
+					try{
+						 if(dateO.contains(" ")){
+					            String [] finalDate = dateO.split(" ");
+					            dateO = finalDate[0];
+					        }
+					}catch(Exception e) {
+						dateO = obj1.getDateOUT();
+						if(dateO.contains(" ")){
+				            String [] finalDate = dateO.split(" ");
+				            dateO = finalDate[0];
+				        }
+					}
 					
-					String dateO = obj1.getDATEOUT();
-				    if(dateO.contains(" ")){
-			            String [] finalDate = dateO.split(" ");
-			            dateO = finalDate[0];
-			        }
-				    
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
 					cell.setCellValue (dateO);
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getTIMEOUT());
+					cell.setCellValue (obj1.getTimeOUT());
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
@@ -601,11 +618,11 @@ public class DashBoardWeighBridgeController {
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getSITEID());
+					cell.setCellValue (obj1.getSiteID());
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getSTATUS());
+					cell.setCellValue (obj1.getStatus());
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);

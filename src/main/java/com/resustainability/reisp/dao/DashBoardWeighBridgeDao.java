@@ -919,7 +919,7 @@ public class DashBoardWeighBridgeDao {
 
 	         if (flag) {
 	            String qry = "SELECT Trno as TransactionNo, Vehicleno as VehicleNo, Material as Zone, Party as Location, Transporter as Transporter, "
-	            		+ "LEFT(CONVERT(varchar, Datein, 24),9) AS DateIN, RIGHT(CONVERT(varchar, Timein, 24),11) AS TimeIN, LEFT(CONVERT(varchar, Dateout, 24),9) AS DateOUT,"
+	            		+ "LEFT(DateOUT, CHARINDEX(' ', DateIN + ' ') - 1) AS DateIN, RIGHT(CONVERT(varchar, Timein, 24),11) AS TimeIN, LEFT(DateOUT, CHARINDEX(' ', DateOUT + ' ') - 1) AS DateOUT,"
 	            		+ " RIGHT(CONVERT(varchar, Timeout, 24),11) AS TimeOUT,Firstweight as GROSSWeight, SiteID, Secondweight as TareWeight,NetWT as NetWeight, "
 	            		+ "typeofwaste AS TypeofMaterial FROM [All_CnD_Sites].[dbo].weight WITH (nolock) WHERE (Trno IS NOT NULL) AND (Vehicleno IS NOT NULL) AND "
 	            		+ "(Datein IS NOT NULL)AND (Timein IS NOT NULL) AND (Firstweight IS NOT NULL) AND (Dateout IS NOT NULL) AND (Timeout IS NOT NULL) AND "
