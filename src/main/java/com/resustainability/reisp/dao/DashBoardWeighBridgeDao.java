@@ -48,7 +48,7 @@ public class DashBoardWeighBridgeDao {
 					+ "REPLACE(REPLACE([location], '\r', ''), '\n', '') AS location,REPLACE(REPLACE([project_status], '\r', ''), '\n', '') AS project_status,"
 					+ "no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
 					+ ",developed_by FROM [MasterDB].[dbo].[master_table] mt "
-					+ " where  mt.location is not null and  mt.location <> '' and  wb_site_id is not null  "; 
+					+ " where  mt.location is not null and  mt.location <> '' and sbu <> 'BMW'  and  wb_site_id is not null  "; 
 			int arrSize1 = 0;
 			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
 					qry = qry + " AND sbu = ? ";
@@ -74,7 +74,7 @@ public class DashBoardWeighBridgeDao {
 				String all_sites = "'"+siteIDs.getWb_site_id().replace("'", "")+"'";
 				String data = new String("");
 				String setQry = "SET NOCOUNT ON;";
-				if(siteIDs.getDb_name().equals("ALL_BMW_Sites")) {
+				if(siteIDs.getDb_name().equals("ALL_BMW_Sites11")) {
 					data = ""
 							+"SELECT top 1 [id] as UID,'bmw' as dmNmae,(select indicator_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as indicator_name , "
 							+ " (select top (1) (cast([visitDayTime] as time(0))) from [ALL_BMW_Sites].[dbo].bmw_detailed   where company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' order by ServerDateTime desc ) as visitDayTime,(select top 1 count(*)   from [ALL_BMW_Sites].[dbo].bmw_detailed "
@@ -103,16 +103,16 @@ public class DashBoardWeighBridgeDao {
 						+ "(select min(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
 								+ "where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as min,"
 										+ "(select max(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()
-										+ " where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as DATEIN,convert(varchar, getdate(), 23) as curDAte"
+										+ " where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as DATE_IN,convert(varchar, getdate(), 23) as curDAte"
 												+ ",(select top (1) (cast([TIMEIN] as time(0))) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  "
 												+ " where SITEID in ("+siteIDs.getWb_site_id()+") "
-												+ "order by TRNO desc ) as TIMEIN"
+												+ "order by TRNO desc ) as TIME_IN"
 										+ ",(select count(TRNO) from "+siteIDs.getDb_name()+""
 										+ ".[dbo]."+siteIDs.getTable_name()+"  where SITEID='"+siteID+"' and NETWT <> '' and NETWT is not null and NETWT <> 0) as count,"
 												+ "(select project from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project,"
 												+ "(select project_status from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_status,"
 								+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,FIRSTWEIGHT,USER1,"
-								+ "CONVERT(varchar(9), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO"
+								+ "CONVERT(varchar(9), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
 						+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
 						+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
 						+ "		   ,REMARKS,CONTAINERID from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" tt "
@@ -167,7 +167,7 @@ public class DashBoardWeighBridgeDao {
 					+ "REPLACE(REPLACE([location], '\r', ''), '\n', '') AS location,REPLACE(REPLACE([project_status], '\r', ''), '\n', '') AS project_status,"
 					+ "no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
 					+ ",developed_by FROM [MasterDB].[dbo].[master_table] mt "
-					+ " where  mt.location is not null and  mt.location <> '' and  wb_site_id is not null order by sbu desc"; 
+					+ " where  mt.location is not null and  mt.location <> '' and sbu <> 'BMW' and  wb_site_id is not null order by sbu desc"; 
 			int arrSize1 = 0;
 			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
 					qry = qry + " AND sbu = ? ";
@@ -223,7 +223,7 @@ public class DashBoardWeighBridgeDao {
 		        int day = yesterday.getDayOfMonth();
 
 		       String yesDAte = year + "-" + month + "-" + day;
-				if(siteIDs.getDb_name().equals("ALL_BMW_Sites")) {
+				if(siteIDs.getDb_name().equals("ALL_BMW_Sites11")) {
 					data = ""
 							+"SELECT top 1 [id] as UID,'bmw' as dmNmae,(select indicator_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as indicator_name , "
 							+ "   (select top 1 convert(varchar, ServerDateTime, 23)   from [ALL_BMW_Sites].[dbo].bmw_detailed where  convert(varchar, ServerDateTime, 23) = convert(varchar, getdate(), 23)"
@@ -252,7 +252,7 @@ public class DashBoardWeighBridgeDao {
 											+ "	and  SITEID  in ("+siteIDs.getWb_site_id()+")  and NETWT is not null and NETWT <> '' ) as dailyCount,"
 											+ "(select max(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()
 											+ " where DATEIN is not null and DATEIN <> '' and SITEID in ("+siteIDs.getWb_site_id()+") and datein = (select top (1) datein from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  where SITEID in ("+siteIDs.getWb_site_id()+") order by TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'"
-													+ "ELSE DATEIN  END AS DATE) desc))  as DATEIN,convert(varchar, getdate(), 23) as curDAte"
+													+ "ELSE DATEIN  END AS DATE) desc))  as DATE_IN,convert(varchar, getdate(), 23) as curDAte"
 											+ ",(select count(TRNO) from "+siteIDs.getDb_name()+""
 											+ ".[dbo]."+siteIDs.getTable_name()+"  where SITEID='"+siteID+"' and NETWT <> '' and NETWT is not null and NETWT <> 0) as count,"
 													+ "(select project from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project,"
@@ -260,7 +260,7 @@ public class DashBoardWeighBridgeDao {
 													+ "(select sbu from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as sbu,"
 									+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
 									+ "(select count(*) from  [MasterDB].[dbo].[master_table] where sbu like '"+siteIDs.getSbu()+"' and project_status='Active') as all_wb,"
-									+ "CONVERT(varchar(9), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO"
+									+ "CONVERT(varchar(9), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
 							+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
 							+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
 							+ "		   ,REMARKS,CONTAINERID from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" tt "
@@ -342,7 +342,7 @@ public class DashBoardWeighBridgeDao {
 			data = ""
 					+ "select TRNO,VEHICLENO , CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(9), DATEIN, 105) ELSE CONVERT(varchar(10), DATEIN, 105) END as  DATEIN,"
 							+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-							+ "CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO"
+							+ "CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
 					+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
 					+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
 					+ "		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
@@ -376,7 +376,7 @@ public class DashBoardWeighBridgeDao {
 			data = ""
 					+ "(select  CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(9), DATEIN, 105) ELSE CONVERT(varchar(10), DATEIN, 105) END as  DATEIN,"
 							+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-							+ " CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO"
+							+ " CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
 					+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
 					+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
 					+ "		   ,REMARKS,CONTAINERID from [All_CnD_Sites].[dbo].[WEIGHT] tt "
@@ -504,7 +504,7 @@ public class DashBoardWeighBridgeDao {
 					 data = ""
 							+ "select TRNO,VEHICLENO ,CONVERT(varchar(10), DATEIN, 105) AS DATEIN,"
 									+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-									+ "CONVERT(varchar(10), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO"
+									+ "CONVERT(varchar(10), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
 							+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
 							+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
 							+ "		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
@@ -604,7 +604,7 @@ public class DashBoardWeighBridgeDao {
 		data = ""
 				+ "select TRNO,VEHICLENO ,CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(9), DATEIN, 105) ELSE CONVERT(varchar(10), DATEIN, 105) END as  DATEIN,"
 						+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-						+ "CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO"
+						+ "CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
 				+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
 				+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
 				+ "		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
@@ -918,13 +918,47 @@ public class DashBoardWeighBridgeDao {
 	         }
 
 	         if (flag) {
-	            String qry = "SELECT Trno as TransactionNo, Vehicleno as VehicleNo, Material as Zone, Party as Location, Transporter as Transporter, "
-	            		+ "LEFT(DateOUT, CHARINDEX(' ', DateIN + ' ') - 1) AS DateIN, RIGHT(CONVERT(varchar, Timein, 24),11) AS TimeIN, LEFT(DateOUT, CHARINDEX(' ', DateOUT + ' ') - 1) AS DateOUT,"
-	            		+ " RIGHT(CONVERT(varchar, Timeout, 24),11) AS TimeOUT,Firstweight as GROSSWeight, SiteID, Secondweight as TareWeight,NetWT as NetWeight, "
-	            		+ "typeofwaste AS TypeofMaterial FROM [All_CnD_Sites].[dbo].weight WITH (nolock) WHERE (Trno IS NOT NULL) AND (Vehicleno IS NOT NULL) AND "
-	            		+ "(Datein IS NOT NULL)AND (Timein IS NOT NULL) AND (Firstweight IS NOT NULL) AND (Dateout IS NOT NULL) AND (Timeout IS NOT NULL) AND "
-	            		+ "(Secondweight IS NOT NULL) AND (NetWT IS NOT NULL) and(SiteID is not null) AND SITEID IN('HYDCnDJMT_WB1','HYDCnDFTG_WB1') "
-	            		+ " and NetWT <> '' and NetWT is not null ";
+	            String qry = "SELECT  "
+	            		+ "    Trno as TransactionNo,  "
+	            		+ "    Vehicleno as VehicleNo,  "
+	            		+ "    Material as Zone,  "
+	            		+ "    Party, "
+	            		+ "    Transporter as Transporter, "
+	            		+ "    LEFT(DateIN, CHARINDEX(' ', DateIN + ' ') - 1) AS DateIN, "
+	            		+ "    RIGHT(CONVERT(varchar, TIMEIN, 24), 8) as TIMEIN, "
+	            		+ "    LEFT(DateOUT, CHARINDEX(' ', DateOUT + ' ') - 1) AS DateOUT, "
+	            		+ "    RIGHT(CONVERT(varchar, TIMEOUT, 24), 8) AS TimeOUT, "
+	            		+ "    Firstweight as GROSSWeight,  "
+	            		+ "    SiteID,  "
+	            		+ "    Secondweight as TareWeight, "
+	            		+ "    NetWT as NetWeight, "
+	            		+ "    typeofwaste AS TypeofMaterial, "
+	            		+ "    CASE  "
+	            		+ "        WHEN CHARINDEX('C-', Party) > 0 THEN LEFT(Party, CHARINDEX('C-', Party) - 1) "
+	            		+ "        ELSE Party  "
+	            		+ "    END AS TransferStation, "
+	            		+ "    CASE  "
+	            		+ "        WHEN CHARINDEX('C-', Party) > 0 THEN 'C' + RIGHT(Party, LEN(Party) - CHARINDEX('C-', Party)) "
+	            		+ "        ELSE NULL  "
+	            		+ "    END AS Circle "
+	            		+ "FROM  "
+	            		+ "    [All_CnD_Sites].[dbo].weight WITH (nolock)  "
+	            		+ "WHERE  "
+	            		+ "    (Trno IS NOT NULL) AND  "
+	            		+ "    (Vehicleno IS NOT NULL) AND  "
+	            		+ "    (Datein IS NOT NULL) AND  "
+	            		+ "    (Timein IS NOT NULL) AND  "
+	            		+ "    (Firstweight IS NOT NULL) AND  "
+	            		+ "    (Dateout IS NOT NULL) AND  "
+	            		+ "    (Timeout IS NOT NULL) AND  "
+	            		+ "    (Secondweight IS NOT NULL) AND  "
+	            		+ "    (NetWT IS NOT NULL) AND  "
+	            		+ "    (SiteID IS NOT NULL) AND  "
+	            		+ "    SiteID IN('HYDCnDJMT_WB1', 'HYDCnDFTG_WB1') AND  "
+	            		+ "    NetWT <> '' AND  "
+	            		+ "    NetWT IS NOT NULL  "
+	            	
+	            		+ " ";
 	            int arrSize = 0;
 	            if (!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj.getTransactionNo()) && !StringUtils.isEmpty(obj.getVehicleNo())) {
 	               qry = qry + " AND VEHICLENO = ? and TRNO = ? ";

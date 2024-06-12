@@ -193,7 +193,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard </span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<%=request.getContextPath() %>/dashboard-wb">MSW Cumulative Dashboard</a></li>
-                                <li><a href="<%=request.getContextPath() %>/dashboard-wb-cnd">CND Cumulative Dashboard</a></li>   <li><a href="<%=request.getContextPath() %>/dashboard-wb-bmw">BMW Cumulative Dashboard</a></li>
+                             <li><a href="<%=request.getContextPath() %>/dashboard-wb-cnd">CND Cumulative Dashboard</a></li>     <%--  <li><a href="<%=request.getContextPath() %>/dashboard-wb-bmw">BMW Cumulative Dashboard</a></li> --%>
 								<li><a href="<%=request.getContextPath() %>/dashboard-wb-daily">Daily Monitoring</a></li>
 								
 								 
@@ -318,14 +318,14 @@ License: You must have a valid license purchased only from themeforest(the above
                                     
                                     ">${obj.sbu }</span></h4>
                                 <div class="text-right"><b>
-                                   <c:if test="${obj.project_status ne 'Active' || obj.DATEIN ne obj.curDAte }">0</c:if>
-                                   <c:if test="${obj.project_status eq 'Active' && obj.DATEIN eq obj.curDAte}">  ${obj.dailyCount } </c:if>
+                                   <c:if test="${obj.project_status ne 'Active' || obj.DATE_IN ne obj.curDAte }">0</c:if>
+                                   <c:if test="${obj.project_status eq 'Active' && obj.DATE_IN eq obj.curDAte}">  ${obj.dailyCount } </c:if>
                                
                                 
                                 </b>  
                                      <h2 class="font-light m-b-0"> <%-- <i 
-                                     <c:if test="${obj.project_status ne 'Active' || obj.DATEIN ne obj.curDAte }">class="ti-arrow-up text-danger"</c:if>
-                                     <c:if test="${obj.project_status eq 'Active' && obj.DATEIN eq obj.curDAte}"> class="ti-arrow-up text-success"</c:if>
+                                     <c:if test="${obj.project_status ne 'Active' || obj.DATE_IN ne obj.curDAte }">class="ti-arrow-up text-danger"</c:if>
+                                     <c:if test="${obj.project_status eq 'Active' && obj.DATE_IN eq obj.curDAte}"> class="ti-arrow-up text-success"</c:if>
                                     ></i>  --%>
                                   <c:if test="${obj.company ne '' && obj.dailyCount == 0 && obj.dmNmae == 'bmw' }">
                                      <i  class="ti-arrow-up text-danger"></i>
@@ -335,22 +335,22 @@ License: You must have a valid license purchased only from themeforest(the above
                                     </c:if>
                                     <c:forTokens items="${obj.all_sites }" delims="," var="mySplit">
 									  <%--  <c:out value="${mySplit}"/> --%> <i title="${mySplit}"
-									   <c:if test="${obj.DATEIN eq obj.curDAte && fn:contains(obj.greenWB, mySplit) && obj.dailyCount != 0 }">class="ti-arrow-up text-success"</c:if>  
-									     <c:if test="${ obj.DATEIN ne obj.curDAte ||not fn:contains(obj.greenWB, mySplit) || obj.dailyCount == 0}">class="ti-arrow-up text-danger"</c:if>  >
+									   <c:if test="${obj.DATE_IN eq obj.curDAte && fn:contains(obj.greenWB, mySplit) && obj.dailyCount != 0 }">class="ti-arrow-up text-success"</c:if>  
+									     <c:if test="${ obj.DATE_IN ne obj.curDAte ||not fn:contains(obj.greenWB, mySplit) || obj.dailyCount == 0}">class="ti-arrow-up text-danger"</c:if>  >
 									   </i>
 									   &nbsp;
 									   <script>
-									   		if('${mySplit}' != '${obj.SITEID}' || '${obj.DATEIN}' != '${obj.curDAte}'){
+									   		if('${mySplit}' != '${obj.SITEID}' || '${obj.DATE_IN}' != '${obj.curDAte}'){
 									   			var val = '${obj.greenWB}';
 									   			$('#hide${index.count }').removeClass('mdi mdi-bullseye text-success');
 									   			$('#hide${index.count }').addClass('mdi mdi-bullseye text-danger');
 									   		} 
-									   		if('${obj.no_of_wbR}' == '${obj.no_of_wb2}' && '${obj.DATEIN}' == '${obj.curDAte}'   ){
+									   		if('${obj.no_of_wbR}' == '${obj.no_of_wb2}' && '${obj.DATE_IN}' == '${obj.curDAte}'   ){
 									   			
 									   			$('#hide${index.count }').removeClass('mdi mdi-bullseye text-danger'); 
 									   			$('#hide${index.count }').addClass('mdi mdi-bullseye text-success');
 									   		}
-									   		if( '${obj.DATEIN}' == ''){
+									   		if( '${obj.DATE_IN}' == ''){
 									   			$('#hide${index.count }').removeClass('mdi mdi-bullseye text-success');
 									   			$('#hide${index.count }').addClass('mdi mdi-bullseye text-danger'); 
 									   		}

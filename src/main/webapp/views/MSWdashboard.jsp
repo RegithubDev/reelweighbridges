@@ -174,7 +174,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Dashboard </span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<%=request.getContextPath() %>/dashboard-wb">MSW Cumulative Dashboard</a></li>
-                                <li><a href="<%=request.getContextPath() %>/dashboard-wb-cnd">CND Cumulative Dashboard</a></li>   <li><a href="<%=request.getContextPath() %>/dashboard-wb-bmw">BMW Cumulative Dashboard</a></li>
+                             <li><a href="<%=request.getContextPath() %>/dashboard-wb-cnd">CND Cumulative Dashboard</a></li>     <%--  <li><a href="<%=request.getContextPath() %>/dashboard-wb-bmw">BMW Cumulative Dashboard</a></li> --%>
 								<li><a href="<%=request.getContextPath() %>/dashboard-wb-daily">Daily Monitoring</a></li>
 								
 								 
@@ -268,24 +268,24 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="card" <c:if test="${obj.project_status ne 'Active' }">style="background-color: #808080;"</c:if>>
                             <div class="card-body">
                                 <h4 class="card-title"> <%--  <i 
-                                     <c:if test="${obj.DATEIN ne obj.curDAte }">class="mdi mdi-bullseye text-danger"</c:if>
+                                     <c:if test="${obj.DATE_IN ne obj.curDAte }">class="mdi mdi-bullseye text-danger"</c:if>
                                    
-                                      <c:if test="${obj.DATEIN eq obj.curDAte }"> class="mdi mdi-bullseye text-success"</c:if>
+                                      <c:if test="${obj.DATE_IN eq obj.curDAte }"> class="mdi mdi-bullseye text-success"</c:if>
                                     ></i> --%><i id="hide${index.count }" class="mdi mdi-bullseye text-success"
                                     ></i>&nbsp;${obj.project }</h4>
                                 <div class="text-right"><b>${obj.count }</b>  
                                     <h2 class="font-light m-b-0"><%-- <i 
-                                     <c:if test="${obj.project_status ne 'Active' || obj.DATEIN ne obj.curDAte }">class="ti-arrow-up text-danger"</c:if>
-                                     <c:if test="${obj.project_status eq 'Active' && obj.DATEIN eq obj.curDAte}"> class="ti-arrow-up text-success"</c:if>
+                                     <c:if test="${obj.project_status ne 'Active' || obj.DATE_IN ne obj.curDAte }">class="ti-arrow-up text-danger"</c:if>
+                                     <c:if test="${obj.project_status eq 'Active' && obj.DATE_IN eq obj.curDAte}"> class="ti-arrow-up text-success"</c:if>
                                     ></i> --%>
                                      <c:forTokens items="${obj.all_sites }" delims="," var="mySplit">
 									  <%--  <c:out value="${mySplit}"/> --%> <i title="${mySplit}"
-									   <c:if test="${mySplit eq obj.SITEID  && obj.DATEIN eq obj.curDAte}">class="ti-arrow-up text-success"</c:if>  
-									     <c:if test="${mySplit ne obj.SITEID  || obj.DATEIN ne obj.curDAte}">class="ti-arrow-up text-danger"</c:if>  >
+									   <c:if test="${mySplit eq obj.SITE_ID  && obj.DATE_IN eq obj.curDAte}">class="ti-arrow-up text-success"</c:if>  
+									     <c:if test="${mySplit ne obj.SITE_ID  || obj.DATE_IN ne obj.curDAte}">class="ti-arrow-up text-danger"</c:if>  >
 									   </i>
 									   &nbsp;
 									   <script>
-									   		if('${mySplit}' != '${obj.SITEID}' || '${obj.DATEIN}' != '${obj.curDAte}'){
+									   		if('${mySplit}' != '${obj.SITE_ID}' || '${obj.DATE_IN}' != '${obj.curDAte}'){
 									   			$('#hide${index.count }').removeClass('mdi mdi-bullseye text-success');
 									   			$('#hide${index.count }').addClass('mdi mdi-bullseye text-danger');
 									   		}
@@ -293,8 +293,8 @@ License: You must have a valid license purchased only from themeforest(the above
 									</c:forTokens>
                                     </h2>
                                     <span class="text-muted">Sync From&nbsp;:&nbsp; ${obj.min }</span><br>
- 									<span class="text-muted">To&nbsp;:&nbsp; ${obj.DATEIN } </span><br>
-									    <span class="text-muted">Last Sync Time&nbsp;:&nbsp; ${obj.TIMEIN }</span>
+ 									<span class="text-muted">To&nbsp;:&nbsp; ${obj.DATE_IN } </span><br>
+									    <span class="text-muted">Last Sync Time&nbsp;:&nbsp; ${obj.TIME_IN }</span>
 	  								
 										  <hr>
                                     ${obj.project_name }

@@ -33,6 +33,7 @@ public class BrainBox {
 	private String Zone;
 	private String Transporter; 
 	private String Transferstation;
+	private String Circle;
 	
 	private String transactionNo;
 	public BrainBox() {}
@@ -41,7 +42,7 @@ public class BrainBox {
 
 	public BrainBox(String transactionNo1, String transactionNo2, String vehicleNo, String typeofMaterial,
 			String dateIn, String timeIN, String dateOUT, String timeOUT, String gROSSWeight, String tareWeight,
-			String netWeight, String zone, String transporter, String transferstation,
+			String netWeight, String zone, String transporter, String transferstation,String circle,
 			Map<String, Object> otherProperties) {
 		super();
 		TransactionNo1 = transactionNo1;
@@ -58,8 +59,17 @@ public class BrainBox {
 		Zone = zone;
 		Transporter = transporter;
 		Transferstation = transferstation;
+		Circle = circle;
 	}
 	
+	public String getCircle() {
+		return Circle;
+	}
+
+	public void setCircle(String circle) {
+		Circle = circle;
+	}
+
 	public String getTransactionNo() {
 		return transactionNo;
 	}
@@ -194,7 +204,8 @@ public class BrainBox {
 				+ VehicleNo + ", TypeofMaterial=" + TypeofMaterial + ", DateIn=" + DateIn + ", TimeIN=" + TimeIN
 				+ ", DateOUT=" + DateOUT + ", TimeOUT=" + TimeOUT + ", GROSSWeight=" + GROSSWeight + ", TareWeight="
 				+ TareWeight + ", NetWeight=" + NetWeight + ", Zone=" + Zone + ", Transporter=" + Transporter
-				+ ", Transferstation=" + Transferstation + "]";
+				+ ", Transferstation=" + Transferstation + ", Circle=" + Circle + ", transactionNo=" + transactionNo
+				+ ", otherProperties=" + otherProperties + "]";
 	}
 
 	

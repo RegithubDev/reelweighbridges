@@ -20,6 +20,8 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.StringUtils;
 
+import com.resustainability.reisp.model.AttModelNormal;
+import com.resustainability.reisp.model.AttOutputModel;
 import com.resustainability.reisp.model.BMW;
 import com.resustainability.reisp.model.BrainBox;
 import com.resustainability.reisp.model.DashBoardWeighBridge;
@@ -347,4 +349,110 @@ public class BMWDao {
 		}
 		return count;
 	}
+
+	public List<AttOutputModel> getAllAttendanceList(AttModelNormal obj1, AttOutputModel obj,HttpServletResponse response) throws SQLException {
+			List<AttOutputModel> menuList = null;
+	boolean flag = false;
+	int count = 0;
+	try{  
+		String user_id = "recgwbngpr";
+		String password = "X1298extvbddyzA";
+		//String Myip = Inet4Address.getLocalHost().getHostAddress();
+		String time = " 12:00:00AM";
+		int arrSize = 0;
+		String qry = "USE INOPSETPDB; "
+				+ "GO "
+				+ "WITH PunchTimes AS ( "
+				+ "    SELECT "
+				+ "        emp_code, "
+				+ "        area_alias, "
+				+ "        punch_time, "
+				+ "        terminal_sn, "
+				+ "        ROW_NUMBER() OVER (PARTITION BY emp_code, CONVERT(date, punch_time) ORDER BY punch_time ASC) AS rn_min, "
+				+ "        ROW_NUMBER() OVER (PARTITION BY emp_code, CONVERT(date, punch_time) ORDER BY punch_time DESC) AS rn_max "
+				+ "    FROM "
+				+ "        [INOPSETPDB].[dbo].[iclock_transaction] "
+				+ "    WHERE punch_time is not null ";
+				 if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date()) && !StringUtils.isEmpty(obj1.getTo_date())) {
+						qry = qry + "     and    CONVERT(date, punch_time) BETWEEN ? AND ? ";
+						arrSize++;
+				 }
+				 if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date())) {
+						qry = qry + "     and   CONVERT(date, punch_time) >= ?  AND punch_time <= GETDATE() ";
+						arrSize++;
+				 }
+				 if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getTo_date())) {
+						qry = qry + "     and   CONVERT(date, punch_time) >= ?  AND punch_time <= GETDATE() ";
+						arrSize++;
+				 }
+				qry = qry + ") "
+				+ " "
+				+ "SELECT "
+				+ "    ct.emp_code AS employee_id, "
+				+ "    CASE  "
+				+ "        WHEN pe.first_name IS NULL OR LEN(pe.first_name) = 0 THEN 'No Name Found!'  "
+				+ "        ELSE pe.first_name  "
+				+ "    END AS employee_name, "
+				+ "    COALESCE(pe.[mobile], 'No Contact Found!') AS contact_no, "
+				+ "    ct.area_alias, "
+				+ "    CONVERT(date, MIN(ct.punch_time)) AS PunchInDate, "
+				+ "    FORMAT(MIN(ct.punch_time), 'HH:mm:ss') AS PunchInTime, "
+				+ "    CONVERT(date, MAX(ct.punch_time)) AS PunchOutDate, "
+				+ "    FORMAT(MAX(ct.punch_time), 'HH:mm:ss') AS PunchOutTime, "
+				+ "    MIN(ct_min.terminal_sn) AS MinTerminalSN, "
+				+ "    MAX(ct_max.terminal_sn) AS MaxTerminalSN "
+				+ " "
+				+ "FROM "
+				+ "    PunchTimes ct "
+				+ "LEFT JOIN "
+				+ "    personnel_employee pe ON ct.emp_code = pe.emp_code "
+				+ "LEFT JOIN "
+				+ "    [personnel_area] pa ON ct.area_alias = pa.area_code "
+				+ "LEFT JOIN "
+				+ "    PunchTimes ct_min ON ct.emp_code = ct_min.emp_code AND ct.area_alias = ct_min.area_alias AND ct_min.rn_min = 1 "
+				+ "LEFT JOIN "
+				+ "    PunchTimes ct_max ON ct.emp_code = ct_max.emp_code AND ct.area_alias = ct_max.area_alias AND ct_max.rn_max = 1 "
+				+ "WHERE  pa.area_code is not null ";
+			
+			    if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getArea_code())) {
+			    	qry = qry + " AND pa.area_code = ? ";
+					arrSize++;
+				}
+			    if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getEmp_code())) {
+			    	qry = qry + " AND pa.emp_code = ? ";
+					arrSize++;
+				}
+				qry = qry +" GROUP BY  "
+						+ "    ct.emp_code,  "
+						+ "    pe.first_name,  "
+						+ "    pe.[mobile],  "
+						+ "    ct.area_alias,  "
+						+ "    CONVERT(date, ct.punch_time) ORDER BY CONVERT(date, ct.punch_time) DESC "; 
+				Object[] pValues = new Object[arrSize];
+				int i = 0;
+				 if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date()) && !StringUtils.isEmpty(obj1.getTo_date())) {
+					pValues[i++] = obj1.getFrom_date();
+					pValues[i++] = obj1.getTo_date();
+				}
+				if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date())) {
+					pValues[i++] = obj1.getFrom_date();
+				}
+				if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getTo_date())) {
+					pValues[i++] = obj1.getTo_date();
+				}
+				if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getArea_code())) {
+					pValues[i++] = obj1.getArea_code();
+				}
+				if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getEmp_code())) {
+					pValues[i++] = obj1.getEmp_code();
+				}
+		menuList = jdbcTemplate.query( qry,pValues, new BeanPropertyRowMapper<AttOutputModel>(AttOutputModel.class));
+	
+	}catch(Exception e){ 
+		e.printStackTrace();
+		throw new SQLException(e.getMessage());
+	}
+	return menuList;
+
+  }
 }

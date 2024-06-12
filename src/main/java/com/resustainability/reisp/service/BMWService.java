@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.resustainability.reisp.dao.BMWDao;
+import com.resustainability.reisp.model.AttModelNormal;
+import com.resustainability.reisp.model.AttOutputModel;
 import com.resustainability.reisp.model.BMW;
 import com.resustainability.reisp.model.BrainBox;
 import com.resustainability.reisp.model.DashBoardWeighBridge;
@@ -65,5 +67,9 @@ public class BMWService {
 	public Object getLogsOfResults(List<BrainBox> companiesList, DashBoardWeighBridge obj1) throws SQLException{
 		return dao.getLogsOfResults(companiesList,obj1);
 		
+	}
+
+	public List<AttOutputModel> getAllAttendanceList(AttModelNormal obj1, AttOutputModel obj, HttpServletResponse response) throws SQLException {
+		return dao.getAllAttendanceList(obj1,obj,response);
 	}
 }

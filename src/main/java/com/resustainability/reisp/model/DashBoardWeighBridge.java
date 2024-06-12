@@ -6,12 +6,12 @@ public class DashBoardWeighBridge {
 
 	private String   UID,plant,cabsTransID,actualVisitDate,indicator_name,uniqueAPIIDs,user_id,password,
 	route,customerTown,vehicleRegNo,aPIType,aPIID,visitDayTime,PTCDT1,syncDate,syncTime,date
-		      ,TRNO,VEHICLENO,MATERIAL,count,min,dmNmae,days_diff,PARTY,all_wb,all_sites,visitDays,customerStatus,TRANSPORTER,curDAte,BILLDCNO,BILLWEIGHT,DATEIN,TIMEIN,FIRSTWEIGHT,USER1,DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO
+		      ,TRNO,VEHICLENO,MATERIAL,count,min,dmNmae,days_diff,PARTY,all_wb,all_sites,visitDays,customerStatus,TRANSPORTER,curDAte,BILLDCNO,BILLWEIGHT,DATEIN,DATE_IN,TIMEIN,FIRSTWEIGHT,USER1,DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID,STATUS,FIRSTFRONTPOTO
 		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE
 		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM
 		   ,Remarks,FIRSTWEIGHTACTUAL,TYPEOFVEHICLE ,DRIVERNAME,status ,WeightTransNo,VEHICLECAPACITY,TotalVisits,ActiveVistis,incativeVistis,customerId,id ,weight_TRNO,PTC_status ,PTCDT ,MSG,user_ip ,CONTAINERID,REMARKS,
 		    	    	    	      company ,greenWB,no_of_wbR,no_of_wb2
-		    	    	    	    	      ,sbu
+		    	    	    	    	      ,sbu,Circle
 		    	    	    	    	      ,project
 		    	    	    	    	      ,project_name
 		    	    	    	    	      ,location
@@ -37,10 +37,10 @@ public class DashBoardWeighBridge {
 		    	    	    	    	      ,ActualVisitYear
 		    	    	    	    	      ,VisitDayTime
 		    	    	    	    	      ,ServiceFrequency
-		    	    	    	    	      ,VisitDays
+		    	    	    	    	      ,VisitDays,SITE_ID
 		    	    	    	    	      ,BlueCount
 		    	    	    	    	      ,BlueWeight
-		    	    	    	    	      ,RedCount
+		    	    	    	    	      ,RedCount,TIME_IN
 		    	    	    	    	      ,RedWeight
 		    	    	    	    	      ,YellowCount
 		    	    	    	    	      ,YellowWeight
@@ -63,6 +63,38 @@ public class DashBoardWeighBridge {
 	
 	List<DashBoardWeighBridge> transactionsList;
 	
+
+	public String getCircle() {
+		return Circle;
+	}
+
+	public void setCircle(String circle) {
+		Circle = circle;
+	}
+
+	public String getSITE_ID() {
+		return SITE_ID;
+	}
+
+	public void setSITE_ID(String sITE_ID) {
+		SITE_ID = sITE_ID;
+	}
+
+	public String getTIME_IN() {
+		return TIME_IN;
+	}
+
+	public void setTIME_IN(String tIME_IN) {
+		TIME_IN = tIME_IN;
+	}
+
+	public String getDATE_IN() {
+		return DATE_IN;
+	}
+
+	public void setDATE_IN(String dATE_IN) {
+		DATE_IN = dATE_IN;
+	}
 
 	public String getTransactionNo1() {
 		return TransactionNo1;
