@@ -312,15 +312,38 @@ License: You must have a valid license purchased only from themeforest(the above
   <div class="bs-stepper vertical vertical-wizard-example">
     <div class="bs-stepper-header">
     <c:forEach var="obj" items="${projectsList}" varStatus="index">
-      <div class="step" data-target="#account-details-vertical${index.count }" role="tab"  id="account-details-vertical-trigger${index.count }">
-       <input type="hidden" id="wbId${index.count }" value="${obj.wb_site_id }"/>
-        <button type="button" class="step-trigger"> <%-- //onclick="getSiteDetails('${index.count }','${obj.project }')" --%>
-          <span class="bs-stepper-box" onclick="exportProject('${index.count }','${obj.project }','${obj.sbu }');" ><i class="fa fa-download" aria-hidden="true"></i> </span>
-          <span class="bs-stepper-label">
-            <span class="bs-stepper-title">${obj.project }</span>
-          </span>
-        </button>
-      </div>
+    
+    
+    <c:choose>
+		    	<c:when test="${sessionScope.USER_ID eq '12180082' || sessionScope.USER_ID eq '220087801'  || sessionScope.USER_ID eq '220087800'  }">
+			       <c:if test="${obj.sbu eq 'MSW_CnT' }">
+			          <div class="step" data-target="#account-details-vertical${index.count }" role="tab"  id="account-details-vertical-trigger${index.count }">
+				       <input type="hidden" id="wbId${index.count }" value="${obj.wb_site_id }"/>
+				        <button type="button" class="step-trigger"> <%-- //onclick="getSiteDetails('${index.count }','${obj.project }')" --%>
+				          <span class="bs-stepper-box" onclick="exportProject('${index.count }','${obj.project }','${obj.sbu }');" ><i class="fa fa-download" aria-hidden="true"></i> </span>
+				          <span class="bs-stepper-label">
+				            <span class="bs-stepper-title">${obj.project } </span>
+				          </span>
+				        </button>
+				      </div>
+							       
+			       </c:if>
+			   </c:when>
+			   <c:otherwise>
+			    <c:if test="${obj.sbu ne 'MSW_CnT' }">
+			        <div class="step" data-target="#account-details-vertical${index.count }" role="tab"  id="account-details-vertical-trigger${index.count }">
+				       <input type="hidden" id="wbId${index.count }" value="${obj.wb_site_id }"/>
+				        <button type="button" class="step-trigger"> <%-- //onclick="getSiteDetails('${index.count }','${obj.project }')" --%>
+				          <span class="bs-stepper-box" onclick="exportProject('${index.count }','${obj.project }','${obj.sbu }');" ><i class="fa fa-download" aria-hidden="true"></i> </span>
+				          <span class="bs-stepper-label">
+				            <span class="bs-stepper-title">${obj.project } </span>
+				          </span>
+				        </button>
+				      </div>
+				      </c:if>
+			   </c:otherwise>
+		    </c:choose>
+   
 	</c:forEach>
     </div>
     <div class="bs-stepper-content">

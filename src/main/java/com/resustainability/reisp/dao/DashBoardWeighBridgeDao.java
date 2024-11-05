@@ -1,6 +1,7 @@
 package com.resustainability.reisp.dao;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -768,7 +769,7 @@ public class DashBoardWeighBridgeDao {
 		return objsList; 
 	}
 
-	public List<DashBoardWeighBridge> getMSWManualDataWithSiteID(DashBoardWeighBridge obj) {
+	public List<DashBoardWeighBridge> getMSWManualDataWithSiteID(DashBoardWeighBridge obj) throws ParseException {
 		 String  fromDateDash = null;
 		 String  fromDateSlash = null;
 		 String toDateSlash = null;
@@ -781,6 +782,37 @@ public class DashBoardWeighBridgeDao {
 		String dbNAme = "All_MSW_SITES";
 		if("CND".equalsIgnoreCase(obj.getSbu())) {
 			dbNAme = "All_CnD_Sites";
+		}
+		if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu()) && (obj.getSbu().contains("MSW_CnT")) ) {
+			 dbNAme = "HIMSW_CnT";
+			 data = "";
+			 	data = data + "  select TRNO,VEHICLENO, ";
+				data = data + "  TIMEIN,CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(22), DATEOUT, 105) ELSE CONVERT(varchar(22), DATEOUT, 105) END AS DATEOUT,";
+
+				data = data + "  TIMEOUT,CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(22), DATEIN, 105) ELSE CONVERT(varchar(22), DATEIN, 105) END as  DATEIN,";
+				 
+				data = data +"MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,FIRSTWEIGHT,USER1,"
+						+ "  SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+				+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+				+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+				+ "  		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
+				+ "  where TRNO is not null and NETWT is not null and NETWT <> '' ";
+			  if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSITEID())) {
+			    	data = data + "   and SITEID in("+obj.getSITEID()+")";
+				}
+				 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getFrom_date())) {
+					 fromDateDash = obj.getFrom_date();  // Original date string in "yyyy-MM-dd" format
+					 fromDateSlash = obj.getTo_date();
+
+					
+					 if(StringUtils.isEmpty(obj.getTo_date())) {
+						 fromDateSlash = fromDateDash;
+					 }
+					data = data + "   AND  (TRY_CAST(CONVERT(datetime, DATEIN, 105) AS DATE) between '"+fromDateDash+"' and '"+fromDateSlash+"')  order by TRNO desc";
+				
+					}
+				objsList = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+				return objsList;
 		}
 		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getFrom_date())) {
 		data = ""
