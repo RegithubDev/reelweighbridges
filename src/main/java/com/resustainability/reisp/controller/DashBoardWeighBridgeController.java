@@ -383,12 +383,22 @@ public class DashBoardWeighBridgeController {
 					cell.setCellStyle(sectionStyle);
 					cell.setCellValue(obj1.getTRNO());
 					
+					String VEHICLENO = obj1.getVEHICLENO();
+					if(StringUtils.isEmpty(VEHICLENO)){
+						VEHICLENO = obj1.getVehicleNo();
+						
+					}
+					
 	                cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getVEHICLENO());
+					cell.setCellValue (VEHICLENO);
 					
 					String date = obj1.getDATEIN();
-				    if(date.contains(" ")){
+					if(StringUtils.isEmpty(date)){
+						date = obj1.getDateIN();
+						
+					}
+				    if(!StringUtils.isEmpty(date) &&  date.contains(" ")){
 			            String [] finalDate = date.split(" ");
 			            date = finalDate[0];
 			        }
@@ -397,12 +407,31 @@ public class DashBoardWeighBridgeController {
 					cell.setCellStyle(sectionStyle);
 					cell.setCellValue (date);
 					
+					String timeIN = obj1.getTIMEIN();
+					if(StringUtils.isEmpty(timeIN)){
+						String [] finalDate = obj1.getTimeIN().split(" ");
+						try {
+							timeIN = finalDate[1];
+						}catch(Exception e) {
+							timeIN = finalDate[0];
+						}
+						
+						
+					}else {
+						String [] finalDate = obj1.getTIMEIN().split(" ");
+						timeIN = finalDate[1];
+					}
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getTIMEIN());
-					
+					cell.setCellValue (timeIN);
+		
+			
 					String dateO = obj1.getDATEOUT();
-				    if(dateO.contains(" ")){
+					if(StringUtils.isEmpty(dateO)){
+						dateO = obj1.getDateOUT();
+						
+					}
+				    if(!StringUtils.isEmpty(dateO) &&  dateO.contains(" ")){	
 			            String [] finalDate = dateO.split(" ");
 			            dateO = finalDate[0];
 			        }
@@ -411,9 +440,27 @@ public class DashBoardWeighBridgeController {
 					cell.setCellStyle(sectionStyle);
 					cell.setCellValue (dateO);
 					
+					String timeOUT = obj1.getTIMEOUT();
+					if(StringUtils.isEmpty(timeOUT)){
+						String [] finalDate = obj1.getTimeOUT().split(" ");
+						try {
+							timeOUT = finalDate[1];
+						}catch(Exception e) {
+							timeOUT = finalDate[0];
+						}
+						
+					}else {
+						String [] finalDate = obj1.getTIMEOUT().split(" ");
+						try {
+							timeOUT = finalDate[1];
+						}catch(Exception e) {
+							timeOUT = finalDate[0];
+						}
+					}
+					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (dateO);
+					cell.setCellValue (timeOUT);
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
@@ -425,13 +472,20 @@ public class DashBoardWeighBridgeController {
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getFIRSTWEIGHT());  
+					cell.setCellValue (obj1.getNETWT());  
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);
 					cell.setCellValue (obj1.getCONTAINERID());
 					
 	                rowNo++;
+	            }
+	            if(dataList.size() == 0) {
+	            	 XSSFRow row = sheet.createRow(rowNo);
+		                int c = 0;
+		                Cell cell = row.createCell(c++);
+						cell.setCellStyle(null);
+						cell.setCellValue("No Data");
 	            }
 	            for(int columnIndex = 0; columnIndex < firstHeaderStringArr.length; columnIndex++) {
 	        		sheet.setColumnWidth(columnIndex, 25 * 170);
@@ -616,9 +670,16 @@ public class DashBoardWeighBridgeController {
 					cell.setCellStyle(sectionStyle);
 					cell.setCellValue (obj1.getUSER2());
 					
-					cell = row.createCell(c++);
-					cell.setCellStyle(sectionStyle);
-					cell.setCellValue (obj1.getSiteID());
+					if(StringUtils.isEmpty((obj1.getSiteID()))){
+						cell = row.createCell(c++);
+						cell.setCellStyle(sectionStyle);
+						cell.setCellValue (obj1.getSITE_ID());
+					}else {
+						cell = row.createCell(c++);
+						cell.setCellStyle(sectionStyle);
+						cell.setCellValue (obj1.getSiteID());
+					}
+					
 					
 					cell = row.createCell(c++);
 					cell.setCellStyle(sectionStyle);

@@ -194,7 +194,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<%=request.getContextPath() %>/dashboard-wb">MSW Cumulative Dashboard</a></li>
                              <li><a href="<%=request.getContextPath() %>/dashboard-wb-cnd">CND Cumulative Dashboard</a></li>     <%--  <li><a href="<%=request.getContextPath() %>/dashboard-wb-bmw">BMW Cumulative Dashboard</a></li> --%>
-								<li><a href="<%=request.getContextPath() %>/dashboard-wb-daily">Daily Monitoring</a></li>
+								<%-- <li><a href="<%=request.getContextPath() %>/dashboard-wb-daily">Daily Monitoring</a></li> --%>
 								
 								 
                                 
@@ -210,7 +210,7 @@ License: You must have a valid license purchased only from themeforest(the above
 		                            <ul aria-expanded="false" class="collapse">
 		                                <li><a href="<%=request.getContextPath() %>/logs/MSW">MSW Logs Dashboard</a></li>
 		                                <li><a href="<%=request.getContextPath() %>/logs/CND">CND Logs Dashboard</a></li> 
-		                                <li><a href="<%=request.getContextPath() %>/logs/BMW">BMW Logs Dashboard</a></li>
+		                               <%-- <li><a href="<%=request.getContextPath() %>/logs/BMW">BMW Logs Dashboard</a></li> --%>
 		                            </ul>
 		                        </li>
 		                               <li>
@@ -312,6 +312,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     ></i>&nbsp;${obj.project } 
                                     <span 
                                       <c:if test="${obj.sbu eq 'MSW'}">class="badge ms-auto bg-info" </c:if> 
+                                       <c:if test="${obj.sbu eq 'MSW_CnT'}">class="badge ms-auto bg-danger" </c:if> 
                                       <c:if test="${obj.sbu eq 'CND'}"> class="badge ms-auto bg-warning"</c:if> 
                                        <c:if test="${obj.sbu eq 'BMW'}"> class="badge ms-auto bg-primary"</c:if> 
                                     style=" float: right;color: white; 

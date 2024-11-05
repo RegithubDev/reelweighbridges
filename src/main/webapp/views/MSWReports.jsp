@@ -238,7 +238,7 @@ th {
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<%=request.getContextPath() %>/dashboard-wb">MSW Cumulative Dashboard</a></li>
                              <li><a href="<%=request.getContextPath() %>/dashboard-wb-cnd">CND Cumulative Dashboard</a></li>     <%--  <li><a href="<%=request.getContextPath() %>/dashboard-wb-bmw">BMW Cumulative Dashboard</a></li> --%>
-								<li><a href="<%=request.getContextPath() %>/dashboard-wb-daily">Daily Monitoring</a></li>
+								<%-- <li><a href="<%=request.getContextPath() %>/dashboard-wb-daily">Daily Monitoring</a></li> --%>
 								</ul>
                         </li>
                                <!--  <li><a href="wbreport.php">IWM Reports</a></li> -->
@@ -250,7 +250,7 @@ th {
                             <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Logs Dashboard</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<%=request.getContextPath() %>/logs/MSW">MSW Logs Dashboard</a></li>
-                                <li><a href="<%=request.getContextPath() %>/logs/CND">CND Logs Dashboard</a></li> <li><a href="<%=request.getContextPath() %>/logs/BMW">BMW Logs Dashboard</a></li>
+                                <li><a href="<%=request.getContextPath() %>/logs/CND">CND Logs Dashboard</a></li><%-- <li><a href="<%=request.getContextPath() %>/logs/BMW">BMW Logs Dashboard</a></li> --%>
 								
 								 
                                 

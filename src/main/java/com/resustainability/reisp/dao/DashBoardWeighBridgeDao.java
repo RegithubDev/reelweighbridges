@@ -44,17 +44,17 @@ public class DashBoardWeighBridgeDao {
 		List<DashBoardWeighBridge> objsList2 = new ArrayList<DashBoardWeighBridge>();
 		try {
 			String qry = "SELECT REPLACE(REPLACE([company], '\r', ''), '\n', '') AS company,REPLACE(REPLACE([sbu], '\r', ''), '\n', '') AS sbu,"
-					+ "REPLACE(REPLACE([project], '\r', ''), '\n', '') AS project,REPLACE(REPLACE([project_name], '\r', ''), '\n', '') AS project_name,"
-					+ "REPLACE(REPLACE([location], '\r', ''), '\n', '') AS location,REPLACE(REPLACE([project_status], '\r', ''), '\n', '') AS project_status,"
-					+ "no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
-					+ ",developed_by FROM [MasterDB].[dbo].[master_table] mt "
-					+ " where  mt.location is not null and  mt.location <> '' and sbu <> 'BMW'  and  wb_site_id is not null  "; 
+					+ "  REPLACE(REPLACE([project], '\r', ''), '\n', '') AS project,REPLACE(REPLACE([project_name], '\r', ''), '\n', '') AS project_name,"
+					+ "  REPLACE(REPLACE([location], '\r', ''), '\n', '') AS location,REPLACE(REPLACE([project_status], '\r', ''), '\n', '') AS project_status,"
+					+ "  no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
+					+ "  ,developed_by FROM [MasterDB].[dbo].[master_table] mt "
+					+ "   where  mt.location is not null and  mt.location <> '' and sbu <> 'BMW'  and  wb_site_id is not null  "; 
 			int arrSize1 = 0;
 			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
-					qry = qry + " AND sbu = ? ";
+					qry = qry + "   AND sbu = ? ";
 					arrSize1++;
 				}
-			 qry = qry + " order by sbu desc ";
+			 qry = qry + "   order by sbu desc ";
 			 Object[] pValues1 = new Object[arrSize1];
 				int j = 0;
 				 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
@@ -77,53 +77,58 @@ public class DashBoardWeighBridgeDao {
 				if(siteIDs.getDb_name().equals("ALL_BMW_Sites11")) {
 					data = ""
 							+"SELECT top 1 [id] as UID,'bmw' as dmNmae,(select indicator_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as indicator_name , "
-							+ " (select top (1) (cast([visitDayTime] as time(0))) from [ALL_BMW_Sites].[dbo].bmw_detailed   where company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' order by ServerDateTime desc ) as visitDayTime,(select top 1 count(*)   from [ALL_BMW_Sites].[dbo].bmw_detailed "
-							+ "where  company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) as count,"
-							+ "   (select top 1 min(convert(varchar, ServerDateTime, 23))   from [ALL_BMW_Sites].[dbo].bmw_detailed "
-							+ "where  company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) as min,"
-							+ " (select top 1  max(convert(varchar, ServerDateTime, 23)) from [ALL_BMW_Sites].[dbo].bmw_detailed where company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) as DATEIN  "
-							+ "      ,(select project_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_name ,"
-									+ "(select project_status from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_status,"
-											+ "(select sbu from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as sbu,"
-													+ "(select project from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project, "
-															+ "(select company from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as company,convert(varchar, getdate(), 23) as curDAte  "
-							+ ",  (select count(*) from [ALL_BMW_Sites].[dbo].bmw_detailed where  convert(varchar, ServerDateTime, 23) = convert(varchar, getdate(), 23)"
-							+ " and company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) "
-							+ "as dailyCount"
+							+ "   (select top (1) (cast([visitDayTime] as time(0))) from [ALL_BMW_Sites].[dbo].bmw_detailed   where company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' order by ServerDateTime desc ) as visitDayTime,(select top 1 count(*)   from [ALL_BMW_Sites].[dbo].bmw_detailed "
+							+ "  where  company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) as count,"
+							+ "     (select top 1 min(convert(varchar, ServerDateTime, 23))   from [ALL_BMW_Sites].[dbo].bmw_detailed "
+							+ "  where  company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) as min,"
+							+ "   (select top 1  max(convert(varchar, ServerDateTime, 23)) from [ALL_BMW_Sites].[dbo].bmw_detailed where company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) as DATEIN  "
+							+ "        ,(select project_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_name ,"
+									+ "  (select project_status from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_status,"
+											+ "  (select sbu from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as sbu,"
+													+ "  (select project from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project, "
+															+ "  (select company from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as company,convert(varchar, getdate(), 23) as curDAte  "
+							+ "  ,  (select count(*) from [ALL_BMW_Sites].[dbo].bmw_detailed where  convert(varchar, ServerDateTime, 23) = convert(varchar, getdate(), 23)"
+							+ "   and company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) "
+							+ "  as dailyCount"
 						
-							+ "  FROM [ALL_BMW_Sites].[dbo].[bmw_detailed] ";
+							+ "    FROM [ALL_BMW_Sites].[dbo].[bmw_detailed] ";
 					objsList1 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 					objsList2.addAll(objsList1);
 				}else {
 				data = ""
-						//+ "BEGIN TRY   SET NOCOUNT ON; "
-						+ "select top 1 UID,TRNO,"
-						+ " (select project_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_name,"
-						+ "VEHICLENO ,"+all_sites+" as all_sites,(select indicator_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as indicator_name ,"
-						+ "(select min(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
-								+ "where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as min,"
-										+ "(select max(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()
-										+ " where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as DATE_IN,convert(varchar, getdate(), 23) as curDAte"
-												+ ",(select top (1) (cast([TIMEIN] as time(0))) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  "
-												+ " where SITEID in ("+siteIDs.getWb_site_id()+") "
-												+ "order by TRNO desc ) as TIME_IN"
-										+ ",(select count(TRNO) from "+siteIDs.getDb_name()+""
-										+ ".[dbo]."+siteIDs.getTable_name()+"  where SITEID='"+siteID+"' and NETWT <> '' and NETWT is not null and NETWT <> 0) as count,"
-												+ "(select project from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project,"
-												+ "(select project_status from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_status,"
-								+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,FIRSTWEIGHT,USER1,"
-								+ "CONVERT(varchar(9), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
-						+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
-						+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
-						+ "		   ,REMARKS,CONTAINERID from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" tt "
-								+ "where TRNO is not null and NETWT is not null and NETWT <> ''  ";
+						//+ "  BEGIN TRY   SET NOCOUNT ON; "
+					+"SELECT TOP 1 UID, TRNO, " +
+					               " (SELECT TOP 1 project_name FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS project_name, " +
+					               " VEHICLENO, " + all_sites + "   AS all_sites, " +
+					               " (SELECT TOP 1 indicator_name FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS indicator_name, " +
+					               " (SELECT MIN(TRY_CAST(CASE WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME, datein, 103) + ' 12:00:00 AM' ELSE DATEIN END AS DATE)) " +
+					               "  FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name() + "   " +
+					               "  WHERE DATEIN IS NOT NULL AND DATEIN <> '' AND SITEID = '" + siteID + "  ') AS min, " +
+					               " (SELECT MAX(TRY_CAST(CASE WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME, datein, 103) + ' 12:00:00 AM' ELSE DATEIN END AS DATE)) " +
+					               "  FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name() + "   " +
+					               "  WHERE DATEIN IS NOT NULL AND DATEIN <> '' AND SITEID = '" + siteID + "  ') AS DATE_IN, " +
+					               " CONVERT(varchar, GETDATE(), 23) AS curDate, " +
+					               " (SELECT TOP 1 CAST([TIMEIN] AS TIME(0)) FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name() + "   " +
+					               "  WHERE SITEID IN (" + siteIDs.getWb_site_id() + "  ) ORDER BY TRNO DESC) AS TIME_IN, " +
+					               " (SELECT COUNT(TRNO) FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name() + "   " +
+					               "  WHERE SITEID = '" + siteID + "  ' AND NETWT <> '' AND NETWT IS NOT NULL AND NETWT <> 0) AS count, " +
+					               " (SELECT TOP 1 project FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS project, " +
+					               " (SELECT TOP 1 project_status FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS project_status, " +
+					               " MATERIAL, PARTY, TRANSPORTER, BILLDCNO, BILLWEIGHT, FIRSTWEIGHT, USER1, " +
+					               " CONVERT(varchar(9), DATEOUT, 105) AS DATEOUT, TIMEOUT, SECONDWEIGHT, USER2, SITEID AS SITE_ID, STATUS, FIRSTFRONTPOTO, " +
+					               " FIRSTBACKPOTO, SECONDFRONTPOTO, SECONDBACKPOTO, NETWT, SW_SITEID, TRIPNO, SHIFTNO, TRANSFERWASTEIE, TRANSFERWASTE, MANIFESTNUMBER, " +
+					               " MANIFESTWEIGHT, MEMBERSHIPCODE, INGATEPASSNO, INMETERREADING, OUTGATEPASSNO, OUTMETERREADING, TRANSFERID, TYPEOFWASTE, " +
+					               " TOTALKMSTRAVELLED, BILLABLEWEIGHT, TOTALTRANSPORTCHARGES, BARCODENUM, REMARKS, CONTAINERID " +
+					               " FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name() + "   tt " +
+					               " WHERE TRNO IS NOT NULL AND NETWT IS NOT NULL AND NETWT <> '' ";
+
 								
 				int arrSize = 0;
 			    if(!StringUtils.isEmpty(siteIDs) && !StringUtils.isEmpty(siteIDs.getWb_site_id())) {
-			    	data = data + " and SITEID in ("+siteIDs.getWb_site_id()+") ";
+			    	data = data + "   and SITEID in ("+siteIDs.getWb_site_id()+") ";
 					arrSize++;
 				}
-			    data = data + " order by CONVERT(varchar(9), DATEIN, 103) desc ";
+			    data = data + "   order by CONVERT(varchar(9), DATEIN, 103) desc ";
 			 
 				Object[] pValues = new Object[arrSize];
 				int i = 0;
@@ -146,7 +151,7 @@ public class DashBoardWeighBridgeDao {
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		try {
 			String qry = "SELECT distinct sbu  FROM [MasterDB].[dbo].[master_table] mt "
-					+ " where  mt.sbu is not null and  mt.sbu <> '' and  project_status <> 'InActive' and wb_site_id is not null order by sbu desc"; 
+					+ "   where  mt.sbu is not null and  mt.sbu <> '' and  project_status <> 'InActive' and wb_site_id is not null order by sbu desc"; 
 			objsList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -163,14 +168,14 @@ public class DashBoardWeighBridgeDao {
 
 		try {
 			String qry = "SELECT REPLACE(REPLACE([company], '\r', ''), '\n', '') AS company,REPLACE(REPLACE([sbu], '\r', ''), '\n', '') AS sbu,"
-					+ "REPLACE(REPLACE([project], '\r', ''), '\n', '') AS project,REPLACE(REPLACE([project_name], '\r', ''), '\n', '') AS project_name,"
-					+ "REPLACE(REPLACE([location], '\r', ''), '\n', '') AS location,REPLACE(REPLACE([project_status], '\r', ''), '\n', '') AS project_status,"
-					+ "no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
-					+ ",developed_by FROM [MasterDB].[dbo].[master_table] mt "
-					+ " where  mt.location is not null and  mt.location <> '' and sbu <> 'BMW' and  wb_site_id is not null order by sbu desc"; 
+					+ "  REPLACE(REPLACE([project], '\r', ''), '\n', '') AS project,REPLACE(REPLACE([project_name], '\r', ''), '\n', '') AS project_name,"
+					+ "  REPLACE(REPLACE([location], '\r', ''), '\n', '') AS location,REPLACE(REPLACE([project_status], '\r', ''), '\n', '') AS project_status,"
+					+ "  no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
+					+ "  ,developed_by FROM [MasterDB].[dbo].[master_table] mt "
+					+ "   where  mt.location is not null and  mt.location <> '' and sbu <> 'BMW' and  wb_site_id is not null order by sbu desc"; 
 			int arrSize1 = 0;
 			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
-					qry = qry + " AND sbu = ? ";
+					qry = qry + "   AND sbu = ? ";
 					arrSize1++;
 				}
 			 Object[] pValues1 = new Object[arrSize1];
@@ -178,9 +183,11 @@ public class DashBoardWeighBridgeDao {
 				 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
 					 pValues1[j++] = obj.getSbu();
 				}
+				
 			objsList = jdbcTemplate.query( qry,pValues1, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 			int counts = 0;
 			for(DashBoardWeighBridge siteIDs : objsList) {
+				 System.out.println(siteIDs.getSbu());
 				String siteID = siteIDs.getWb_site_id().replaceAll("'", "").trim();
 				if(siteID.contains(",")) {
 					String [] siteIDss = siteID.split(",");
@@ -188,6 +195,8 @@ public class DashBoardWeighBridgeDao {
 					if(siteID.equals("WB1")){
 						siteID = "WB3";
 					}
+				}else {
+					siteID = siteID.trim();
 				}
 				String pattern = "MM-dd-yyyy";
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -222,56 +231,158 @@ public class DashBoardWeighBridgeDao {
 		        int month = yesterday.getMonthValue();
 		        int day = yesterday.getDayOfMonth();
 
-		       String yesDAte = year + "-" + month + "-" + day;
+		       String yesDAte = year + "  -" + month + "  -" + day;
 				if(siteIDs.getDb_name().equals("ALL_BMW_Sites11")) {
 					data = ""
 							+"SELECT top 1 [id] as UID,'bmw' as dmNmae,(select indicator_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as indicator_name , "
-							+ "   (select top 1 convert(varchar, ServerDateTime, 23)   from [ALL_BMW_Sites].[dbo].bmw_detailed where  convert(varchar, ServerDateTime, 23) = convert(varchar, getdate(), 23)"
-							+ " and company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) as DATEIN  "
-							+ "      ,(select project_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_name ,"
-									+ "(select project_status from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_status,"
-											+ "(select sbu from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as sbu,"
-													+ "(select project from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project, "
-															+ "(select company from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as company,convert(varchar, getdate(), 23) as curDAte  "
-							+ ",  (select count(*) from [ALL_BMW_Sites].[dbo].bmw_detailed where  convert(varchar, ServerDateTime, 23) = convert(varchar, getdate(), 23)"
-							+ " and company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) "
-							+ "as dailyCount   "
+							+ "     (select top 1 convert(varchar, ServerDateTime, 23)   from [ALL_BMW_Sites].[dbo].bmw_detailed where  convert(varchar, ServerDateTime, 23) = convert(varchar, getdate(), 23)"
+							+ "   and company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) as DATEIN  "
+							+ "        ,(select project_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_name ,"
+									+ "  (select project_status from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_status,"
+											+ "  (select sbu from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as sbu,"
+													+ "  (select project from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project, "
+															+ "  (select company from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as company,convert(varchar, getdate(), 23) as curDAte  "
+							+ "  ,  (select count(*) from [ALL_BMW_Sites].[dbo].bmw_detailed where  convert(varchar, ServerDateTime, 23) = convert(varchar, getdate(), 23)"
+							+ "   and company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%' ) "
+							+ "  as dailyCount   "
 						
-							+ "  FROM [ALL_BMW_Sites].[dbo].[bmw_detailed]";
+							+ "    FROM [ALL_BMW_Sites].[dbo].[bmw_detailed]";
 					objsList1 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 					objsList2.addAll(objsList1);
-				}else {
-					data = ""
-							
-							//+ "BEGIN TRY   SET NOCOUNT ON; "
-							+ "select top 1 UID,TRNO,VEHICLENO ,"+all_sites+" as all_sites,"+siteIDs.getNo_of_wb()+" as no_of_wbR, (select project_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_name,"
-							+ "(select min(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
-									+ "where DATEIN is not null and DATEIN <> '' and SITEID='"+siteID+"')  as min,(select indicator_name from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as indicator_name ,"
-											+ "(Select count(*) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" where "
-											+ " datein = (select top (1) datein from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" where SITEID in ("+siteIDs.getWb_site_id()+") order by trno desc) "
-											+ "	and  SITEID  in ("+siteIDs.getWb_site_id()+")  and NETWT is not null and NETWT <> '' ) as dailyCount,"
-											+ "(select max(TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'  ELSE DATEIN  END AS DATE)) from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()
-											+ " where DATEIN is not null and DATEIN <> '' and SITEID in ("+siteIDs.getWb_site_id()+") and datein = (select top (1) datein from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  where SITEID in ("+siteIDs.getWb_site_id()+") order by TRY_CAST( CASE  WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME,datein, 103)+' 12:00:00 AM'"
-													+ "ELSE DATEIN  END AS DATE) desc))  as DATE_IN,convert(varchar, getdate(), 23) as curDAte"
-											+ ",(select count(TRNO) from "+siteIDs.getDb_name()+""
-											+ ".[dbo]."+siteIDs.getTable_name()+"  where SITEID='"+siteID+"' and NETWT <> '' and NETWT is not null and NETWT <> 0) as count,"
-													+ "(select project from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project,"
-													+ "(select project_status from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as project_status,"
-													+ "(select sbu from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as sbu,"
-									+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-									+ "(select count(*) from  [MasterDB].[dbo].[master_table] where sbu like '"+siteIDs.getSbu()+"' and project_status='Active') as all_wb,"
-									+ "CONVERT(varchar(9), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
-							+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
-							+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
-							+ "		   ,REMARKS,CONTAINERID from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" tt "
-									+ "where TRNO is not null and NETWT is not null and NETWT <> '' ";
+				}else if(siteIDs.getSbu().equals("MSW_CnT")){
+					
+					
+					
+					data  = "SELECT TOP 1"
+							+ "      UID,"
+							+ "      TRNO,"
+							+ "      VEHICLENO,"
+							+ "      '" + siteID + "  ' AS all_sites,"
+							+ "      1 AS no_of_wbR,"
+							+ "      (SELECT project_name FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS project_name, "
+							+ "      (SELECT MIN(TRY_CONVERT(DATETIME, CASE WHEN DATEIN LIKE '%00:00:00%' THEN LEFT(DATEIN, 10) + ' 12:00:00' ELSE DATEIN END, 105))"
+							+ "       FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name() +""
+							+ "       WHERE DATEIN IS NOT NULL AND DATEIN <> '' AND SITEID = '" + siteID + "  ') AS min, "
+							+ "      (SELECT indicator_name FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS indicator_name, "
+							+ "      (SELECT COUNT(*)"
+							+ "       FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name()+""
+							+ "       WHERE DATEIN = (SELECT TOP 1 DATEIN FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name()+"  WHERE SITEID = '" + siteID + "  ' ORDER BY TRNO DESC)"
+							+ "         AND SITEID = '" + siteID + "  '"
+							+ "         AND NETWT IS NOT NULL AND NETWT <> '') AS dailyCount, "
+							+ "      (SELECT MAX(TRY_CONVERT(DATETIME, CASE WHEN DATEIN LIKE '%00:00:00%' THEN LEFT(DATEIN, 10) + ' 12:00:00' ELSE DATEIN END, 105))"
+							+ "       FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name()+" "
+							+ "       WHERE DATEIN IS NOT NULL AND DATEIN <> '' AND SITEID = '" + siteID + "  ') AS DATE_IN, "
+							+ "      CONVERT(VARCHAR, GETDATE(), 23) AS curDate, "
+							+ "      (SELECT COUNT(TRNO) FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name()+"  WHERE SITEID = '" + siteID + "  ' AND NETWT <> '' AND NETWT IS NOT NULL AND NETWT <> 0) AS count, "
+							+ "      (SELECT project FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS project, "
+							+ "      (SELECT project_status FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS project_status, "
+							+ "      (SELECT sbu FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%" + siteID + "%') AS sbu, "
+							+ "      MATERIAL, PARTY, TRANSPORTER, BILLDCNO, BILLWEIGHT, TIMEIN, FIRSTWEIGHT, USER1, "
+							+ "      (SELECT COUNT(*) FROM [MasterDB].[dbo].[master_table] WHERE sbu LIKE 'MSW_' AND project_status = 'Active') AS all_wb, "
+							+ "      CONVERT(VARCHAR(9), DATEOUT, 105) AS DATEOUT, TIMEOUT, SECONDWEIGHT, USER2, SITEID AS SITE_ID, "
+							+ "      STATUS, FIRSTFRONTPOTO, FIRSTBACKPOTO, SECONDFRONTPOTO, SECONDBACKPOTO, NETWT, SW_SITEID, TRIPNO, SHIFTNO, "
+							+ "      TRANSFERWASTEIE, TRANSFERWASTE, MANIFESTNUMBER, MANIFESTWEIGHT, MEMBERSHIPCODE, "
+							+ "      INGATEPASSNO, INMETERREADING, OUTGATEPASSNO, OUTMETERREADING, TRANSFERID, TYPEOFWASTE, "
+							+ "      TOTALKMSTRAVELLED, BILLABLEWEIGHT, TOTALTRANSPORTCHARGES, BARCODENUM, REMARKS, CONTAINERID"
+							+ "  FROM " + siteIDs.getDb_name() + "  .[dbo]." + siteIDs.getTable_name() +" tt"
+							+ "   WHERE TRNO IS NOT NULL AND NETWT IS NOT NULL AND NETWT <> ''"
+							+ "    AND SITEID = '" + siteID +"'";
+					
 
 					int arrSize = 0;
 				    if(!StringUtils.isEmpty(siteIDs) && !StringUtils.isEmpty(siteIDs.getWb_site_id())) {
-				    	data = data + " and SITEID in ("+siteIDs.getWb_site_id()+") ";
+				    	data = data + "   and SITEID in ("+siteIDs.getWb_site_id()+") ";
 						arrSize++;
 					}
-				    data = data + " order by CONVERT(varchar(9), DATEIN, 103) desc ";
+				    data = data + "   ORDER BY TRY_CONVERT(DATETIME, DATEIN, 105) DESC";
+				 
+					Object[] pValues = new Object[arrSize];
+					int i = 0;
+					if(!StringUtils.isEmpty(siteIDs.getWb_site_id()) && !StringUtils.isEmpty(siteIDs.getWb_site_id())) {
+						pValues[i++] = siteIDs.getWb_site_id();
+					}		
+					
+					objsList1 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+					objsList2.addAll(objsList1);
+				}else {
+					data = "SELECT TOP 1 "
+							+ "     UID,"
+							+ "     TRNO,"
+							+ "     VEHICLENO,"
+							+ "    "+all_sites+" AS all_sites,"
+							+ "    "+siteIDs.getNo_of_wb()+" AS no_of_wbR,"
+							+ "     (SELECT TOP 1 project_name FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%"+siteID+"%') AS project_name,"
+							+ "     (SELECT MIN(TRY_CAST(CASE WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME, LEFT(DATEIN, 10) + ' 12:00:00 AM', 103) ELSE DATEIN END AS DATE)) "
+							+ "      FROM "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  "
+							+ "      WHERE DATEIN IS NOT NULL AND DATEIN <> '' AND SITEID = '"+siteID+"') AS min,"
+							+ "     (SELECT TOP 1 indicator_name FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%"+siteID+"%') AS indicator_name,"
+							+ "     (SELECT COUNT(*) "
+							+ "      FROM "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
+							+ "      WHERE DATEIN = (SELECT TOP 1 DATEIN FROM "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" WHERE SITEID IN ("+siteIDs.getWb_site_id()+") ORDER BY TRNO DESC) "
+							+ "        AND SITEID IN ("+siteIDs.getWb_site_id()+") "
+							+ "        AND NETWT IS NOT NULL AND NETWT <> '') AS dailyCount,"
+							+ "     (SELECT MAX(TRY_CAST(CASE WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME, LEFT(DATEIN, 10) + ' 12:00:00 AM', 103) ELSE DATEIN END AS DATE)) "
+							+ "      FROM "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+"  "
+							+ "      WHERE DATEIN IS NOT NULL AND DATEIN <> '' AND SITEID IN ("+siteIDs.getWb_site_id()+") "
+							+ "        AND DATEIN = (SELECT TOP 1 DATEIN FROM "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" WHERE SITEID IN ("+siteIDs.getWb_site_id()+") ORDER BY TRY_CAST(CASE WHEN DATEIN LIKE '%00:00:00%' THEN CONVERT(DATETIME, LEFT(DATEIN, 10) + ' 12:00:00 AM', 103) ELSE DATEIN END AS DATE) DESC)) AS DATE_IN,"
+							+ "     CONVERT(VARCHAR, GETDATE(), 23) AS curDAte,"
+							+ "     (SELECT COUNT(TRNO) FROM "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" WHERE SITEID = '"+siteID+"' AND NETWT <> '' AND NETWT IS NOT NULL AND NETWT <> 0) AS count,"
+							+ "     (SELECT TOP 1 project FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%"+siteID+"%') AS project,"
+							+ "     (SELECT TOP 1 project_status FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%"+siteID+"%') AS project_status,"
+							+ "     (SELECT TOP 1 sbu FROM [MasterDB].[dbo].[master_table] WHERE wb_site_id LIKE '%"+siteID+"%') AS sbu,"
+							+ "     MATERIAL,"
+							+ "     PARTY,"
+							+ "     TRANSPORTER,"
+							+ "     BILLDCNO,"
+							+ "     BILLWEIGHT,"
+							+ "     TIMEIN,"
+							+ "     FIRSTWEIGHT,"
+							+ "     USER1,"
+							+ "     (SELECT COUNT(*) FROM [MasterDB].[dbo].[master_table] WHERE sbu LIKE '"+siteIDs.getSbu()+"' AND project_status = 'Active') AS all_wb,"
+							+ "     CONVERT(VARCHAR(9), DATEOUT, 105) AS DATEOUT,"
+							+ "     TIMEOUT,"
+							+ "     SECONDWEIGHT,"
+							+ "     USER2,"
+							+ "     SITEID AS SITE_ID,"
+							+ "     STATUS,"
+							+ "     FIRSTFRONTPOTO,"
+							+ "     FIRSTBACKPOTO,"
+							+ "     SECONDFRONTPOTO,"
+							+ "     SECONDBACKPOTO,"
+							+ "     NETWT,"
+							+ "     SW_SITEID,"
+							+ "     TRIPNO,"
+							+ "     SHIFTNO,"
+							+ "     TRANSFERWASTEIE,"
+							+ "     TRANSFERWASTE,"
+							+ "     MANIFESTNUMBER,"
+							+ "     MANIFESTWEIGHT,"
+							+ "     MEMBERSHIPCODE,"
+							+ "     INGATEPASSNO,"
+							+ "     INMETERREADING,"
+							+ "     OUTGATEPASSNO,"
+							+ "     OUTMETERREADING,"
+							+ "     TRANSFERID,"
+							+ "     TYPEOFWASTE,"
+							+ "     TOTALKMSTRAVELLED,"
+							+ "     BILLABLEWEIGHT,"
+							+ "     TOTALTRANSPORTCHARGES,"
+							+ "     BARCODENUM,"
+							+ "     REMARKS,"
+							+ "     CONTAINERID"
+							+ " FROM "
+							+ "     "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" tt  "
+							+ " WHERE "
+							+ "     TRNO IS NOT NULL AND NETWT IS NOT NULL AND NETWT <> '' " ;
+							
+						
+
+					int arrSize = 0;
+				    if(!StringUtils.isEmpty(siteIDs) && !StringUtils.isEmpty(siteIDs.getWb_site_id())) {
+				    	data = data + "   and SITEID in ("+siteIDs.getWb_site_id()+") ";
+						arrSize++;
+					}
+				    data = data + "   order by TRY_CAST(DATEIN AS DATE) DESC ";
 				 
 					Object[] pValues = new Object[arrSize];
 					int i = 0;
@@ -281,8 +392,22 @@ public class DashBoardWeighBridgeDao {
 					
 					objsList1 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 					if(!siteIDs.getDb_name().equals("ALL_BMW_Sites")) {
-					String WBQry = "SELECT SITEID as greenWB,(select no_of_wb from [MasterDB].[dbo].[master_table] where wb_site_id like '%"+siteID+"%') as no_of_wb2 FROM  "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" t1 where SITEID in ("+siteIDs.getWb_site_id()+") and datein = (select top (1) datein from "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" where SITEID in ("+siteIDs.getWb_site_id()+") order by trno desc) "
+					String WBQry = ""
+							+ "SELECT \r\n"
+							+ "    SITEID AS greenWB,\r\n"
+							+ "    (SELECT TOP 1 no_of_wb \r\n"
+							+ "     FROM [MasterDB].[dbo].[master_table] \r\n"
+							+ "    where wb_site_id like '%"+siteID+"%') AS no_of_wb2\r\n"
+							+ "FROM  \r\n"
+							+ " "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" "
+							+ "WHERE \r\n"
+							+ "    SITEID IN ("+siteIDs.getWb_site_id()+") \r\n"
+							+ "    AND datein = (SELECT TOP 1 datein \r\n"
+							+ "                  FROM  "+siteIDs.getDb_name()+".[dbo]."+siteIDs.getTable_name()+" \r\n"
+							+ "                  WHERE SITEID IN ("+siteIDs.getWb_site_id()+") \r\n"
+							+ "                  ORDER BY trno DESC)   \r\n"
 							+ "GROUP BY SITEID";
+					
 					objsList3 = jdbcTemplate.query( WBQry, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 					 String commaSeparatedString = objsList3.stream()
 				                .map(DashBoardWeighBridge::getGreenWB)
@@ -319,10 +444,11 @@ public class DashBoardWeighBridgeDao {
 			String date = simpleDateFormat.format(new Date());
 			date = date+" 00:00:00";
 			
-
+			String date0 = null;
 			String pattern3 = "dd-MM-yyyy";
 			SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat(pattern3);
 			String date3 = simpleDateFormat3.format(new Date());
+			date0 = date3+" 12:00:00";
 			date3 = date3+" 00:00:00";
 			
 			String pattern2 = "M/d/yyyy";
@@ -339,21 +465,56 @@ public class DashBoardWeighBridgeDao {
 			if("CND".equalsIgnoreCase(obj.getSbu())) {
 				dbNAme = "All_CnD_Sites";
 			}
-			data = ""
-					+ "select TRNO,VEHICLENO , CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(9), DATEIN, 105) ELSE CONVERT(varchar(10), DATEIN, 105) END as  DATEIN,"
-							+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-							+ "CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
-					+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
-					+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
-					+ "		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
-							+ "where TRNO is not null and NETWT is not null and NETWT <> '' and ( datein = '"+date+ "' or datein = '"+date2+"' or  datein = '"+date3+ "' or datein = '"+date4+"' ) ";
-							
+			
+			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu()) && (obj.getSbu().contains("MSW_CnT")) ) {
+				 dbNAme = "HIMSW_CnT";
+				 data = "";
+				 data = data + "  select TRNO,VEHICLENO , CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(11), DATEIN, 105) ELSE CONVERT(varchar(11), DATEIN, 105) END as  DATEIN,"
+							+ "  MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
+							+ "  CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(1), DATEOUT, 105) ELSE CONVERT(varchar(11), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+					+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+					+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+					+ "  		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
+							+ "  where TRNO is not null  and ( datein = '"+date0+ "' ) ";
+				 
+				  if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSITEID())) {
+				    	data = data + "   and SITEID in("+obj.getSITEID()+")";
+					}
+				    data = data + "   order by TRNO desc";
+				 
+					objsList = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+					return objsList;
+			}
+			
+			
+			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSITEID()) && (obj.getSITEID().contains("'WB1','WB2','WB3','WB4'")) ) {
+			
+				data = data + "  select TRNO,VEHICLENO , CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(11), DATEIN, 105) ELSE CONVERT(varchar(11), DATEIN, 105) END as  DATEIN,"
+								+ "  MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
+								+ "  CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(1), DATEOUT, 105) ELSE CONVERT(varchar(11), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+						+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+						+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+						+ "  		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
+								+ "  where TRNO is not null and NETWT is not null and NETWT <> '' AND CONVERT(date, InDateTime) = CONVERT(date, GETDATE()) ";
+						
+		 }else {
+			 data = data + "  select TRNO,VEHICLENO , CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(11), DATEIN, 105) ELSE CONVERT(varchar(11), DATEIN, 105) END as  DATEIN,"
+								+ "  MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
+								+ "  CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(1), DATEOUT, 105) ELSE CONVERT(varchar(11), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+						+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+						+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+						+ "  		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
+								+ "  where TRNO is not null and NETWT is not null and NETWT <> '' and ( datein = '"+date+ "  ' or datein = '"+date2+"' or  datein = '"+date3+ "  ' or datein = '"+date4+"' ) ";
+						
+		 }
+			
+					
 			int arrSize = 0;
 		    if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSITEID())) {
-		    	data = data + " and SITEID in("+obj.getSITEID()+")";
+		    	data = data + "   and SITEID in("+obj.getSITEID()+")";
 				arrSize++;
 			}
-		    data = data + " order by TRNO ";
+		    data = data + "   order by TRNO desc";
 		 
 			Object[] pValues = new Object[arrSize];
 			int i = 0;
@@ -374,20 +535,20 @@ public class DashBoardWeighBridgeDao {
 		try {
 			String data = new String("");
 			data = ""
-					+ "(select  CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(9), DATEIN, 105) ELSE CONVERT(varchar(10), DATEIN, 105) END as  DATEIN,"
-							+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-							+ " CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
-					+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
-					+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
-					+ "		   ,REMARKS,CONTAINERID from [All_CnD_Sites].[dbo].[WEIGHT] tt "
-							+ "where TRNO is not null and NETWT is not null and NETWT <> '' ";
+					+ "  (select  CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(22), DATEIN, 105) ELSE CONVERT(varchar(22), DATEIN, 105) END as  DATEIN,"
+							+ "  MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
+							+ "   CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(22), DATEOUT, 105) ELSE CONVERT(varchar(22), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+					+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+					+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+					+ "  		   ,REMARKS,CONTAINERID from [All_CnD_Sites].[dbo].[WEIGHT] tt "
+							+ "  where TRNO is not null and NETWT is not null and NETWT <> '' ";
 							
 			int arrSize = 0;
 		    if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getWb_site_id())) {
-		    	data = data + " and SITEID = "+obj.getWb_site_id();
+		    	data = data + "   and SITEID = "+obj.getWb_site_id();
 				arrSize++;
 			}
-		    data = data + " order by CONVERT(varchar(9), DATEIN, 103) desc ";
+		    data = data + "   order by CONVERT(varchar(9), DATEIN, 103) desc ";
 		 
 			Object[] pValues = new Object[arrSize];
 			int i = 0;
@@ -405,16 +566,20 @@ public class DashBoardWeighBridgeDao {
 	public List<DashBoardWeighBridge> getProjectssList(DashBoardWeighBridge obj) throws Exception {
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		List<DashBoardWeighBridge> objsList1 = new ArrayList<DashBoardWeighBridge>();
+		List<DashBoardWeighBridge> objsList2 = new ArrayList<DashBoardWeighBridge>();
 		try {
 			String pattern = "MM-dd-yyyy";
+			String date0 = null;
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 			String date = simpleDateFormat.format(new Date());
+			
 			date = date+" 00:00:00";
 			
 
 			String pattern3 = "dd-MM-yyyy";
 			SimpleDateFormat simpleDateFormat3 = new SimpleDateFormat(pattern3);
 			String date3 = simpleDateFormat3.format(new Date());
+			date0 = date3+" 12:00:00";
 			date3 = date3+" 00:00:00";
 			
 			String pattern2 = "M/d/yyyy";
@@ -429,29 +594,42 @@ public class DashBoardWeighBridgeDao {
 			
 			
 			String qry = "SELECT REPLACE(REPLACE([company], '\r', ''), '\n', '') AS company,REPLACE(REPLACE([sbu], '\r', ''), '\n', '') AS sbu,"
-					+ "REPLACE(REPLACE([project], '\r', ''), '\n', '') AS project,REPLACE(REPLACE([project_name], '\r', ''), '\n', '') AS project_name,"
-					+ "REPLACE(REPLACE([location], '\r', ''), '\n', '') AS location,REPLACE(REPLACE([project_status], '\r', ''), '\n', '') AS project_status,"
-					+ "no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
-					+ ",developed_by,convert(varchar, getdate(), 23) as curDAte FROM [MasterDB].[dbo].[master_table] mt "
-					+ " where  mt.location is not null and  mt.location <> '' and  wb_site_id is not null and project_status <> 'Inactive' "; 
+					+ "  REPLACE(REPLACE([project], '\r', ''), '\n', '') AS project,REPLACE(REPLACE([project_name], '\r', ''), '\n', '') AS project_name,"
+					+ "  REPLACE(REPLACE([location], '\r', ''), '\n', '') AS location,REPLACE(REPLACE([project_status], '\r', ''), '\n', '') AS project_status,"
+					+ "  no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
+					+ "  ,developed_by,convert(varchar, getdate(), 23) as curDAte FROM [MasterDB].[dbo].[master_table] mt "
+					+ "   where  mt.location is not null and  mt.location <> '' and  wb_site_id is not null and project_status <> 'Inactive' "; 
 			int arrSize = 0;
-		    if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
-		    	qry = qry + " and sbu = ? ";
-				arrSize++;
-			}
-			qry = qry + "order by project desc"; 
-			Object[] pValues = new Object[arrSize];
-			int i = 0;
-			if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
-				pValues[i++] = obj.getSbu();
-			}
 			String dbNAme = "All_MSW_SITES";
-			if("CND".equalsIgnoreCase(obj.getSbu())) {
-				dbNAme = "All_CnD_Sites";
-			}
-			objsList = jdbcTemplate.query( qry,pValues, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+		    if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu()) && (obj.getSbu().contains("MSW")) ) {
+		    	qry = qry + "   and sbu in('"+obj.getSbu()+"', 'MSW_CnT') ";
+				qry = qry + "  order by sbu desc"; 
+			
+				objsList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+				
+		    }else if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu()) && (!obj.getSbu().contains("MSW")) ) {
+		    	qry = qry + "   and sbu = ? ";
+				arrSize++;
+				Object[] pValues = new Object[arrSize];
+				qry = qry + "  order by project desc"; 
+				
+				int i = 0;
+				if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
+					pValues[i++] = obj.getSbu();
+				}
+				if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu()) && (obj.getSbu().contains("MSW")) ) {
+					 pValues[i++] = "MSW_CnT";
+				}
+				if("CND".equalsIgnoreCase(obj.getSbu())) {
+					dbNAme = "All_CnD_Sites";
+				}
+				objsList = jdbcTemplate.query( qry,pValues, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+				
+		    }
+	
 			for (DashBoardWeighBridge siteIDs : objsList) {
 				String data = "";
+				System.out.println(siteIDs.getSbu());
 				String siteID = siteIDs.getWb_site_id().replaceAll("'", "").trim();
 				if(siteID.contains(",")) {
 					String [] siteIDss = siteID.split(",");
@@ -460,70 +638,74 @@ public class DashBoardWeighBridgeDao {
 						siteID = "WB3";
 					}
 				}
-				if(siteIDs.getDb_name().equals("ALL_BMW_Sites")) {
-					data = ""
-							+ "Select  id "
-							+ "      ,company "
-							+ "      ,plant "
-							+ "      ,route "
-							+ "      ,CustomerDistrict "
-							+ "      ,CustomerTown as customerTown "
-							+ "      ,VehicleRegNo as vehicleRegNo "
-							+ "      ,CustomerName "
-							+ "      ,CustomerCABSCode "
-							+ "      ,CustomerSAPCode "
-							+ "      ,TypeofEstablishment "
-							+ "      ,ManifestNo "
-							+ "      ,ActualVisitDate as actualVisitDate "
-							+ "      ,ActualVisitMonth "
-							+ "      ,ActualVisitYear "
-							+ "      ,VisitDayTime "
-							+ "      ,ServiceFrequency "
-							+ "      ,BlueCount "
-							+ "      ,BlueWeight "
-							+ "      ,RedCount "
-							+ "      ,RedWeight "
-							+ "      ,YellowCount "
-							+ "      ,YellowWeight "
-							+ "      ,CytotoxicCount "
-							+ "      ,CytotoxicWeight "
-							+ "      ,WhitesCount "
-							+ "      ,WhitesWeight "
-							+ "      ,TotalCount "
-							+ "      ,TotalWeight "
-							+ "      ,CollectionLatitude "
-							+ "      ,CollectionLongitude "
-							+ "      ,ServerDateTime "
-							+ "      ,APIType as aPIType "
-							+ "      ,CabsTransID as cabsTransID "
-							+ "      ,APIID as aPIID "
-							+ "  FROM [ALL_BMW_Sites].[dbo].[bmw_detailed] where convert(varchar, ServerDateTime, 23) = convert(varchar, getdate(), 23) "
-							+ " and company like '%"+siteIDs.getCompany().trim()+"%' and plant like '%"+siteIDs.getProject_name()+"%'";
-					objsList1 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
-				}else {
-					 data = ""
-							+ "select TRNO,VEHICLENO ,CONVERT(varchar(10), DATEIN, 105) AS DATEIN,"
-									+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-									+ "CONVERT(varchar(10), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
-							+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
-							+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
-							+ "		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
-									+ "where TRNO is not null and NETWT is not null and NETWT <> '' and ( datein = '"+date+ "' or datein = '"+date2+"' or  datein = '"+date3+ "' or datein = '"+date4+"' ) ";
-									
+	
+					System.out.println(siteID);
+					dbNAme = "All_MSW_SITES";
+					if("CND".equalsIgnoreCase(obj.getSbu())) {
+						dbNAme = "All_CnD_Sites";
+					}
+					 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(siteID) && (siteID.contains("WB3")) ) {
+						 data = data + "  select TRNO,VEHICLENO ,CONVERT(varchar(11), DATEIN, 105) AS DATEIN,"
+											+ "  MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
+											+ "  CONVERT(varchar(11), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+									+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+									+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+									+ "  		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
+											+ "  where TRNO is not null and NETWT is not null and NETWT <> '' AND CONVERT(date, InDateTime) = CONVERT(date, GETDATE()) ";
+										
+					 }else {
+						 data = data + "  select TRNO,VEHICLENO ,CONVERT(varchar(10), DATEIN, 105) AS DATEIN,"
+											+ "  MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
+											+ "  CONVERT(varchar(10), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+									+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+									+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+									+ "  		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
+											+ "  where TRNO is not null and NETWT is not null and NETWT <> '' and ( datein = '"+date+ "  ' or datein = '"+date2+"' or  datein = '"+date3+ "  ' or datein = '"+date4+"' ) ";
+										
+					 }
+					
 					int arrSize1 = 0;
 				    if(!StringUtils.isEmpty(siteIDs) && !StringUtils.isEmpty(siteIDs.getWb_site_id())) {
-				    	data = data + " and SITEID in("+siteIDs.getWb_site_id()+")";
+				    	data = data + "   and SITEID in("+siteIDs.getWb_site_id()+")";
 						arrSize1++;
 					}
-				    data = data + " order by TRNO desc  ";
+				    data = data + "   order by TRNO desc  ";
 				 
 					Object[] pValues1 = new Object[arrSize1];
 					int j = 0;
 					if(!StringUtils.isEmpty(siteIDs) && !StringUtils.isEmpty(siteIDs.getWb_site_id())) {
-						pValues[j++] = siteIDs.getWb_site_id();
+						pValues1[j++] = siteIDs.getWb_site_id();
 					}
 					objsList1 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
-				}
+					if(!StringUtils.isEmpty(siteIDs) && !StringUtils.isEmpty(siteIDs.getSbu()) && (siteIDs.getSbu().contains("MSW_CnT")) ) {
+						 dbNAme = "HIMSW_CnT";
+						 data = "";
+						 data = data + "  select TRNO,VEHICLENO ,CONVERT(varchar(10), DATEIN, 105) AS DATEIN,"
+									+ "  MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
+									+ "  CONVERT(varchar(10), DATEOUT, 105) AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+							+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+							+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+							+ "  		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
+									+ "  where TRNO is not null  and ( datein = '"+date0+ "' ) ";
+						 
+						  arrSize1 = 0;
+						    if(!StringUtils.isEmpty(siteIDs) && !StringUtils.isEmpty(siteIDs.getWb_site_id())) {
+						    	data = data + "   and SITEID in("+siteIDs.getWb_site_id()+")";
+								arrSize1++;
+							}
+						    data = data + "   order by TRNO desc  ";
+						 
+							pValues1 = new Object[arrSize1];
+							j = 0;
+							if(!StringUtils.isEmpty(siteIDs) && !StringUtils.isEmpty(siteIDs.getWb_site_id())) {
+								pValues1[j++] = siteIDs.getWb_site_id();
+							}
+							objsList2 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
+					
+					}
+					objsList1.addAll(objsList2);
+					
+				
 
 				siteIDs.setTransactionsList(objsList1);
 			}
@@ -539,13 +721,13 @@ public class DashBoardWeighBridgeDao {
 		List<DashBoardWeighBridge> objsList1 = new ArrayList<DashBoardWeighBridge>();
 		try {
 			String qry = "SELECT sbu,db_name,table_name,status,project , convert(varchar, getdate(), 106) as curDAte FROM MasterDB.dbo.log_master mt  "
-					+ " where  mt.table_name is not null and  mt.table_name <> '' and  table_name is not null and status <> 'Inactive' "; 
+					+ "   where  mt.table_name is not null and  mt.table_name <> '' and  table_name is not null and status <> 'Inactive' "; 
 			int arrSize = 0;
 			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
-					qry = qry + " AND sbu = ? ";
+					qry = qry + "   AND sbu = ? ";
 					arrSize++;
 				}
-				qry = qry + " order by sbu desc ";
+				qry = qry + "   order by sbu desc ";
 			 Object[] pValues1 = new Object[arrSize];
 				int j = 0;
 				 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
@@ -554,8 +736,8 @@ public class DashBoardWeighBridgeDao {
 			objsList = jdbcTemplate.query( qry,pValues1, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 			for (DashBoardWeighBridge list : objsList) {
 				String data = ""
-						+ "select TOP (1) convert(varchar, PTCDT, 0) as PTCDT1, convert(varchar, getdate(), 106) as curDAte,DATEDIFF(day, [PTCDT], getdate()) AS days_diff from ["+list.getDb_name()+"].[dbo].["+list.getTable_name()+"] tt ";
-			    data = data + " order by PTCDT desc  ";
+						+ "  select TOP (1) convert(varchar, PTCDT, 0) as PTCDT1, convert(varchar, getdate(), 106) as curDAte,DATEDIFF(day, [PTCDT], getdate()) AS days_diff from ["+list.getDb_name()+"].[dbo].["+list.getTable_name()+"] tt ";
+			    data = data + "   order by PTCDT desc  ";
 				objsList1 = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 				list.setTransactionsList(objsList1);
 			}
@@ -569,14 +751,14 @@ public class DashBoardWeighBridgeDao {
 	public List<DashBoardWeighBridge> getWeighBridgeList(DashBoardWeighBridge obj) {
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		String qry = "SELECT company,sbu,project,project_name,location,project_status,no_of_wb,wb_site_id,db_name,table_name ,api_status,api_consumed_by"
-				+ ",developed_by FROM [MasterDB].[dbo].[master_table] mt "
-				+ " where  mt.location is not null and  mt.location <> '' and  wb_site_id is not null "; 
+				+ "  ,developed_by FROM [MasterDB].[dbo].[master_table] mt "
+				+ "   where  mt.location is not null and  mt.location <> '' and  wb_site_id is not null "; 
 		int arrSize1 = 0;
 		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
-				qry = qry + " AND sbu = ? ";
+				qry = qry + "   AND sbu = ? ";
 				arrSize1++;
 			}
-			qry = qry + " order by sbu desc ";
+			qry = qry + "   order by sbu desc ";
 		 Object[] pValues1 = new Object[arrSize1];
 			int j = 0;
 			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSbu())) {
@@ -602,17 +784,26 @@ public class DashBoardWeighBridgeDao {
 		}
 		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getFrom_date())) {
 		data = ""
-				+ "select TRNO,VEHICLENO ,CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(9), DATEIN, 105) ELSE CONVERT(varchar(10), DATEIN, 105) END as  DATEIN,"
-						+ "MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,TIMEIN,FIRSTWEIGHT,USER1,"
-						+ "CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(9), DATEOUT, 105) ELSE CONVERT(varchar(10), DATEOUT, 105) END AS DATEOUT,TIMEOUT,SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
-				+ "		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
-				+ "		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
-				+ "		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
-						+ "where TRNO is not null and NETWT is not null and NETWT <> '' ";
+				+ "  select TRNO,VEHICLENO ,";
+				 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSITEID()) && (obj.getSITEID().contains("'WB1','WB2','WB3','WB4'")) ) {
+					 data = data +"FORMAT(TRY_CAST(DATEIN AS datetime), 'dd/MMMM/yyyy') AS DATEIN, FORMAT(TRY_CAST(TIMEOUT AS datetime), 'hh:mm tt') AS TIMEOUT,";
+					 data = data 	+ "  FORMAT(TRY_CAST(DATEOUT AS datetime), 'dd/MMMM/yyyy') AS DATEOUT, FORMAT(TRY_CAST(TIMEIN AS datetime), 'hh:mm tt') AS TIMEIN,";
+				 }else {
+					 data = data + "  TIMEIN,CASE WHEN CHARINDEX(' ', DATEOUT) > 0  AND LEN(LEFT(DATEOUT, CHARINDEX(' ', DATEOUT) - 1)) > 10  THEN CONVERT(varchar(22), DATEOUT, 105) ELSE CONVERT(varchar(22), DATEOUT, 105) END AS DATEOUT,";
+
+						data = data + "  TIMEOUT,CASE WHEN CHARINDEX(' ', DATEIN) > 0  AND LEN(LEFT(DATEIN, CHARINDEX(' ', DATEIN) - 1)) > 10  THEN CONVERT(varchar(22), DATEIN, 105) ELSE CONVERT(varchar(22), DATEIN, 105) END as  DATEIN,";
+
+				 }
+				 data = data +"MATERIAL,PARTY,TRANSPORTER,BILLDCNO,BILLWEIGHT,FIRSTWEIGHT,USER1,"
+						+ "  SECONDWEIGHT,USER2,SITEID as SITE_ID,STATUS,FIRSTFRONTPOTO"
+				+ "  		   ,FIRSTBACKPOTO,SECONDFRONTPOTO,SECONDBACKPOTO,NETWT,SW_SITEID,TRIPNO,SHIFTNO,TRANSFERWASTEIE ,TRANSFERWASTE,MANIFESTNUMBER ,MANIFESTWEIGHT,MEMBERSHIPCODE"
+				+ "  		   ,INGATEPASSNO ,INMETERREADING,OUTGATEPASSNO,OUTMETERREADING ,TRANSFERID,TYPEOFWASTE,TOTALKMSTRAVELLED ,BILLABLEWEIGHT,TOTALTRANSPORTCHARGES ,BARCODENUM"
+				+ "  		   ,REMARKS,CONTAINERID from ["+dbNAme+"].[dbo].[WEIGHT] tt "
+						+ "  where TRNO is not null and NETWT is not null and NETWT <> '' ";
 						 
 		int arrSize1 = 1;
 	    if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSITEID())) {
-	    	data = data + " and SITEID in("+obj.getSITEID()+")";
+	    	data = data + "   and SITEID in("+obj.getSITEID()+")";
 			//arrSize1++;
 		}
 		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getFrom_date())) {
@@ -636,12 +827,16 @@ public class DashBoardWeighBridgeDao {
 			   //     toDateSlash = date.format(DateTimeFormatter.ofPattern(desiredFormat))+" 12:00:00 AM";
 			     
 			 }
-			 	data = data + " AND (TRY_CAST(DATEIN AS date) between '"+fromDateSlash+"' and '"+toDateSlash+"')  ";
+			 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getSITEID()) && (obj.getSITEID().contains("'WB1','WB2','WB3','WB4'")) ) {
+					data = data + "   AND (TRY_CAST([OutDateTime] AS date) between '"+fromDateSlash+"' and '"+toDateSlash+"')  order by OutDateTime desc";
+			 }else {
+					data = data + "   AND (TRY_CAST(DATEIN AS date) between '"+fromDateSlash+"' and '"+toDateSlash+"')  order by TRNO desc";
+			 }
+			 
 				arrSize1++;
 				arrSize1++;
 			
 			}
-	    data = data + " order by TRNO ";
 	
 		objsList = jdbcTemplate.query( data, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 	
@@ -654,7 +849,7 @@ public class DashBoardWeighBridgeDao {
 	public List<DashBoardWeighBridge> getMonthList(DashBoardWeighBridge obj) throws Exception{
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		String qry = "SELECT ActualVisitMonth, LEFT(ActualVisitMonth, CHARINDEX(' ', ActualVisitMonth + ' ') - 1) AS split_value FROM [bmw_detailed] group by ActualVisitMonth"
-				+ ""; 
+				+ "  "; 
 		objsList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 		return objsList;
 	}
@@ -662,7 +857,7 @@ public class DashBoardWeighBridgeDao {
 	public List<DashBoardWeighBridge> getCustomerCodeList(DashBoardWeighBridge obj)throws Exception {
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		String qry = "SELECT CustomerSAPCode FROM [bmw_detailed] group by CustomerSAPCode"
-				+ ""; 
+				+ "  "; 
 		objsList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 		return objsList;
 	}
@@ -670,36 +865,36 @@ public class DashBoardWeighBridgeDao {
 	public List<DashBoardWeighBridge> getTransactionsList1(DashBoardWeighBridge obj) throws Exception{
 		List<DashBoardWeighBridge> objsList = new ArrayList<DashBoardWeighBridge>();
 		String qry = "SELECT top(10) [company_code]"
-				+ "      ,[company]"
-				+ "      ,[CustomerCode]"
-				+ "      ,[plant_name]"
-				+ "      ,[profit_center]"
-				+ "      ,[profit_center_name]"
-				+ "      ,[ActualVisitMonth]"
-				+ "      ,[TypeofEstablishment]"
-				+ "      ,[ServiceFrequency]"
-				+ "      ,[visitsPerMonth]"
-				+ "      ,[CustomerStatus]"
-				+ "      ,[BlueCount]"
-				+ "      ,[BlueWeight]"
-				+ "      ,[RedCount]"
-				+ "      ,[RedWeight]"
-				+ "      ,[YellowCount]"
-				+ "      ,[YellowWeight]"
-				+ "      ,[CytotoxicCount]"
-				+ "      ,[CytotoxicWeight]"
-				+ "      ,[WhitesCount]"
-				+ "      ,[WhitesWeight]"
-				+ "      ,[TotalCount]"
-				+ "      ,[TotalWeight]"
-				+ "      ,[last_modified]"
-				+ "  FROM [ALL_BMW_Sites].[dbo].[transactions_summary] where company_code is not null  "; 
+				+ "        ,[company]"
+				+ "        ,[CustomerCode]"
+				+ "        ,[plant_name]"
+				+ "        ,[profit_center]"
+				+ "        ,[profit_center_name]"
+				+ "        ,[ActualVisitMonth]"
+				+ "        ,[TypeofEstablishment]"
+				+ "        ,[ServiceFrequency]"
+				+ "        ,[visitsPerMonth]"
+				+ "        ,[CustomerStatus]"
+				+ "        ,[BlueCount]"
+				+ "        ,[BlueWeight]"
+				+ "        ,[RedCount]"
+				+ "        ,[RedWeight]"
+				+ "        ,[YellowCount]"
+				+ "        ,[YellowWeight]"
+				+ "        ,[CytotoxicCount]"
+				+ "        ,[CytotoxicWeight]"
+				+ "        ,[WhitesCount]"
+				+ "        ,[WhitesWeight]"
+				+ "        ,[TotalCount]"
+				+ "        ,[TotalWeight]"
+				+ "        ,[last_modified]"
+				+ "    FROM [ALL_BMW_Sites].[dbo].[transactions_summary] where company_code is not null  "; 
 		int arrSize1 = 0;
 		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getCustomerSAPCode())) {
-				qry = qry + " AND CustomerCode like %"+obj.getCustomerSAPCode()+"%";
+				qry = qry + "   AND CustomerCode like %"+obj.getCustomerSAPCode()+"%";
 			}
 		 if(!StringUtils.isEmpty(obj) && !StringUtils.isEmpty(obj.getActualVisitMonth())) {
-				qry = qry + " AND ActualVisitMonth = ? ";
+				qry = qry + "   AND ActualVisitMonth = ? ";
 				arrSize1++;
 			}
 		 Object[] pValues1 = new Object[arrSize1];
@@ -718,22 +913,22 @@ public class DashBoardWeighBridgeDao {
 			NamedParameterJdbcTemplate namedParamJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 			BeanPropertySqlParameterSource paramSource = new BeanPropertySqlParameterSource(obj);
 			String ERQ2 = "  UPDATE ALL_BMW_Sites.dbo.bmw_detailed SET [plant] = LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE([plant], "
-					+ "CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
+					+ "  CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
 			paramSource = new BeanPropertySqlParameterSource(obj);	 
 			namedParamJdbcTemplate.update(ERQ2, paramSource);
 			
 			String ERQ3 = "  UPDATE ALL_BMW_Sites.dbo.bmw_detailed SET [CustomerSAPCode] = LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE([CustomerSAPCode], "
-					+ "CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
+					+ "  CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
 			paramSource = new BeanPropertySqlParameterSource(obj);	 
 			namedParamJdbcTemplate.update(ERQ3, paramSource);
 			
 			String ERQ = "  UPDATE [MasterDB].[dbo].[master_table] SET [project_code] = LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE([project_code], "
-					+ "CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
+					+ "  CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
 			paramSource = new BeanPropertySqlParameterSource(obj);	 
 			namedParamJdbcTemplate.update(ERQ, paramSource);
 			
 			String ERQ1 = "  UPDATE [MasterDB].[dbo].[master_table] SET [project_name] = LTRIM(RTRIM(REPLACE(REPLACE(REPLACE(REPLACE([project_name], "
-					+ "CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
+					+ "  CHAR(10), CHAR(32)), CHAR(13), CHAR(32)), CHAR(160), CHAR(32)),CHAR(9),CHAR(32))))";
 			paramSource = new BeanPropertySqlParameterSource(obj);	 
 			namedParamJdbcTemplate.update(ERQ1, paramSource);
 			
@@ -745,78 +940,78 @@ public class DashBoardWeighBridgeDao {
 		    namedParamJdbcTemplate.update(deleteQRY, paramSource);
 
 		    String qry = "MERGE [ALL_BMW_Sites].[dbo].[transactions_summary] AS target "
-				+ "USING ( "
-				+ "    SELECT (select profit_center from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS profit_center,		 "
-				+ "(select profit_center_name from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS profit_center_name, "
-				+ "MAX(d.company) AS company,(select company_code from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS company_code, "
-				+ "MAX(d.plant) AS plant_name,				MAX(d.TypeofEstablishment) AS TypeofEstablishment,			 "
-				+ "MAX(d.ServiceFrequency) AS ServiceFrequency,				MAX(d.ActualVisitMonth) AS ActualVisitMonth,	 "
-				+ "MAX(d.CustomerStatus) AS CustomerStatus,CustomerSAPCode, "
-				+ "count(CustomerSAPCode) as CustomerSAPCodeCount, "
-				+ "SUM(TRY_CAST(BlueCount AS FLOAT )) as BlueCount, "
-				+ "SUM(TRY_CAST(BlueWeight AS FLOAT )) as BlueWeight, "
-				+ "SUM(TRY_CAST(RedCount AS FLOAT )) as RedCount, "
-				+ "SUM(TRY_CAST(RedWeight AS FLOAT )) as RedWeight, "
-				+ "SUM(TRY_CAST(YellowCount AS FLOAT )) as YellowCount, "
-				+ "SUM(TRY_CAST(YellowWeight AS FLOAT )) as YellowWeight, "
-				+ "SUM(TRY_CAST(CytotoxicCount AS FLOAT )) as CytotoxicCount, "
-				+ "SUM(TRY_CAST(CytotoxicWeight AS FLOAT )) as CytotoxicWeight, "
-				+ "SUM(TRY_CAST(WhitesCount AS FLOAT )) as WhitesCount, "
-				+ "SUM(TRY_CAST(WhitesWeight AS FLOAT )) as WhitesWeight, "
-				+ "SUM(TRY_CAST(TotalCount AS FLOAT )) as TotalCount, "
-				+ "SUM(TRY_CAST(TotalWeight AS FLOAT )) as TotalWeight  FROM  ( "
-				+ "    SELECT DISTINCT([ManifestNo]) "
-				+ "	  ,[company] "
-				+ "      ,[plant] "
-				+ "      ,[CustomerDistrict] "
-				+ "      ,[CustomerTown] "
-				+ "      ,[VehicleRegNo] "
-				+ "      ,[CustomerName] "
-				+ "      ,[CustomerSAPCode] "
-				+ "      ,[TypeofEstablishment] "
-				+ "      ,[ActualVisitDate] "
-				+ "      ,[ActualVisitMonth] "
-				+ "      ,[VisitDayTime] "
-				+ "      ,[ServiceFrequency] "
-				+ "      ,[BlueCount] "
-				+ "      ,[BlueWeight] "
-				+ "      ,[RedCount] "
-				+ "      ,[RedWeight] "
-				+ "      ,[YellowCount] "
-				+ "      ,[YellowWeight] "
-				+ "      ,[CytotoxicCount] "
-				+ "      ,[CytotoxicWeight] "
-				+ "      ,[WhitesCount] "
-				+ "      ,[WhitesWeight] "
-				+ "      ,[TotalCount] "
-				+ "      ,[TotalWeight] "
-				+ "      ,[CustomerStatus] "
-				+ "    FROM ALL_BMW_Sites.dbo.[bmw_detailed] "
-				+ ") as d group by CustomerSAPCode,ActualVisitMonth  "
-				+ ") AS source "
-				+ "ON target.CustomerCode = source.CustomerSAPCode "
-				+ "WHEN MATCHED THEN "
-				+ "    UPDATE SET company = source.company, profit_center = source.profit_center, profit_center_name = source.profit_center_name, company_code = source.company_code, "
-				+ "	plant_name = source.plant_name "
-				+ "	, TypeofEstablishment = source.TypeofEstablishment, ServiceFrequency = source.ServiceFrequency, ActualVisitMonth = source.ActualVisitMonth, "
-				+ "	CustomerStatus = source.CustomerStatus, CustomerCode = source.CustomerSAPCode "
-				+ "	, visitsPerMonth = source.CustomerSAPCodeCount, BlueCount = source.BlueCount, BlueWeight = source.BlueWeight, RedCount = source.RedCount, "
-				+ "	RedWeight = source.RedWeight "
-				+ "	, YellowCount = source.YellowCount, YellowWeight = source.YellowWeight, CytotoxicCount = source.CytotoxicCount,  "
-				+ "	CytotoxicWeight = source.CytotoxicWeight, WhitesCount = source.WhitesCount, WhitesWeight = source.WhitesWeight,  "
-				+ "	TotalCount = source.TotalCount,TotalWeight = source.TotalWeight,last_modified = getdate() "
-				+ "WHEN NOT MATCHED THEN "
-				+ "    INSERT (company, profit_center, profit_center_name, company_code, plant_name, TypeofEstablishment, ServiceFrequency, "
-				+ "	ActualVisitMonth, CustomerStatus, CustomerCode, visitsPerMonth, BlueCount, BlueWeight "
-				+ "	, RedCount, RedWeight, YellowCount, YellowWeight, CytotoxicCount, CytotoxicWeight, WhitesCount, WhitesWeight,  "
-				+ "	TotalCount,TotalWeight,last_modified) "
-				+ "    VALUES (source.company, source.profit_center, source.profit_center_name, source.company_code, source.plant_name, source.TypeofEstablishment, source.ServiceFrequency "
-				+ "	, source.ActualVisitMonth, source.CustomerStatus, source.CustomerSAPCode, source.CustomerSAPCodeCount, source.BlueCount, source.BlueWeight, "
-				+ "	source.RedCount, source.RedWeight "
-				+ "	, source.YellowCount, source.YellowWeight, source.CytotoxicCount, source.CytotoxicWeight, source.WhitesCount, source.WhitesWeight,  "
-				+ "	source.TotalCount,source.TotalWeight,getdate()); "
-				+ " "
-				+ ""; 
+				+ "  USING ( "
+				+ "      SELECT (select profit_center from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS profit_center,		 "
+				+ "  (select profit_center_name from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS profit_center_name, "
+				+ "  MAX(d.company) AS company,(select company_code from [MasterDB].[dbo].[master_table] where company = MAX(d.company)) AS company_code, "
+				+ "  MAX(d.plant) AS plant_name,				MAX(d.TypeofEstablishment) AS TypeofEstablishment,			 "
+				+ "  MAX(d.ServiceFrequency) AS ServiceFrequency,				MAX(d.ActualVisitMonth) AS ActualVisitMonth,	 "
+				+ "  MAX(d.CustomerStatus) AS CustomerStatus,CustomerSAPCode, "
+				+ "  count(CustomerSAPCode) as CustomerSAPCodeCount, "
+				+ "  SUM(TRY_CAST(BlueCount AS FLOAT )) as BlueCount, "
+				+ "  SUM(TRY_CAST(BlueWeight AS FLOAT )) as BlueWeight, "
+				+ "  SUM(TRY_CAST(RedCount AS FLOAT )) as RedCount, "
+				+ "  SUM(TRY_CAST(RedWeight AS FLOAT )) as RedWeight, "
+				+ "  SUM(TRY_CAST(YellowCount AS FLOAT )) as YellowCount, "
+				+ "  SUM(TRY_CAST(YellowWeight AS FLOAT )) as YellowWeight, "
+				+ "  SUM(TRY_CAST(CytotoxicCount AS FLOAT )) as CytotoxicCount, "
+				+ "  SUM(TRY_CAST(CytotoxicWeight AS FLOAT )) as CytotoxicWeight, "
+				+ "  SUM(TRY_CAST(WhitesCount AS FLOAT )) as WhitesCount, "
+				+ "  SUM(TRY_CAST(WhitesWeight AS FLOAT )) as WhitesWeight, "
+				+ "  SUM(TRY_CAST(TotalCount AS FLOAT )) as TotalCount, "
+				+ "  SUM(TRY_CAST(TotalWeight AS FLOAT )) as TotalWeight  FROM  ( "
+				+ "      SELECT DISTINCT([ManifestNo]) "
+				+ "  	  ,[company] "
+				+ "        ,[plant] "
+				+ "        ,[CustomerDistrict] "
+				+ "        ,[CustomerTown] "
+				+ "        ,[VehicleRegNo] "
+				+ "        ,[CustomerName] "
+				+ "        ,[CustomerSAPCode] "
+				+ "        ,[TypeofEstablishment] "
+				+ "        ,[ActualVisitDate] "
+				+ "        ,[ActualVisitMonth] "
+				+ "        ,[VisitDayTime] "
+				+ "        ,[ServiceFrequency] "
+				+ "        ,[BlueCount] "
+				+ "        ,[BlueWeight] "
+				+ "        ,[RedCount] "
+				+ "        ,[RedWeight] "
+				+ "        ,[YellowCount] "
+				+ "        ,[YellowWeight] "
+				+ "        ,[CytotoxicCount] "
+				+ "        ,[CytotoxicWeight] "
+				+ "        ,[WhitesCount] "
+				+ "        ,[WhitesWeight] "
+				+ "        ,[TotalCount] "
+				+ "        ,[TotalWeight] "
+				+ "        ,[CustomerStatus] "
+				+ "      FROM ALL_BMW_Sites.dbo.[bmw_detailed] "
+				+ "  ) as d group by CustomerSAPCode,ActualVisitMonth  "
+				+ "  ) AS source "
+				+ "  ON target.CustomerCode = source.CustomerSAPCode "
+				+ "  WHEN MATCHED THEN "
+				+ "      UPDATE SET company = source.company, profit_center = source.profit_center, profit_center_name = source.profit_center_name, company_code = source.company_code, "
+				+ "  	plant_name = source.plant_name "
+				+ "  	, TypeofEstablishment = source.TypeofEstablishment, ServiceFrequency = source.ServiceFrequency, ActualVisitMonth = source.ActualVisitMonth, "
+				+ "  	CustomerStatus = source.CustomerStatus, CustomerCode = source.CustomerSAPCode "
+				+ "  	, visitsPerMonth = source.CustomerSAPCodeCount, BlueCount = source.BlueCount, BlueWeight = source.BlueWeight, RedCount = source.RedCount, "
+				+ "  	RedWeight = source.RedWeight "
+				+ "  	, YellowCount = source.YellowCount, YellowWeight = source.YellowWeight, CytotoxicCount = source.CytotoxicCount,  "
+				+ "  	CytotoxicWeight = source.CytotoxicWeight, WhitesCount = source.WhitesCount, WhitesWeight = source.WhitesWeight,  "
+				+ "  	TotalCount = source.TotalCount,TotalWeight = source.TotalWeight,last_modified = getdate() "
+				+ "  WHEN NOT MATCHED THEN "
+				+ "      INSERT (company, profit_center, profit_center_name, company_code, plant_name, TypeofEstablishment, ServiceFrequency, "
+				+ "  	ActualVisitMonth, CustomerStatus, CustomerCode, visitsPerMonth, BlueCount, BlueWeight "
+				+ "  	, RedCount, RedWeight, YellowCount, YellowWeight, CytotoxicCount, CytotoxicWeight, WhitesCount, WhitesWeight,  "
+				+ "  	TotalCount,TotalWeight,last_modified) "
+				+ "      VALUES (source.company, source.profit_center, source.profit_center_name, source.company_code, source.plant_name, source.TypeofEstablishment, source.ServiceFrequency "
+				+ "  	, source.ActualVisitMonth, source.CustomerStatus, source.CustomerSAPCode, source.CustomerSAPCodeCount, source.BlueCount, source.BlueWeight, "
+				+ "  	source.RedCount, source.RedWeight "
+				+ "  	, source.YellowCount, source.YellowWeight, source.CytotoxicCount, source.CytotoxicWeight, source.WhitesCount, source.WhitesWeight,  "
+				+ "  	source.TotalCount,source.TotalWeight,getdate()); "
+				+ "   "
+				+ "  "; 
 		
 		    paramSource = new BeanPropertySqlParameterSource(dObj);		 
 		    namedParamJdbcTemplate.update(qry, paramSource);
@@ -833,55 +1028,55 @@ public class DashBoardWeighBridgeDao {
 			String qry = " ";
 			if("msw_bilaspur_logs".contentEquals(obj.getSbu())) {
 				 qry = "SELECT "
-					 		+ "    CONVERT(DATE, PTCDT) AS PTCDT,"
-					 		+ "		  STUFF(("
-					 		+ "        SELECT DISTINCT ', ' + [VEHICLENO] "
-					 		+ "        FROM [All_MSW_SITES].[dbo].[msw_bilaspur_logs] b "
-					 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
-					 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_MSW_SITES].[dbo].[msw_bilaspur_logs] a "
-					 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc"; 
+					 		+ "      CONVERT(DATE, PTCDT) AS PTCDT,"
+					 		+ "  		  STUFF(("
+					 		+ "          SELECT DISTINCT ', ' + [VEHICLENO] "
+					 		+ "          FROM [All_MSW_SITES].[dbo].[msw_bilaspur_logs] b "
+					 		+ "          WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+					 		+ "          FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_MSW_SITES].[dbo].[msw_bilaspur_logs] a "
+					 		+ "  GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc"; 
 				
 			}else if("hyd_logs".contentEquals(obj.getSbu())) {
 				 qry = "    SELECT CONVERT(DATE, PTCDT) AS PTCDT, "
-				 		+ "   "
-				 		+ "		  STUFF(( SELECT DISTINCT ', ' + [VEHICLENO] FROM [All_MSW_SITES].[dbo].[hyd_logs] b "
-				 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
-				 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_MSW_SITES].[dbo].[hyd_logs] a "
-				 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
-				 		+ ""; 
+				 		+ "     "
+				 		+ "  		  STUFF(( SELECT DISTINCT ', ' + [VEHICLENO] FROM [All_MSW_SITES].[dbo].[hyd_logs] b "
+				 		+ "          WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+				 		+ "          FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_MSW_SITES].[dbo].[hyd_logs] a "
+				 		+ "  GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
+				 		+ "  "; 
 			}else if("hyd_cnd_logs".contentEquals(obj.getSbu())) {
 				 qry = "    SELECT  "
-				 		+ "    CONVERT(DATE, PTCDT) AS PTCDT, "
-				 		+ "   "
-				 		+ "		  STUFF(( "
-				 		+ "        SELECT DISTINCT ', ' + [VEHICLENO] "
-				 		+ "        FROM [All_CnD_Sites].[dbo].[hyd_cnd_logs] b "
-				 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
-				 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_CnD_Sites].[dbo].[hyd_cnd_logs] a "
-				 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
-					 		+ ""; 
+				 		+ "      CONVERT(DATE, PTCDT) AS PTCDT, "
+				 		+ "     "
+				 		+ "  		  STUFF(( "
+				 		+ "          SELECT DISTINCT ', ' + [VEHICLENO] "
+				 		+ "          FROM [All_CnD_Sites].[dbo].[hyd_cnd_logs] b "
+				 		+ "          WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+				 		+ "          FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_CnD_Sites].[dbo].[hyd_cnd_logs] a "
+				 		+ "  GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
+					 		+ "  "; 
 			}else if("noida_site_log".contentEquals(obj.getSbu())) {
 				 qry = "   SELECT  "
-				 		+ "    CONVERT(DATE, PTCDT) AS PTCDT, "
-				 		+ "   "
-				 		+ "		  STUFF(( "
-				 		+ "        SELECT DISTINCT ', ' + [VEHICLENO] "
-				 		+ "        FROM [All_CnD_Sites].[dbo].[noida_site_log] b "
-				 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
-				 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_CnD_Sites].[dbo].[noida_site_log] a "
-				 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
-					 		+ ""; 
+				 		+ "      CONVERT(DATE, PTCDT) AS PTCDT, "
+				 		+ "     "
+				 		+ "  		  STUFF(( "
+				 		+ "          SELECT DISTINCT ', ' + [VEHICLENO] "
+				 		+ "          FROM [All_CnD_Sites].[dbo].[noida_site_log] b "
+				 		+ "          WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+				 		+ "          FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs FROM [All_CnD_Sites].[dbo].[noida_site_log] a "
+				 		+ "  GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc "
+					 		+ "  "; 
 			}else if("bmw_logs".contentEquals(obj.getSbu())) {
 				 qry = "   SELECT  "
-				 		+ "    CONVERT(DATE, PTCDT) AS PTCDT, "
-				 		+ "    STUFF(( "
-				 		+ "        SELECT DISTINCT ', ' + APIID "
-				 		+ "        FROM ALL_BMW_Sites.dbo.bmw_logs b "
-				 		+ "        WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
-				 		+ "        FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs "
-				 		+ "FROM ALL_BMW_Sites.dbo.bmw_logs a "
-				 		+ "GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc"
-					 		+ ""; 
+				 		+ "      CONVERT(DATE, PTCDT) AS PTCDT, "
+				 		+ "      STUFF(( "
+				 		+ "          SELECT DISTINCT ', ' + APIID "
+				 		+ "          FROM ALL_BMW_Sites.dbo.bmw_logs b "
+				 		+ "          WHERE CONVERT(DATE, b.PTCDT) = CONVERT(DATE, a.PTCDT) "
+				 		+ "          FOR XML PATH('')), 1, 2, '') AS uniqueAPIIDs "
+				 		+ "  FROM ALL_BMW_Sites.dbo.bmw_logs a "
+				 		+ "  GROUP BY CONVERT(DATE, PTCDT) order by PTCDT desc"
+					 		+ "  "; 
 			}
 			objsList = jdbcTemplate.query( qry, new BeanPropertyRowMapper<DashBoardWeighBridge>(DashBoardWeighBridge.class));
 		} catch (Exception e) {
@@ -918,58 +1113,66 @@ public class DashBoardWeighBridgeDao {
 	         }
 
 	         if (flag) {
-	            String qry = "SELECT  "
-	            		+ "    Trno as TransactionNo,  "
-	            		+ "    Vehicleno as VehicleNo,  "
-	            		+ "    Material as Zone,  "
-	            		+ "    Party, "
-	            		+ "    Transporter as Transporter, "
-	            		+ "    LEFT(DateIN, CHARINDEX(' ', DateIN + ' ') - 1) AS DateIN, "
-	            		+ "    RIGHT(CONVERT(varchar, TIMEIN, 24), 8) as TIMEIN, "
-	            		+ "    LEFT(DateOUT, CHARINDEX(' ', DateOUT + ' ') - 1) AS DateOUT, "
-	            		+ "    RIGHT(CONVERT(varchar, TIMEOUT, 24), 8) AS TimeOUT, "
-	            		+ "    Firstweight as GROSSWeight,  "
-	            		+ "    SiteID,  "
-	            		+ "    Secondweight as TareWeight, "
-	            		+ "    NetWT as NetWeight, "
-	            		+ "    typeofwaste AS TypeofMaterial, "
-	            		+ "    CASE  "
-	            		+ "        WHEN CHARINDEX('C-', Party) > 0 THEN LEFT(Party, CHARINDEX('C-', Party) - 1) "
-	            		+ "        ELSE Party  "
-	            		+ "    END AS TransferStation, "
-	            		+ "    CASE  "
-	            		+ "        WHEN CHARINDEX('C-', Party) > 0 THEN 'C' + RIGHT(Party, LEN(Party) - CHARINDEX('C-', Party)) "
-	            		+ "        ELSE NULL  "
-	            		+ "    END AS Circle "
-	            		+ "FROM  "
-	            		+ "    [All_CnD_Sites].[dbo].weight WITH (nolock)  "
-	            		+ "WHERE  "
-	            		+ "    (Trno IS NOT NULL) AND  "
-	            		+ "    (Vehicleno IS NOT NULL) AND  "
-	            		+ "    (Datein IS NOT NULL) AND  "
-	            		+ "    (Timein IS NOT NULL) AND  "
-	            		+ "    (Firstweight IS NOT NULL) AND  "
-	            		+ "    (Dateout IS NOT NULL) AND  "
-	            		+ "    (Timeout IS NOT NULL) AND  "
-	            		+ "    (Secondweight IS NOT NULL) AND  "
-	            		+ "    (NetWT IS NOT NULL) AND  "
-	            		+ "    (SiteID IS NOT NULL) AND  "
-	            		+ "    SiteID IN('HYDCnDJMT_WB1', 'HYDCnDFTG_WB1') AND  "
-	            		+ "    NetWT <> '' AND  "
-	            		+ "    NetWT IS NOT NULL  "
+	            String qry = "WITH NumberedRows AS ("
+	            		+ "      SELECT "
+	            		+ "          Trno AS TransactionNo, "
+	            		+ "          SiteID, "
+	            		+ "          Vehicleno AS VehicleNo, "
+	            		+ "          Material AS Zone, "
+	            		+ "          Party, "
+	            		+ "          Transporter AS Transporter, "
+	            		+ "          LEFT(DateIN, CHARINDEX(' ', DateIN + ' ') - 1) AS DateIN, "
+	            		+ "          RIGHT(CONVERT(varchar, TIMEIN, 24), 8) AS TIMEIN, "
+	            		+ "          LEFT(DateOUT, CHARINDEX(' ', DateOUT + ' ') - 1) AS DateOUT, "
+	            		+ "          RIGHT(CONVERT(varchar, TIMEOUT, 24), 8) AS TimeOUT, "
+	            		+ "          Firstweight AS GROSSWeight, "
+	            		+ "          Secondweight AS TareWeight, "
+	            		+ "          NetWT AS NetWeight, "
+	            		+ "          typeofwaste AS TypeofMaterial,"
+	            		+ "          CASE"
+	            		+ "              WHEN CHARINDEX('C-', Party) > 0 THEN LEFT(Party, CHARINDEX('C-', Party) - 1) "
+	            		+ "              ELSE Party "
+	            		+ "          END AS TransferStation,"
+	            		+ "          CASE "
+	            		+ "              WHEN CHARINDEX('C-', Party) > 0 THEN 'C' + RIGHT(Party, LEN(Party) - CHARINDEX('C-', Party)) "
+	            		+ "              ELSE NULL "
+	            		+ "          END AS Circle,"
+	            		+ "          ROW_NUMBER() OVER (PARTITION BY SiteID ORDER BY TRNO DESC) AS RowNum"
+	            		+ "      FROM "
+	            		+ "          [All_CnD_Sites].[dbo].weight WITH (NOLOCK)"
+	            		+ "      WHERE "
+	            		+ "          Trno IS NOT NULL "
+	            		+ "          AND Vehicleno IS NOT NULL "
+	            		+ "          AND Datein IS NOT NULL "
+	            		+ "          AND Timein IS NOT NULL "
+	            		+ "          AND Firstweight IS NOT NULL "
+	            		+ "          AND Dateout IS NOT NULL "
+	            		+ "          AND Timeout IS NOT NULL "
+	            		+ "          AND Secondweight IS NOT NULL "
+	            		+ "          AND NetWT IS NOT NULL "
+	            		+ "          AND SiteID IS NOT NULL "
+	            		+ "          AND SiteID IN ('HYDCnDJMT_WB1', 'HYDCnDFTG_WB1') "
+	            		+ "          AND NetWT <> '' "
+	            		+ "          AND NetWT IS NOT NULL"
+	            		
 	            	
-	            		+ " ";
+	            		+ "   ";
 	            int arrSize = 0;
 	            if (!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj.getTransactionNo()) && !StringUtils.isEmpty(obj.getVehicleNo())) {
-	               qry = qry + " AND VEHICLENO = ? and TRNO = ? ";
+	               qry = qry + "   AND VEHICLENO = ? and TRNO = ? ";
 	               ++arrSize;
 	               ++arrSize;
 	            }
 	            if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date())) {
-			    	qry = qry + " AND CONVERT(varchar(10), DATEOUT, 105) = CONVERT(varchar(10), ?, 105) ";
+			    	qry = qry + "   AND CONVERT(varchar(10), DATEOUT, 105) = CONVERT(varchar(10), ?, 105) ";
 					arrSize++;
 				}
-	            qry = qry + " ORDER BY TRNO desc offset ? rows  fetch next 1000 rows only ";
+	            qry = qry + "  )  ";
+	            qry = qry + "   SELECT *"
+	            		+ "  FROM NumberedRows"
+	            		+ "  ORDER BY RowNum, SiteID"
+	            		+ "  OFFSET ? ROWS "
+	            		+ "  FETCH NEXT 10000 ROWS ONLY; ";
 	            arrSize++;
 	            Object[] pValues = new Object[arrSize];
 	            int i = 0;
@@ -978,6 +1181,9 @@ public class DashBoardWeighBridgeDao {
 	               pValues[i] = obj.getVehicleNo();
 	               pValues[var18++] = obj.getTransactionNo();
 	            }
+	            if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getFrom_date())) {
+					pValues[i++] = obj1.getFrom_date();;
+				}
 	            if(!StringUtils.isEmpty(obj1) && !StringUtils.isEmpty(obj1.getOffset())) {
 					pValues[i++] = obj1.getOffset();;
 				}else {

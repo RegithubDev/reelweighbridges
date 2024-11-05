@@ -219,7 +219,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<%=request.getContextPath() %>/dashboard-wb">MSW Cumulative Dashboard</a></li>
                              <li><a href="<%=request.getContextPath() %>/dashboard-wb-cnd">CND Cumulative Dashboard</a></li>     <%--  <li><a href="<%=request.getContextPath() %>/dashboard-wb-bmw">BMW Cumulative Dashboard</a></li> --%>
-								<li><a href="<%=request.getContextPath() %>/dashboard-wb-daily">Daily Monitoring</a></li>
+								<%-- <li><a href="<%=request.getContextPath() %>/dashboard-wb-daily">Daily Monitoring</a></li> --%>
 								
 								 
                                 
@@ -228,13 +228,13 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <!-- <li><a href="wbreport.php">IWM Reports</a></li> -->
                                   <c:if test="${sessionScope.BASE_ROLE eq 'Administrator' }">
                                   <li><a href="<%=request.getContextPath() %>/report/MSW">MSW Reports</a></li>
-<li><a href="<%=request.getContextPath() %>/report/CND">C&D Reports</a></li>
-								  <li><a href="<%=request.getContextPath() %>/report/BMW">BMW Reports</a></li>  <%-- <li><a href="<%=request.getContextPath() %>/user">Users</a></li> --%> </c:if>
+								<li><a href="<%=request.getContextPath() %>/report/CND">C&D Reports</a></li>
+								 <%-- <li><a href="<%=request.getContextPath() %>/report/BMW">BMW Reports</a></li> --%>  <%-- <li><a href="<%=request.getContextPath() %>/user">Users</a></li> --%> </c:if>
 								 <li>
                             <a class="has-arrow" href="#" aria-expanded="false"><i class="mdi mdi-gauge"></i><span class="hide-menu">Logs Dashboard</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<%=request.getContextPath() %>/logs/MSW">MSW Logs Dashboard</a></li>
-                                <li><a href="<%=request.getContextPath() %>/logs/CND">CND Logs Dashboard</a></li> <li><a href="<%=request.getContextPath() %>/logs/BMW">BMW Logs Dashboard</a></li>
+                                <li><a href="<%=request.getContextPath() %>/logs/CND">CND Logs Dashboard</a></li> <%-- <li><a href="<%=request.getContextPath() %>/logs/BMW">BMW Logs Dashboard</a></li> --%>
 								
 								 
                                 
@@ -247,7 +247,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                 <li><a href="<%=request.getContextPath() %>/report-logs/hyd_logs">HYD MSw Logs Report</a></li>
                                 <li><a href="<%=request.getContextPath() %>/report-logs/hyd_cnd_logs">HYD CND Logs Report</a></li>
                                 <li><a href="<%=request.getContextPath() %>/report-logs/noida_site_log">Noida Logs Report</a></li>
-                                <li><a href="<%=request.getContextPath() %>/report-logs/bmw_logs">BMW Logs Report</a></li>
+                                <%--  <li><a href="<%=request.getContextPath() %>/report-logs/bmw_logs">BMW Logs Report</a></li> --%>
                             </ul>
                         </li>
 								 
@@ -352,10 +352,10 @@ License: You must have a valid license purchased only from themeforest(the above
 			<th style="width: 9%">Date Out</th>
 			<th style="width: 10%">Time Out</th>
 		    <th style="width: 7%">First Weight</th>
-			<th style="width: 7%">Site Id</th>
+			<!-- <th style="width: 7%">Site Id</th> -->
 		    <th style="width: 7%">Second Weight</th>
 			<th style="width: 7%">Net Weight</th>
-			<th style="width: 8%">Container ID</th>
+			<!-- <th style="width: 8%">Container ID</th> -->
 		  </tr>
        	</thead>
        	<tbody>
@@ -472,6 +472,9 @@ License: You must have a valid license purchased only from themeforest(the above
 			   </c:otherwise>
 		    </c:choose>
 			</c:if>
+			<c:if test="${empty objjr.dateOUT}">
+			 	<td></td>
+			</c:if>
 			<c:if test="${not empty objjr.TIMEOUT}">
 			<c:choose>
 		    	<c:when test="${fn:contains(objjr.TIMEOUT, ' ')}">
@@ -499,10 +502,13 @@ License: You must have a valid license purchased only from themeforest(the above
 			   </c:otherwise>
 		    </c:choose>
 			</c:if>
+			<c:if test="${empty objjr.timeOUT}">
+			 	<td></td>
+			</c:if>
 			<td>${objjr.FIRSTWEIGHT }</td>
-			<c:if test="${not empty objjr.SITEID}">
+<%-- 			<c:if test="${not empty objjr.SITEID || not empty objjr.SiteID}">
 			<c:choose>
-		    	<c:when test="${fn:contains(objjr.SITEID, ' ')}">
+		    	<c:when test="${fn:contains(objjr.SiteID, ' ')}">
 			        <c:set var="stringValue" value="Hello World" />
 					<c:set var="splitArray" value="${fn:split(objjr.SITEID, ' ')}" />
 					<c:set var="firstWord" value="${splitArray[1]}" />
@@ -512,9 +518,9 @@ License: You must have a valid license purchased only from themeforest(the above
 			      <td>${objjr.SITEID }</td>
 			   </c:otherwise>
 		    </c:choose>
-			</c:if>
+			</c:if> --%>
 			
-			<c:if test="${not empty objjr.siteID}">
+	<%-- 		<c:if test="${not empty objjr.siteID}">
 			<c:choose>
 		    	<c:when test="${fn:contains(objjr.siteID, ' ')}">
 			        <c:set var="stringValue" value="Hello World" />
@@ -526,10 +532,10 @@ License: You must have a valid license purchased only from themeforest(the above
 			      <td style=" width: 100px; word-break: break-all;">${objjr.siteID }</td>
 			   </c:otherwise>
 		    </c:choose>
-			</c:if>
+			</c:if> --%>
 			<td>${objjr.SECONDWEIGHT }</td>
 			<td>${objjr.NETWT }</td>
-			<td>${objjr.CONTAINERID }</td>
+			<%-- <td>${objjr.CONTAINERID }</td> --%>
      	</tr>
        	  </c:forEach>
        	  <c:if test="${empty obj.transactionsList }">   <tr style="text-align: center;"> <td colspan="10">No Transactions found</td></tr></c:if>
